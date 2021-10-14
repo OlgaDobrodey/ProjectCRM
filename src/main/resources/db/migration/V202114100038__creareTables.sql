@@ -63,8 +63,3 @@ CREATE TABLE IF NOT EXISTS crm.users_tasks
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
-
-INSERT INTO crm.status(id, status_name)
-VALUES (1, 'new'),
-       (2, 'performed'),
-       (3, 'completed');
