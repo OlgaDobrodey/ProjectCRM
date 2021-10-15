@@ -2,7 +2,7 @@ CREATE SCHEMA IF NOT EXISTS CRM;
 
 CREATE TABLE IF NOT EXISTS crm.roles
 (
-    id        INT         NOT NULL,
+    id        INT         NOT NULL AUTO_INCREMENT,
     role_name VARCHAR(50) NOT NULL,
     CONSTRAINT roles_pkey PRIMARY KEY (id),
     CONSTRAINT role_unique UNIQUE (role_name)
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS crm.roles
 
 CREATE TABLE IF NOT EXISTS crm.status
 (
-    id          INT         NOT NULL,
+    id          INT         NOT NULL AUTO_INCREMENT,
     status_name VARCHAR(50) NOT NULL,
     CONSTRAINT status_pkey PRIMARY KEY (id),
     CONSTRAINT status_unique UNIQUE (status_name)
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS crm.status
 
 CREATE TABLE IF NOT EXISTS crm.users
 (
-    id         INT         NOT NULL,
+    id         INT         NOT NULL AUTO_INCREMENT,
     login      VARCHAR(50) NOT NULL,
     psw        INT         NOT NULL,
     role       INT         NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS crm.users
 
 CREATE TABLE IF NOT EXISTS crm.tasks
 (
-    id      INT          NOT NULL,
+    id      INT          NOT NULL AUTO_INCREMENT,
     title   VARCHAR(250) NOT NULL,
     status  INT          NOT NULL,
     dedline DATE         NOT NULL,

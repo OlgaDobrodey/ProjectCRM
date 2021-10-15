@@ -1,55 +1,54 @@
-INSERT INTO crm.status(id, status_name)
-VALUES (1, 'new'),
-       (2, 'performed'),
-       (3, 'completed');
+INSERT INTO crm.status(status_name)
+VALUES ('new'),
+       ('performed'),
+       ('completed');
 
-INSERT INTO crm.roles(id, role_name)
-VALUES (2, 'user'),
-       (1, 'admin');
+INSERT INTO crm.roles(role_name)
+VALUES ('user'),
+       ('admin');
 
-INSERT INTO crm.users(id, login, psw, role, last_name, first_name)
-VALUES (1, 'Petrov', 123, 1, 'Petrov', 'Petr'),
-       (2, 'Ivanov', 123, 1, 'Ivanov', 'Ivan'),
-       (3, 'Sidorov', 123, 1, 'Sidorov', 'Sidr'),
-       (4, 'Frolov', 123, 2, 'Frolov', 'Vova'),
-       (5, 'Kozlov', 123, 2, 'Kozlov', 'Igor'),
-       (6, 'Kolpokova', 123, 2, 'Kolpokova', 'Sveta'),
-       (7, 'Kulak', 123, 2, 'Kulak', 'Tanyay'),
-       (8, 'Dropalo', 123, 2, 'Dropalo', 'Andrey'),
-       (9, 'Kurgan', 123, 2, 'Kurgan', 'Misha'),
-       (10, 'Leurdo', 123, 2, 'Leurdo', 'Elena');
+INSERT INTO crm.users(login, psw, role, last_name, first_name)
+VALUES ('Petrov', 123, 1, 'Petrov', 'Petr'),
+       ('Ivanov', 123, 1, 'Ivanov', 'Ivan'),
+       ('Sidorov', 123, 1, 'Sidorov', 'Sidr'),
+       ('Frolov', 123, 2, 'Frolov', 'Vova'),
+       ('Kozlov', 123, 2, 'Kozlov', 'Igor'),
+       ('Kolpokova', 123, 2, 'Kolpokova', 'Sveta'),
+       ('Kulak', 123, 2, 'Kulak', 'Tanyay'),
+       ('Dropalo', 123, 2, 'Dropalo', 'Andrey'),
+       ('Kurgan', 123, 2, 'Kurgan', 'Misha'),
+       ('Leurdo', 123, 2, 'Leurdo', 'Elena');
 
-INSERT INTO crm.tasks(id, title, status, dedline, info)
-VALUES (1, 'Design the solution', 1, '2022-10-23', 'Define the relationship between resources and business systems.'),
-       (2, 'Prepare for implementation', 1, '2022-12-23', 'Identify production LPARs.'),
-       (3, 'Prepare the test/QA environment', 2, '2021-12-23',
+INSERT INTO crm.tasks(title, status, dedline, info)
+VALUES ('Design the solution', 1, '2022-10-23', 'Define the relationship between resources and business systems.'),
+       ('Prepare for implementation', 1, '2022-12-23', 'Identify production LPARs.'),
+       ('Prepare the test/QA environment', 2, '2021-12-23',
         'Verify connectivity from test and QA servers to test LPAR, Tivoli Enterprise Console(R) server, and console machines.'),
-       (4, 'Install the product in the test/QA environment.', 1, '2022-10-23',
+       ('Install the product in the test/QA environment.', 1, '2022-10-23',
         'Create configuration level objects for the test LPAR.'),
-       (5,
-        'Implement distributed data feeds (this can be done in parallel with the Source/390 data feed implementation).',
+       ('Implement distributed data feeds (this can be done in parallel with the Source/390 data feed implementation).',
         3, '2019-10-23', 'Configure the Tivoli Enterprise Console rules to send events.'),
-       (6, 'Implement a business system in the test/QA environment.', 3, '2018-10-23', null),
-       (7, 'Schedule jobs', 2, '2022-10-23', 'Define the relationship between resources and business systems.'),
-       (8, 'Prepare the production environment.', 2, '2022-03-15',
+       ('Implement a business system in the test/QA environment.', 3, '2018-10-23', null),
+       ('Schedule jobs', 2, '2022-10-23', 'Define the relationship between resources and business systems.'),
+       ('Prepare the production environment.', 2, '2022-03-15',
         'Define the relationship between resources and business systems.'),
-       (9, 'Install the product in the production environment.', 1, '2022-08-23', null),
-       (10, 'Implement distributed data feeds in the production environment.', 2, '2022-08-16',
+       ('Install the product in the production environment.', 1, '2022-08-23', null),
+       ('Implement distributed data feeds in the production environment.', 2, '2022-08-16',
         'Verify the event flow.'),
-       (11, 'Implement Source/390 data feeds in the production environment.', 3, '2012-10-23',
+       ('Implement Source/390 data feeds in the production environment.', 3, '2012-10-23',
         'Configure filtering, if appropriate.'),
-       (12, 'Implement a business system in the production environment.', 2, '2032-10-23',
+       ('Implement a business system in the production environment.', 2, '2032-10-23',
         'Define the relationship between resources and business systems.'),
-       (13, 'Install the history server.', 3, '2019-05-23',
+       ('Install the history server.', 3, '2019-05-23',
         'Define the relationship between resources and business systems.'),
-       (14, 'Install the Health Monitor.', 1, '2024-12-25', 'Verify the event flow.'),
-       (15, 'Enable the problem/change interface', 1, '2022-10-14', 'Configure filtering, if appropriate.'),
-       (16, 'Create and present administrator and operator training information', 2, '2023-04-19',
+       ('Install the Health Monitor.', 1, '2024-12-25', 'Verify the event flow.'),
+       ('Enable the problem/change interface', 1, '2022-10-14', 'Configure filtering, if appropriate.'),
+       ('Create and present administrator and operator training information', 2, '2023-04-19',
         '	Consider training a key group and have them train their peers.'),
-       (17, 'Create a solution maintenance plan', 2, '2022-05-21', 'Create databases on the history server.'),
-       (18, 'Schedule jobs date', 1, '2022-07-29', 'Monitor system performance and adjust hardware as required.'),
-       (19, 'Database backup and maintenance', 1, '2025-12-30', 'Database backup and maintenance'),
-       (20, 'Tivoli Business Systems Manager SQL server jobs', 3, '2020-11-28',
+       ('Create a solution maintenance plan', 2, '2022-05-21', 'Create databases on the history server.'),
+       ( 'Schedule jobs date', 1, '2022-07-29', 'Monitor system performance and adjust hardware as required.'),
+       ('Database backup and maintenance', 1, '2025-12-30', 'Database backup and maintenance'),
+       ('Tivoli Business Systems Manager SQL server jobs', 3, '2020-11-28',
         'Tivoli Business Systems Manager SQL server jobs');
 
 INSERT INTO crm.users_tasks(
