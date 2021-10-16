@@ -1,10 +1,10 @@
 CREATE SCHEMA IF NOT EXISTS CRM;
 
-CREATE TABLE IF NOT EXISTS crm.roles
+CREATE TABLE IF NOT EXISTS crm.role
 (
     id        INT         NOT NULL AUTO_INCREMENT,
     role_name VARCHAR(50) NOT NULL,
-    CONSTRAINT roles_pkey PRIMARY KEY (id),
+    CONSTRAINT role_pkey PRIMARY KEY (id),
     CONSTRAINT role_unique UNIQUE (role_name)
 );
 
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS crm.status
     CONSTRAINT status_unique UNIQUE (status_name)
 );
 
-CREATE TABLE IF NOT EXISTS crm.users
+CREATE TABLE IF NOT EXISTS crm.user
 (
     id         INT         NOT NULL AUTO_INCREMENT,
     login      VARCHAR(50) NOT NULL,
@@ -24,42 +24,33 @@ CREATE TABLE IF NOT EXISTS crm.users
     role       INT         NOT NULL,
     first_name VARCHAR(50) NOT NULL,
     last_name  VARCHAR(50) NOT NULL,
-    CONSTRAINT users_pkey PRIMARY KEY (id),
+    CONSTRAINT user_pkey PRIMARY KEY (id),
     CONSTRAINT login_unique UNIQUE (login),
     CONSTRAINT fk_role FOREIGN KEY (role)
-        REFERENCES roles (id)
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        REFERENCES role (id)
 );
 
-CREATE TABLE IF NOT EXISTS crm.tasks
+CREATE TABLE IF NOT EXISTS crm.task
 (
     id      INT          NOT NULL AUTO_INCREMENT,
     title   VARCHAR(250) NOT NULL,
     status  INT          NOT NULL,
     dedline DATE         NOT NULL,
     info    VARCHAR(250),
-    CONSTRAINT tasks_pkey PRIMARY KEY (id),
+    CONSTRAINT task_pkey PRIMARY KEY (id),
     CONSTRAINT name_unique UNIQUE (title),
     CONSTRAINT fk_status FOREIGN KEY (status)
         REFERENCES status (id)
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-
 );
 
-CREATE TABLE IF NOT EXISTS crm.users_tasks
+CREATE TABLE IF NOT EXISTS crm.user_task
 (
     user_id INT NOT NULL,
     task_id INT NOT NULL,
     info    VARCHAR(250),
-    CONSTRAINT users_tasks_pkey PRIMARY KEY (user_id, task_id),
+    CONSTRAINT user_task_pkey PRIMARY KEY (user_id, task_id),
     CONSTRAINT fk_task_user FOREIGN KEY (task_id)
-        REFERENCES tasks (id)
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
+        REFERENCES task (id),
     CONSTRAINT fk_user_task FOREIGN KEY (user_id)
-        REFERENCES users (id)
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        REFERENCES user (id)
 );
