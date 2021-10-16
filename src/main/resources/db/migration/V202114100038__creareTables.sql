@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS role
 (
-    id        INT         NOT NULL AUTO_INCREMENT,
+    id        INT NOT NULL AUTO_INCREMENT,
     role_name VARCHAR(50) NOT NULL,
     CONSTRAINT role_pkey PRIMARY KEY (id),
     CONSTRAINT role_unique UNIQUE (role_name)
@@ -19,13 +19,13 @@ CREATE TABLE IF NOT EXISTS user
     id         INT         NOT NULL AUTO_INCREMENT,
     login      VARCHAR(50) NOT NULL,
     psw        INT         NOT NULL,
-    role       INT         NOT NULL,
+    role       INT,
     first_name VARCHAR(50) NOT NULL,
     last_name  VARCHAR(50) NOT NULL,
     CONSTRAINT user_pkey PRIMARY KEY (id),
     CONSTRAINT login_unique UNIQUE (login),
     CONSTRAINT fk_role FOREIGN KEY (role)
-        REFERENCES role (id)
+        REFERENCES role (id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS task

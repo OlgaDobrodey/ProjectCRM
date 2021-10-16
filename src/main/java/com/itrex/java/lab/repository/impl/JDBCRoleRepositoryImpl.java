@@ -15,9 +15,8 @@ public class JDBCRoleRepositoryImpl implements RoleRepository {
     private static final String SELECT_ALL_QUERY = "SELECT * FROM crm.role";
     private static final String SELECT_ROLE_BY_ID_QUERY = "SELECT * FROM crm.role WHERE id = ";
     private static final String INSERT_ROLE_QUERY = "INSERT INTO crm.role(role_name) VALUES (?)";
-    private static final String UPDATE_ROLE_QUERY = "UPDATE crm.role SET role_name=? WHERE id = ?";
+    private static final String UPDATE_ROLE_QUERY = "UPDATE crm.role SET role_name = ? WHERE id = ?";
     private static final String DELETE_ROLE_QUERTY = "DELETE FROM crm.role WHERE id = ?";
-
 
     private final DataSource dataSource;
 
@@ -41,7 +40,6 @@ public class JDBCRoleRepositoryImpl implements RoleRepository {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-
         return roles;
     }
 
@@ -52,7 +50,7 @@ public class JDBCRoleRepositoryImpl implements RoleRepository {
              Statement stm = conn.createStatement();
              ResultSet resultSet = stm.executeQuery(SELECT_ROLE_BY_ID_QUERY + id)) {
             if (resultSet.next()) {
-                role.setId(resultSet.getInt(ID_ROLE_COLUMN));
+                role.setId(id);
                 role.setRoleName(resultSet.getString(NAME_ROLE_COLUMN));
                 if (resultSet.next()) {
                     throw new SQLIntegrityConstraintViolationException("Count roles more one");
@@ -86,7 +84,6 @@ public class JDBCRoleRepositoryImpl implements RoleRepository {
                 for (Role role : roles) {
                     addAllRolles.add(insert(role, con));
                 }
-
                 con.commit();
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -121,8 +118,9 @@ public class JDBCRoleRepositoryImpl implements RoleRepository {
              PreparedStatement preparedStatement = conn.prepareStatement(DELETE_ROLE_QUERTY)) {
             preparedStatement.setInt(1, id);
 
-            int i = preparedStatement.executeUpdate();
-            if(i==1) return true;
+            if (preparedStatement.executeUpdate() == 1) {
+                return true;
+            }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

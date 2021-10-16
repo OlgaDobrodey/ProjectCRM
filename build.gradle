@@ -1,6 +1,8 @@
 plugins {
     id 'java'
     id 'application'
+    id 'jacoco'
+
 }
 
 group 'com.itrex.java.lab'
@@ -19,9 +21,8 @@ repositories {
 }
 
 dependencies {
-
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.0.0'
     implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.0.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
@@ -30,3 +31,4 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+

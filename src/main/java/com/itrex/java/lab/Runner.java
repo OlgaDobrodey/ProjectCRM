@@ -25,5 +25,9 @@ public class Runner {
         RoleRepository roleRepository = new JDBCRoleRepositoryImpl(jdbcConnectionPool);
         List<Role> users = roleRepository.selectAll();
         System.out.println("Step 1 select all users:\n" + users);
+
+        System.out.println("=========CLOSE ALL UNUSED CONNECTIONS=============");
+        jdbcConnectionPool.dispose();
+        System.out.println("=================SHUT DOWN APP====================");
     }
 }
