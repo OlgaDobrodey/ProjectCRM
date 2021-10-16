@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS role
 (
-    id        INT NOT NULL AUTO_INCREMENT,
+    id        INT         NOT NULL AUTO_INCREMENT,
     role_name VARCHAR(50) NOT NULL,
     CONSTRAINT role_pkey PRIMARY KEY (id),
     CONSTRAINT role_unique UNIQUE (role_name)
@@ -32,13 +32,13 @@ CREATE TABLE IF NOT EXISTS task
 (
     id      INT          NOT NULL AUTO_INCREMENT,
     title   VARCHAR(250) NOT NULL,
-    status  INT          NOT NULL,
+    status  INT,
     dedline DATE         NOT NULL,
     info    VARCHAR(250),
     CONSTRAINT task_pkey PRIMARY KEY (id),
     CONSTRAINT name_unique UNIQUE (title),
     CONSTRAINT fk_status FOREIGN KEY (status)
-        REFERENCES status (id)
+        REFERENCES status (id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS user_task
