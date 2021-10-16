@@ -7,7 +7,7 @@ group 'com.itrex.java.lab'
 version '1.0-SNAPSHOT'
 
 ext {
-    javaMainClass = "com.itrex.java.lab.Main"
+    javaMainClass = "com.itrex.java.lab.Runner"
 }
 
 application {
