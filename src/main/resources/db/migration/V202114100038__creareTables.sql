@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS crm.role
+CREATE TABLE IF NOT EXISTS role
 (
     id        INT         NOT NULL AUTO_INCREMENT,
     role_name VARCHAR(50) NOT NULL,
@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS crm.role
     CONSTRAINT role_unique UNIQUE (role_name)
 );
 
-CREATE TABLE IF NOT EXISTS crm.status
+CREATE TABLE IF NOT EXISTS status
 (
     id          INT         NOT NULL AUTO_INCREMENT,
     status_name VARCHAR(50) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS crm.status
     CONSTRAINT status_unique UNIQUE (status_name)
 );
 
-CREATE TABLE IF NOT EXISTS crm.user
+CREATE TABLE IF NOT EXISTS user
 (
     id         INT         NOT NULL AUTO_INCREMENT,
     login      VARCHAR(50) NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS crm.user
         REFERENCES role (id)
 );
 
-CREATE TABLE IF NOT EXISTS crm.task
+CREATE TABLE IF NOT EXISTS task
 (
     id      INT          NOT NULL AUTO_INCREMENT,
     title   VARCHAR(250) NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS crm.task
         REFERENCES status (id)
 );
 
-CREATE TABLE IF NOT EXISTS crm.user_task
+CREATE TABLE IF NOT EXISTS user_task
 (
     user_id INT NOT NULL,
     task_id INT NOT NULL,

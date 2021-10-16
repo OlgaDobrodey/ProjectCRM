@@ -1,13 +1,13 @@
-INSERT INTO crm.status(status_name)
+INSERT INTO status(status_name)
 VALUES ('new'),
        ('performed'),
        ('completed');
 
-INSERT INTO crm.role(role_name)
+INSERT INTO role(role_name)
 VALUES ('user'),
        ('admin');
 
-INSERT INTO crm.user(login, psw, role, last_name, first_name)
+INSERT INTO user(login, psw, role, last_name, first_name)
 VALUES ('Petrov', 123, 1, 'Petrov', 'Petr'),
        ('Ivanov', 123, 1, 'Ivanov', 'Ivan'),
        ('Sidorov', 123, 1, 'Sidorov', 'Sidr'),
@@ -19,7 +19,7 @@ VALUES ('Petrov', 123, 1, 'Petrov', 'Petr'),
        ('Kurgan', 123, 2, 'Kurgan', 'Misha'),
        ('Leurdo', 123, 2, 'Leurdo', 'Elena');
 
-INSERT INTO crm.task(title, status, dedline, info)
+INSERT INTO task(title, status, dedline, info)
 VALUES ('Design the solution', 1, '2022-10-23', 'Define the relationship between resources and business systems.'),
        ('Prepare for implementation', 1, '2022-12-23', 'Identify production LPARs.'),
        ('Prepare the test/QA environment', 2, '2021-12-23',
@@ -51,7 +51,7 @@ VALUES ('Design the solution', 1, '2022-10-23', 'Define the relationship between
        ('Tivoli Business Systems Manager SQL server jobs', 3, '2020-11-28',
         'Tivoli Business Systems Manager SQL server jobs');
 
-INSERT INTO crm.user_task(
+INSERT INTO user_task(
     user_id, task_id, info)
 VALUES
     (1, 1, 'info'),
