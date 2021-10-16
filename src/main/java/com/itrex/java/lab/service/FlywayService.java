@@ -22,9 +22,9 @@ public class FlywayService {
 
     private void inti() {
         flyway = Flyway.configure()
-                .dataSource(URL, USER, PSW)
-                .locations(LOCATIONS)
-                .schemas(SCHEMA)
+                .dataSource(H2_URL, H2_USER, H2_PSW)
+                .locations(H2_LOCATIONS)
+                .schemas(H2_SCHEMA)
                 .load();
     }
 }
