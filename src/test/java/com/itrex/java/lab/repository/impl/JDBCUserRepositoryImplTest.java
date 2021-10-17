@@ -1,15 +1,11 @@
 package com.itrex.java.lab.repository.impl;
 
 import com.itrex.java.lab.entity.Role;
-import com.itrex.java.lab.entity.Status;
-import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.repository.BaseRepositoryTest;
 import com.itrex.java.lab.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -70,7 +66,6 @@ public class JDBCUserRepositoryImplTest extends BaseRepositoryTest {
 
         user.setLastName("Ivanov");
         user.setFirstName("Ivan");
-
 
         User expected = new User();
         expected.setId(repository.selectAll().size() + 1);
@@ -138,16 +133,16 @@ public class JDBCUserRepositoryImplTest extends BaseRepositoryTest {
     void update_validData_receiveUserAndInteger_shouldReturnExistUserTest() {
         //given
         User expected = new User();
-        expected .setLogin("Test");
-        expected .setPsw(123);
+        expected.setLogin("Test");
+        expected.setPsw(123);
 
         Role role = new Role();
         role.setId(1);
         role.setRoleName("user");
         expected.setRole(role);
 
-        expected .setLastName("Ivanov");
-        expected .setFirstName("Ivan");
+        expected.setLastName("Ivanov");
+        expected.setFirstName("Ivan");
         Integer testId = 1;
 
         //when

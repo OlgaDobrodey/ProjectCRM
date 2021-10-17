@@ -9,9 +9,9 @@ import java.util.List;
 public interface UserTaskRepository {
 
     List<UserTask> selectAll();
-    UserTask selectByUserAndTask(Task task, User user);
+    UserTask selectByTask(Task task);
     UserTask add(UserTask userTask);
     List<UserTask> addAll(List<UserTask> userTasks);
     UserTask update(Task task, User user, UserTask userTask);
-    boolean remove(Task task, User user);
+    boolean remove(Task task);
 }

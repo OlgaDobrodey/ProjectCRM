@@ -71,13 +71,13 @@ public class JDBCUserRepositoryImpl implements UserRepository {
 
     @Override
     public User add(User user) {
-        User insertTask = new User();
+        User insertUser = new User();
         try (Connection con = dataSource.getConnection()) {
-            insertTask = insert(user, con);
+            insertUser = insert(user, con);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return insertTask;
+        return insertUser;
     }
 
     @Override
