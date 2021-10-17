@@ -1,8 +1,10 @@
 package com.itrex.java.lab;
 
 import com.itrex.java.lab.entity.Role;
+import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.repository.RoleRepository;
 import com.itrex.java.lab.repository.impl.JDBCRoleRepositoryImpl;
+import com.itrex.java.lab.repository.impl.JDBCTaskRepositoryImpl;
 import com.itrex.java.lab.service.FlywayService;
 import org.h2.jdbcx.JdbcConnectionPool;
 
@@ -21,10 +23,9 @@ public class Runner {
         System.out.println("============CREATE CONNECTION POOL================");
         JdbcConnectionPool jdbcConnectionPool = JdbcConnectionPool.create(H2_URL, H2_USER, H2_PSW);
 
-
-        RoleRepository roleRepository = new JDBCRoleRepositoryImpl(jdbcConnectionPool);
-        List<Role> users = roleRepository.selectAll();
-        System.out.println("Step 1 select all users:\n" + users);
+        JDBCTaskRepositoryImpl jdbcTaskRepository = new JDBCTaskRepositoryImpl(jdbcConnectionPool);
+        List<Task> tasks = jdbcTaskRepository.selectAll();
+        System.out.println(tasks);
 
         System.out.println("=========CLOSE ALL UNUSED CONNECTIONS=============");
         jdbcConnectionPool.dispose();

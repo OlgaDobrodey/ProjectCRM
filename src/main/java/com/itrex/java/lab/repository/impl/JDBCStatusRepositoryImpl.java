@@ -53,7 +53,7 @@ public class JDBCStatusRepositoryImpl implements StatusRepository {
                 status.setId(id);
                 status.setStatusName(resultSet.getString(NAME_STATUS_COLUMN));
                 if (resultSet.next()) {
-                    throw new SQLIntegrityConstraintViolationException("Count roles more one");
+                    throw new SQLIntegrityConstraintViolationException("Count statuses more one");
                 }
             }
         } catch (SQLIntegrityConstraintViolationException ex) {
@@ -130,18 +130,14 @@ public class JDBCStatusRepositoryImpl implements StatusRepository {
     private Status insert(Status status, Connection con) throws SQLException {
         try (PreparedStatement preparedStatement = con.prepareStatement(INSERT_STATUS_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, status.getStatusName());
-            status = setIdForChangeRole(preparedStatement, status);
-        }
-        return status;
-    }
 
-    private Status setIdForChangeRole(PreparedStatement preparedStatement, Status status) throws SQLException {
-        final int effectiveRows = preparedStatement.executeUpdate();
+            final int effectiveRows = preparedStatement.executeUpdate();
 
-        if (effectiveRows == 1) {
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    status.setId(generatedKeys.getInt(ID_STATUS_COLUMN));
+            if (effectiveRows == 1) {
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        status.setId(generatedKeys.getInt(ID_STATUS_COLUMN));
+                    }
                 }
             }
         }

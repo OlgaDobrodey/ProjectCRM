@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS task
     id      INT          NOT NULL AUTO_INCREMENT,
     title   VARCHAR(250) NOT NULL,
     status  INT,
-    dedline DATE         NOT NULL,
+    dedline DATE,
     info    VARCHAR(250),
     CONSTRAINT task_pkey PRIMARY KEY (id),
     CONSTRAINT name_unique UNIQUE (title),
@@ -48,7 +48,11 @@ CREATE TABLE IF NOT EXISTS user_task
     info    VARCHAR(250),
     CONSTRAINT user_task_pkey PRIMARY KEY (user_id, task_id),
     CONSTRAINT fk_task_user FOREIGN KEY (task_id)
-        REFERENCES task (id),
+        REFERENCES task (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
     CONSTRAINT fk_user_task FOREIGN KEY (user_id)
         REFERENCES user (id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );

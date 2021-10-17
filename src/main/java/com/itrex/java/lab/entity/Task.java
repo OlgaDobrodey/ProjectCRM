@@ -1,6 +1,7 @@
 package com.itrex.java.lab.entity;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Task {
 
@@ -55,9 +56,22 @@ public class Task {
         return "\nTask{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", status=" + status +
+                ", status=" + status.getStatusName() +
                 ", dedline=" + dedline +
                 ", info='" + info + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(id, task.id) && Objects.equals(title, task.title) && Objects.equals(status, task.status) && Objects.equals(dedline, task.dedline) && Objects.equals(info, task.info);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, status, dedline, info);
     }
 }
