@@ -40,7 +40,7 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
         Role actual = repository.selectById(idRole);
         Role expected = new Role();
         expected.setId(2);
-        expected.setRoleName("admin");
+        expected.setRoleName("user");
 
         //then
         assertEquals(expected, actual);

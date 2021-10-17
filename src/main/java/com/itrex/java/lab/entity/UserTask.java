@@ -35,8 +35,8 @@ public class UserTask {
     @Override
     public String toString() {
         return "\nUserTask{" +
-                "user=" + user +
-                ", task=" + task +
+                "user=" + user.getId() +
+                ", task=" + task.getId() +
                 ", info='" + info + '\'' +
                 '}';
     }

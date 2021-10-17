@@ -3,8 +3,12 @@ package com.itrex.java.lab.repository.impl;
 import com.itrex.java.lab.entity.Status;
 import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.repository.BaseRepositoryTest;
+import com.itrex.java.lab.repository.StatusRepository;
 import com.itrex.java.lab.repository.TaskRepository;
+import com.itrex.java.lab.repository.TestCategoryTest;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -12,13 +16,22 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
 
     private final TaskRepository repository;
+    private TestCategoryTest testCategoryTest;
+    private StatusRepository statusRepository;
 
     public JDBCTaskRepositoryImplTest() {
         super();
         repository = new JDBCTaskRepositoryImpl(getConnectionPool());
+    }
+
+    @BeforeAll
+    private void createCategory() {
+        this.testCategoryTest = new TestCategoryTest();
+        this.statusRepository = new JDBCStatusRepositoryImpl(getConnectionPool());
     }
 
     @Test
@@ -44,11 +57,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         expected.setDedline(LocalDate.parse("2022-12-23", format));
 
-        Status status = new Status();
-        status.setId(1);
-        status.setStatusName("new");
-
-        expected.setStatus(status);
+        expected.setStatus(statusRepository.selectById(1));
         expected.setInfo("Identify production LPARs.");
 
         //then
@@ -58,18 +67,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void add_validData_receiveTask_shouldReturnExistTaskTest() {
         //given
-        Task task = new Task();
-        task.setTitle("test");
-
-        Status status = new Status();
-        status.setId(1);
-        status.setStatusName("new");
-        task.setStatus(status);
-
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        task.setDedline(LocalDate.parse("2022-12-23", format));
-
-        task.setInfo("info task");
+        Task task = testCategoryTest.createTestTasks(1).get(0);
 
         Task expected = new Task();
         expected.setId(repository.selectAll().size() + 1);
@@ -88,24 +86,9 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void addAll_validData_receiveTask_shouldReturnExistTaskTest() {
         //given
-        Task test1 = new Task();
-        test1.setTitle("test");
-
-        Status status = new Status();
-        status.setId(1);
-        status.setStatusName("new");
-        test1.setStatus(status);
-
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        test1.setDedline(LocalDate.parse("2022-12-23", format));
-
-        test1.setInfo("info task");
-
-        Task test2 = new Task();
-        test2.setTitle("test2");
-        test2.setStatus(status);
-        test2.setDedline(LocalDate.parse("2022-12-23", format));
-        test2.setInfo("info task");
+        List<Task> testTasks = testCategoryTest.createTestTasks(2);
+        Task test1 = testTasks.get(0);
+        Task test2 = testTasks.get(1);
 
         Integer countSelectAllTask = repository.selectAll().size();
         Task result1 = new Task();
@@ -135,18 +118,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void update_validData_receiveTaskAndInteger_shouldReturnExistTaskTest() {
         //given
-        Task expected = new Task();
-        expected.setTitle("test");
-
-        Status status = new Status();
-        status.setId(1);
-        status.setStatusName("new");
-        expected.setStatus(status);
-
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        expected.setDedline(LocalDate.parse("2022-12-23", format));
-
-        expected.setInfo("info task");
+        Task expected = testCategoryTest.createTestTasks(1).get(0);
         Integer testId = 1;
 
         //when

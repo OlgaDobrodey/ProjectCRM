@@ -130,7 +130,7 @@ public class JDBCRoleRepositoryImpl implements RoleRepository {
     private Role insert(Role role, Connection con) throws SQLException {
         try (PreparedStatement preparedStatement = con.prepareStatement(INSERT_ROLE_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, role.getRoleName());
-            final int effectiveRows = preparedStatement.executeUpdate();
+            int effectiveRows = preparedStatement.executeUpdate();
 
             if (effectiveRows == 1) {
                 try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {

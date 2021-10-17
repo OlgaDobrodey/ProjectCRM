@@ -10,8 +10,7 @@ import org.junit.jupiter.api.TestInstance;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class JDBCUserTaskRepositoryImplTest extends BaseRepositoryTest {
@@ -33,14 +32,6 @@ public class JDBCUserTaskRepositoryImplTest extends BaseRepositoryTest {
         taskRepository = new JDBCTaskRepositoryImpl(getConnectionPool());
     }
 
-//
-//    List<UserTask> selectAll();
-//    //  UserTask selectByUserAndTask(Task task, User user);
-//    UserTask add(UserTask userTask);
-//    List<UserTask> addAll(List<UserTask> userTasks);
-//    UserTask update(Task task, User user, UserTask userTask);
-//    boolean remove(Task task);
-
     @Test
     public void selectAll_validData_shouldReturnExistUserTaskTest() {
         //given && when
@@ -50,42 +41,90 @@ public class JDBCUserTaskRepositoryImplTest extends BaseRepositoryTest {
         assertFalse(result.isEmpty());
     }
 
-    //    @Test
-//    void add_validData_receiveUser_shouldReturnExistUserTest() {
-//        //given
-//        User user = new User();
-//        user.setLogin("Test");
-//        user.setPsw(123);
-//
-//        Role role = new Role();
-//        role.setId(1);
-//        role.setRoleName("user");
-//        user.setRole(role);
-//
-//        user.setLastName("Ivanov");
-//        user.setFirstName("Ivan");
-//
-//        User expected = new User();
-//        expected.setId(repository.selectAll().size() + 1);
-//        expected.setLogin(user.getLogin());
-//        expected.setPsw(user.getPsw());
-//        expected.setRole(user.getRole());
-//        expected.setFirstName(user.getFirstName());
-//        expected.setLastName(user.getLastName());
-//
-//        //when
-//        User actual = repository.add(user);
-//
-//        //then
-//        assertEquals(expected, actual);
-//    }
+    @Test
+    void selectByUserTask_validData_receiveUserAndTask_shouldReturnExistUserTaskTest() {
+        //given
+        User user = userRepository.selectById(2);
+        Task task = taskRepository.selectById(5);
+
+        //when
+        UserTask actual = repository.selectByUserTask(user,task);
+        UserTask expected = new UserTask();
+        expected.setUser(user);
+        expected.setTask(task);
+
+        //then
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void add_validData_receiveUser_shouldReturnExistUserTest() {
+        //given
+        User user = userRepository.add(testCategoryTest.createTestUsers(1).get(0));
+        Task task = taskRepository.add(testCategoryTest.createTestTasks(1).get(0));
+        UserTask userTask = new UserTask();
+        userTask.setUser(user);
+        userTask.setTask(task);
+        userTask.setInfo("info test");
+
+        UserTask expected = new UserTask();
+        expected.setTask(userTask.getTask());
+        expected.setUser(userTask.getUser());
+        expected.setInfo(userTask.getInfo());
+
+        //when
+        UserTask actual = repository.add(userTask);
+
+        //then
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void addAll_validData_receiveUser_shouldReturnExistUserTest() {
+        //given
+        List<Task> tasks = testCategoryTest.createTestTasks(2);
+        taskRepository.addAll(tasks);
+        List<User> users = testCategoryTest.createTestUsers(1);
+        User testUser = userRepository.add(users.get(0));
+
+        UserTask test1 = new UserTask();
+        test1.setTask(tasks.get(0));
+        test1.setUser(testUser);
+        test1.setInfo("test1");
+
+        UserTask test2 = new UserTask();
+        test2.setTask(tasks.get(1));
+        test2.setUser(testUser);
+        test2.setInfo("test2");
+
+        UserTask result1 = new UserTask();
+        result1.setTask(test1.getTask());
+        result1.setUser(test1.getUser());
+        result1.setInfo(test1.getInfo());
+
+        UserTask result2 = new UserTask();
+        result2.setTask(test2.getTask());
+        result2.setUser(test2.getUser());
+        result2.setInfo(test2.getInfo());
+
+        //when
+        List<UserTask> expected = List.of(result1, result2);
+        List<UserTask> actual = repository.addAll(List.of(test1, test2));
+
+        //then
+        assertEquals(expected, actual);
+    }
+
     @Test
     void update_validData_receiveUserTaskAndUserAndTask_shouldReturnExistUserTest() {
         //given
-        UserTask expected = testCategoryTest.createUserTasks(1).get(0);
-
         User user = userRepository.selectById(1);
         Task task = taskRepository.selectById(2);
+
+        UserTask expected = new UserTask();
+        expected.setUser(userRepository.selectById(3));
+        expected.setTask(taskRepository.selectById(2));
+        expected.setInfo("info test");
 
         //when
         UserTask actual = repository.update(task, user, expected);
@@ -94,15 +133,15 @@ public class JDBCUserTaskRepositoryImplTest extends BaseRepositoryTest {
         assertEquals(expected, actual);
     }
 
-//    @Test
-//    void removeUser_validData_receiveInteger_shouldReturnExistBooleanTest() {
-//        //given
-//        testCategoryTest.createTestTasks(1).
-//
-//        //when
-//        Boolean actual = repository.remove(repository);
-//
-//        //then
-//        assertTrue(actual);
-//    }
+    @Test
+    void removeUser_validData_receiveInteger_shouldReturnExistBooleanTest() {
+        //given
+        Task testTasks = taskRepository.selectById(1);
+
+        //when
+        Boolean actual = repository.remove(testTasks);
+
+        //then
+        assertTrue(actual);
+    }
 }

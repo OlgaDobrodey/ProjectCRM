@@ -1,21 +1,28 @@
 package com.itrex.java.lab.repository;
 
-import com.itrex.java.lab.entity.*;
-import com.itrex.java.lab.repository.impl.JDBCRoleRepositoryImpl;
-import com.itrex.java.lab.repository.impl.JDBCStatusRepositoryImpl;
+import com.itrex.java.lab.entity.Role;
+import com.itrex.java.lab.entity.Status;
+import com.itrex.java.lab.entity.Task;
+import com.itrex.java.lab.entity.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestCategoryTest extends BaseRepositoryTest {
+public class TestCategoryTest {
 
-    public Status createTestStatusInDataBase() {
-        return new JDBCStatusRepositoryImpl(getConnectionPool()).selectById(1);
+    public Status createTestStatus() {
+        Status status = new Status();
+        status.setId(1);
+        status.setStatusName("new");
+        return status;
     }
 
-    public Role createTestRoleInDataBase() {
-        return new JDBCRoleRepositoryImpl(getConnectionPool()).selectById(1);
+    public Role createTestRole() {
+        Role role = new Role();
+        role.setRoleName("admin");
+        role.setId(1);
+        return role;
     }
 
     public List<User> createTestUsers(Integer count) {
@@ -24,7 +31,7 @@ public class TestCategoryTest extends BaseRepositoryTest {
             User user = new User();
             user.setLogin("Test " + i);
             user.setPsw(123 + i);
-            user.setRole(createTestRoleInDataBase());
+            user.setRole(createTestRole());
             user.setLastName("Ivanov " + i);
             user.setFirstName("Ivan " + i);
             users.add(user);
@@ -37,25 +44,12 @@ public class TestCategoryTest extends BaseRepositoryTest {
         for (int i = 0; i < count; i++) {
             Task task = new Task();
             task.setTitle("Task test " + i);
-            task.setStatus(createTestStatusInDataBase());
+            task.setStatus(createTestStatus());
             task.setInfo("Task test info " + i);
-            task.setDedline(LocalDate.now());
+            task.setDedline(LocalDate.of(2001, 1, 1));
 
             tasks.add(task);
         }
         return tasks;
-    }
-
-    public List<UserTask> createUserTasks(Integer count) {
-        List<UserTask> userTasks = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            UserTask userTask = new UserTask();
-            userTask.setTask(createTestTasks(1).get(0));
-            userTask.setUser(createTestUsers(1).get(0));
-            userTask.setInfo("User task info " + i);
-            userTasks.add(userTask);
-        }
-
-        return userTasks;
     }
 }

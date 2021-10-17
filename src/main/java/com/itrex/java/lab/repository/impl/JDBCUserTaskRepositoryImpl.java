@@ -3,6 +3,8 @@ package com.itrex.java.lab.repository.impl;
 import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.entity.UserTask;
+import com.itrex.java.lab.repository.TaskRepository;
+import com.itrex.java.lab.repository.UserRepository;
 import com.itrex.java.lab.repository.UserTaskRepository;
 
 import javax.sql.DataSource;
@@ -17,14 +19,19 @@ public class JDBCUserTaskRepositoryImpl implements UserTaskRepository {
     private static final String INFO_COLUMN = "info";
 
     private static final String SELECT_ALL_QUERY = "SELECT * FROM crm.user_task";
+    private static final String SELECT_USERTASK_BY_USER_AND_TASK = "SELECT * FROM crm.user_task WHERE user_id = %d AND task_id= %d";
     private static final String INSERT_USER_TASK_QUERY = "INSERT INTO crm.user_task(user_id, task_id, info) VALUES (?, ?, ?)";
     private static final String UPDATE_USER_TASK_QUERY = "UPDATE crm.user_task SET user_id=?, task_id=?, info=?  WHERE user_id = ? AND task_id=? ";
     private static final String DELETE_USER_TASK_QUERY = "DELETE FROM crm.user_task WHERE task_id=?";
 
     private DataSource dataSource;
+    private UserRepository userRepository;
+    private TaskRepository taskRepository;
 
     public JDBCUserTaskRepositoryImpl(DataSource dataSource) {
         this.dataSource = dataSource;
+        this.userRepository = new JDBCUserRepositoryImpl(dataSource);
+        this.taskRepository = new JDBCTaskRepositoryImpl(dataSource);
     }
 
     @Override
@@ -46,15 +53,32 @@ public class JDBCUserTaskRepositoryImpl implements UserTaskRepository {
     }
 
     @Override
-    public UserTask selectByTask(Task task) {
-        return null;
+    public UserTask selectByUserTask(User user, Task task) {
+        UserTask userTask = new UserTask();
+        String select = String.format(SELECT_USERTASK_BY_USER_AND_TASK, user.getId(), task.getId());
+        try (Connection conn = dataSource.getConnection();
+             Statement stm = conn.createStatement();
+             ResultSet resultSet = stm.executeQuery(select)) {
+            if (resultSet.next()) {
+                userTask = getUserTask(resultSet, userTask);
+                if (resultSet.next()) {
+                    throw new SQLIntegrityConstraintViolationException("Count userTasks more one");
+                }
+            }
+        } catch (SQLIntegrityConstraintViolationException ex) {
+            ex.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return userTask;
     }
+
 
     @Override
     public UserTask add(UserTask userTask) {
         UserTask insertUT = new UserTask();
         try (Connection con = dataSource.getConnection()) {
-            insertUT = insert(insertUT, con);
+            insertUT = insert(userTask, con);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -95,8 +119,8 @@ public class JDBCUserTaskRepositoryImpl implements UserTaskRepository {
             preparedStatement.setInt(5, task.getId());
 
             preparedStatement.executeUpdate();
-            userTask.setUser(user);
-            userTask.setTask(task);
+            userTask.setUser(userTask.getUser());
+            userTask.setTask(userTask.getTask());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -119,31 +143,24 @@ public class JDBCUserTaskRepositoryImpl implements UserTaskRepository {
     }
 
     private UserTask getUserTask(ResultSet resultSet, UserTask userTask) throws SQLException {
-        userTask.setTask(resultSet.getObject(TASK_COLUMN, Task.class));
-        userTask.setUser(resultSet.getObject(USER_COLUMN, User.class));
+
+        userTask.setUser(userRepository.selectById(resultSet.getInt(USER_COLUMN)));
+        userTask.setTask(taskRepository.selectById(resultSet.getInt(TASK_COLUMN)));
         userTask.setInfo(resultSet.getString(INFO_COLUMN));
 
         return userTask;
     }
 
     private UserTask insert(UserTask userTask, Connection con) throws SQLException {
-        try (PreparedStatement preparedStatement = con.prepareStatement(INSERT_USER_TASK_QUERY, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = con.prepareStatement(INSERT_USER_TASK_QUERY)) {
             extracted(userTask, preparedStatement);
-
-            final int effectiveRows = preparedStatement.executeUpdate();
-
-            if (effectiveRows == 1) {
-                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-//                        userTask.setId(generatedKeys.getInt(ID_USER_TASK_COLUMN));
-                    }
-                }
-            }
+            preparedStatement.executeUpdate();
         }
         return userTask;
     }
 
     private void extracted(UserTask userTask, PreparedStatement preparedStatement) throws SQLException {
+
         preparedStatement.setInt(1, userTask.getUser().getId());
         preparedStatement.setInt(2, userTask.getTask().getId());
         preparedStatement.setString(3, userTask.getInfo());

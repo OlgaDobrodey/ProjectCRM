@@ -3,21 +3,35 @@ package com.itrex.java.lab.repository.impl;
 import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.repository.BaseRepositoryTest;
+import com.itrex.java.lab.repository.RoleRepository;
+import com.itrex.java.lab.repository.TestCategoryTest;
 import com.itrex.java.lab.repository.UserRepository;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class JDBCUserRepositoryImplTest extends BaseRepositoryTest {
 
     private final UserRepository repository;
+    private TestCategoryTest testCategoryTest;
+    private RoleRepository roleRepository;
 
     public JDBCUserRepositoryImplTest() {
         super();
         repository = new JDBCUserRepositoryImpl(getConnectionPool());
     }
+
+    @BeforeAll
+    private void createCategory() {
+        testCategoryTest = new TestCategoryTest();
+        roleRepository = new JDBCRoleRepositoryImpl(getConnectionPool());
+    }
+
 
     @Test
     public void selectAll_validData_shouldReturnExistUserTest() {
@@ -39,12 +53,7 @@ public class JDBCUserRepositoryImplTest extends BaseRepositoryTest {
         expected.setId(2);
         expected.setLogin("Ivanov");
         expected.setPsw(123);
-
-        Role role = new Role();
-        role.setId(1);
-        role.setRoleName("user");
-        expected.setRole(role);
-
+        expected.setRole(roleRepository.selectById(1));
         expected.setLastName("Ivanov");
         expected.setFirstName("Ivan");
 
@@ -55,17 +64,7 @@ public class JDBCUserRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void add_validData_receiveUser_shouldReturnExistUserTest() {
         //given
-        User user = new User();
-        user.setLogin("Test");
-        user.setPsw(123);
-
-        Role role = new Role();
-        role.setId(1);
-        role.setRoleName("user");
-        user.setRole(role);
-
-        user.setLastName("Ivanov");
-        user.setFirstName("Ivan");
+        User user = testCategoryTest.createTestUsers(1).get(0);
 
         User expected = new User();
         expected.setId(repository.selectAll().size() + 1);
@@ -82,67 +81,44 @@ public class JDBCUserRepositoryImplTest extends BaseRepositoryTest {
         assertEquals(expected, actual);
     }
 
-//    @Test
-//    void addAll_validData_receiveUser_shouldReturnExistUserTest() {
-//        //given
-//        Task test1 = new Task();
-//        test1.setTitle("test");
-//
-//        Status status = new Status();
-//        status.setId(1);
-//        status.setStatusName("new");
-//        test1.setStatus(status);
-//
-//        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//        test1.setDedline(LocalDate.parse("2022-12-23", format));
-//
-//        test1.setInfo("info task");
-//
-//        Task test2 = new Task();
-//        test2.setTitle("test2");
-//        test2.setStatus(status);
-//        test2.setDedline(LocalDate.parse("2022-12-23", format));
-//        test2.setInfo("info task");
-//
-//        Integer countSelectAllTask = repository.selectAll().size();
-//        Task result1 = new Task();
-//        result1.setTitle(test1.getTitle());
-//        result1.setDedline(test1.getDedline());
-//        result1.setStatus(test1.getStatus());
-//        result1.setInfo(test1.getInfo());
-//
-//        result1.setId(countSelectAllTask + 1);
-//
-//        Task result2 = new Task();
-//        result2.setTitle(test2.getTitle());
-//        result2.setDedline(test2.getDedline());
-//        result2.setStatus(test2.getStatus());
-//        result2.setInfo(test2.getInfo());
-//
-//        result2.setId(countSelectAllTask + 2);
-//
-//        //when
-//        List<Task> expected = List.of(result1, result2);
-//        List<Task> actual = repository.addAll(List.of(test1, test2));
-//
-//        //then
-//        assertEquals(expected, actual);
-//    }
+    @Test
+    void addAll_validData_receiveUser_shouldReturnExistUserTest() {
+        //given
+        List<User> testUsers = testCategoryTest.createTestUsers(2);
+        User test1 = testUsers.get(0);
+        User test2 = testUsers.get(1);
+
+        Integer countSelectAllTask = repository.selectAll().size();
+        User result1 = new User();
+        result1.setLogin(test1.getLogin());
+        result1.setPsw(test1.getPsw());
+        result1.setRole(test1.getRole());
+        result1.setLastName(test1.getLastName());
+        result1.setFirstName(test1.getFirstName());
+
+        result1.setId(countSelectAllTask + 1);
+
+        User result2 = new User();
+        result2.setLogin(test2.getLogin());
+        result2.setPsw(test2.getPsw());
+        result2.setRole(test2.getRole());
+        result2.setLastName(test2.getLastName());
+        result2.setFirstName(test2.getFirstName());
+
+        result2.setId(countSelectAllTask + 2);
+
+        //when
+        List<User> expected = List.of(result1, result2);
+        List<User> actual = repository.addAll(List.of(test1, test2));
+
+        //then
+        assertEquals(expected, actual);
+    }
 
     @Test
     void update_validData_receiveUserAndInteger_shouldReturnExistUserTest() {
         //given
-        User expected = new User();
-        expected.setLogin("Test");
-        expected.setPsw(123);
-
-        Role role = new Role();
-        role.setId(1);
-        role.setRoleName("user");
-        expected.setRole(role);
-
-        expected.setLastName("Ivanov");
-        expected.setFirstName("Ivan");
+        User expected = testCategoryTest.createTestUsers(1).get(0);
         Integer testId = 1;
 
         //when
