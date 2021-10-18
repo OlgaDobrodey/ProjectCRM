@@ -56,7 +56,7 @@ public class Task {
         return "\nTask{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", status=" + status +
+                ", status=" + (status!=null?status.getStatusName():null) +
                 ", dedline=" + dedline +
                 ", info='" + info + '\'' +
                 '}';

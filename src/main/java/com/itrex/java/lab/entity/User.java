@@ -65,7 +65,7 @@ public class User {
                 "id=" + id +
                 ", login='" + login + '\'' +
                 ", psw=" + psw +
-                ", role=" + role +
+                ", role=" + (role!=null?role.getRoleName():null )+
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 '}';
