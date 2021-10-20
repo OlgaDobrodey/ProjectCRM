@@ -11,26 +11,19 @@ import java.util.List;
 
 public class TestCategoryTest {
 
-    public Status createTestStatus() {
-        Status status = new Status();
-        status.setId(1);
-        status.setStatusName("new");
-        return status;
-    }
-
-    public Role createTestRole() {
+    public static Role createTestRole() {
         Role role = new Role();
-        role.setRoleName("admin");
+        role.setRoleName("ADMIN");
         role.setId(1);
         return role;
     }
 
-    public List<User> createTestUsers(Integer count) {
+    public static List<User> createTestUsers(Integer count) {
         List<User> users = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             User user = new User();
             user.setLogin("Test " + i);
-            user.setPsw(123 + i);
+            user.setPsw("123" + i);
             user.setRole(createTestRole());
             user.setLastName("Ivanov " + i);
             user.setFirstName("Ivan " + i);
@@ -39,14 +32,14 @@ public class TestCategoryTest {
         return users;
     }
 
-    public List<Task> createTestTasks(Integer count) {
+    public static List<Task> createTestTasks(Integer count) {
         List<Task> tasks = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             Task task = new Task();
             task.setTitle("Task test " + i);
-            task.setStatus(createTestStatus());
+            task.setStatus(Status.NEW);
             task.setInfo("Task test info " + i);
-            task.setDedline(LocalDate.of(2001, 1, 1));
+            task.setDeadline(LocalDate.of(2001, 1, 1));
 
             tasks.add(task);
         }

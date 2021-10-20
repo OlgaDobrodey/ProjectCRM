@@ -1,8 +1,10 @@
 package com.itrex.java.lab.repository.impl;
 
+import com.itrex.java.lab.entity.Status;
 import com.itrex.java.lab.entity.Task;
-import com.itrex.java.lab.repository.StatusRepository;
+import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.repository.TaskRepository;
+import com.itrex.java.lab.repository.UserRepository;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -14,14 +16,17 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
     private static final String ID_TASK_COLUMN = "id";
     private static final String TITLE_TASK_COLUMN = "title";
     private static final String STATUS_TASK_COLUMN = "status";
-    private static final String DEDLINE_TASK_COLUMN = "dedline";
+    private static final String DEADLINE_TASK_COLUMN = "deadline";
     private static final String INFO_TASK_COLUMN = "info";
+    private static final String CROSS_TABLE_ID_USER = "user_id";
 
     private static final String SELECT_ALL_QUERY = "SELECT * FROM crm.task";
     private static final String SELECT_TASK_BY_ID_QUERY = "SELECT * FROM crm.task WHERE id = ";
-    private static final String INSERT_TASK_QUERY = "INSERT INTO crm.task(title, status, dedline, info) VALUES (?, ?, ?, ?)";
-    private static final String UPDATE_TASK_QUERY = "UPDATE crm.task SET title=?, status=?, dedline=?, info=?  WHERE id = ?";
+    private static final String SELECT_ALL_USERS_FOR_TASK = "SELECT user_id FROM crm.user_task WHERE task_id = ";
+    private static final String INSERT_TASK_QUERY = "INSERT INTO crm.task(title, status, deadline, info) VALUES (?, ?, ?, ?)";
+    private static final String UPDATE_TASK_QUERY = "UPDATE crm.task SET title=?, status=?, deadline=?, info=?  WHERE id = ?";
     private static final String DELETE_TASK_QUERTY = "DELETE FROM crm.task WHERE id = ?";
+    private static final String DELETE_ALL_USERS_BY_TASK = "DELETE FROM crm.user_task WHERE task_id = ?";
 
     private DataSource dataSource;
 
@@ -30,7 +35,7 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public List<Task> selectAll() {
+    public List<Task> selectAll() throws SQLException {
         List<Task> tasks = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              Statement stm = conn.createStatement();
@@ -42,13 +47,13 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
                 tasks.add(task);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            throw new SQLException("ERROR: SELECT ALL TASK: " + ex);
         }
         return tasks;
     }
 
     @Override
-    public Task selectById(Integer id) {
+    public Task selectById(Integer id) throws SQLException {
         Task task = new Task();
         try (Connection conn = dataSource.getConnection();
              Statement stm = conn.createStatement();
@@ -59,52 +64,62 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
                     throw new SQLIntegrityConstraintViolationException("Count tasks more one");
                 }
             }
-        } catch (SQLIntegrityConstraintViolationException ex) {
-            ex.printStackTrace();
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            throw new SQLException("ERROR: SELECT TASK BY ID: " + ex);
         }
         return task;
     }
 
     @Override
-    public Task add(Task task) {
-        Task insertTask = new Task();
-        try (Connection con = dataSource.getConnection()) {
-            insertTask = insert(task, con);
+    public List<User> selectAllUsersByTask(Task task) throws SQLException {
+        List<User> users = new ArrayList<>();
+        try (Connection conn = dataSource.getConnection();
+             Statement stm = conn.createStatement();
+             ResultSet resultSet = stm.executeQuery(SELECT_ALL_USERS_FOR_TASK + task.getId())) {
+            UserRepository userRepository = new JDBCUserRepositoryImpl(dataSource);
+            while (resultSet.next()) {
+                User user = userRepository.selectById(resultSet.getInt(CROSS_TABLE_ID_USER));
+                users.add(user);
+            }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            throw new SQLException("ERROR: SELECT ALL USERS FOR TASK: " + ex);
         }
-        return insertTask;
+        return users;
     }
 
     @Override
-    public List<Task> addAll(List<Task> tasks) {
-        List<Task> addAllTask = new ArrayList<>();
-        try (Connection con = dataSource.getConnection()) {
-            con.setAutoCommit(false);
-            try {
-                for (Task task : tasks) {
-                    addAllTask.add(insert(task, con));
-                }
-                con.commit();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                con.rollback();
-            } finally {
-                con.setAutoCommit(true);
-            }
+    public Task add(Task task) throws SQLException {
+        List<Task> tasks = new ArrayList<>();
+        try (Connection con = dataSource.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(INSERT_TASK_QUERY, Statement.RETURN_GENERATED_KEYS)) {
+            tasks.add(task);
+            insert(tasks, preparedStatement);
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            throw new SQLException("ERROR: INSERT INTO TASK- " + task + ": " + ex);
         }
-        return addAllTask;
+        return tasks.get(0);
+    }
+
+    @Override
+    public List<Task> addAll(List<Task> tasks) throws SQLException {
+        StringBuilder insertBuild = new StringBuilder(INSERT_TASK_QUERY);
+        for (int i = 1; i < tasks.size(); i++) {
+            insertBuild.append(", ").append("(?, ?, ?, ?)");
+        }
+        try (Connection con = dataSource.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(insertBuild.toString(), Statement.RETURN_GENERATED_KEYS)) {
+            insert(tasks, preparedStatement);
+        } catch (SQLException ex) {
+            throw new SQLException("ERROR: INSERT INTO THESE USERS - " + tasks + ": " + ex);
+        }
+        return tasks;
     }
 
     @Override
     public Task update(Task task, Integer id) {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_TASK_QUERY)) {
-            extracted(task, preparedStatement);
+            extracted(0, task, preparedStatement);
 
             preparedStatement.setInt(5, id);
 
@@ -117,53 +132,92 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public boolean remove(Integer id) {
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement preparedStatement = conn.prepareStatement(DELETE_TASK_QUERTY)) {
-            preparedStatement.setInt(1, id);
-
-            if (preparedStatement.executeUpdate() == 1) {
-                return true;
+    public boolean remove(Task task) throws SQLException {
+        try (Connection conn = dataSource.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                removeAllUsersByTask(task);
+                try (PreparedStatement preparedStatement = conn.prepareStatement(DELETE_TASK_QUERTY)) {
+                    preparedStatement.setInt(1, task.getId());
+                    int a = preparedStatement.executeUpdate();
+                    if (a == 1) {
+                        return true;
+                    }
+                }
+                conn.commit();
+            } catch (SQLException ex) {
+                conn.rollback();
+                throw new SQLException("TRANSACTION ROLLBACK: " + ex);
+            } finally {
+                conn.setAutoCommit(true);
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException ex) {
+            throw new SQLException("ERROR: REMOVE_TASK - " + task + ": " + ex);
         }
         return false;
+    }
+
+    @Override
+    public void addUserByTask(Task task, User user) throws SQLException {
+        JDBCUserRepositoryImpl userRepository = new JDBCUserRepositoryImpl(dataSource);
+        userRepository.addTaskByUser(task, user);
+    }
+
+    @Override
+    public boolean removeUserByTask(Task task, User user) throws SQLException {
+        JDBCUserRepositoryImpl userRepository = new JDBCUserRepositoryImpl(dataSource);
+        return userRepository.removeTaskByUser(task, user);
+    }
+
+    @Override
+    public void removeAllUsersByTask(Task task) throws SQLException {
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement preparedStatement = conn.prepareStatement(DELETE_ALL_USERS_BY_TASK)) {
+            preparedStatement.setInt(1, task.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            throw new SQLException("ERROR: DELETE_USER_ALL_TASK - " + task + ": " + ex);
+        }
     }
 
     private Task getTask(ResultSet resultSet, Task task) throws SQLException {
 
         task.setId(resultSet.getInt(ID_TASK_COLUMN));
         task.setTitle(resultSet.getString(TITLE_TASK_COLUMN));
-        StatusRepository statusRepository = new JDBCStatusRepositoryImpl(dataSource);
-        task.setStatus(statusRepository.selectById(resultSet.getInt(STATUS_TASK_COLUMN)));
-        task.setDedline(resultSet.getDate(DEDLINE_TASK_COLUMN).toLocalDate());
+        task.setStatus(Status.valueOf(resultSet.getString(STATUS_TASK_COLUMN)));
+        Date date = resultSet.getDate(DEADLINE_TASK_COLUMN);
+        task.setDeadline(date!=null?date.toLocalDate():null);
         task.setInfo(resultSet.getString(INFO_TASK_COLUMN));
 
         return task;
     }
 
-    private Task insert(Task task, Connection con) throws SQLException {
-        try (PreparedStatement preparedStatement = con.prepareStatement(INSERT_TASK_QUERY, Statement.RETURN_GENERATED_KEYS)) {
-            extracted(task, preparedStatement);
-
-            final int effectiveRows = preparedStatement.executeUpdate();
-
-            if (effectiveRows == 1) {
-                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+    private void insert(List<Task> tasks, PreparedStatement preparedStatement) throws SQLException {
+        for (int i = 0; i < tasks.size(); i++) {
+            extracted(i, tasks.get(i), preparedStatement);         //
+        }
+        int effectiveRows = preparedStatement.executeUpdate();
+        if (effectiveRows == tasks.size()) {
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                for (int i = 0; i < effectiveRows; i++) {
                     if (generatedKeys.next()) {
-                        task.setId(generatedKeys.getInt(ID_TASK_COLUMN));
+                        tasks.get(i).setId(generatedKeys.getInt(ID_TASK_COLUMN));
                     }
                 }
             }
         }
-        return task;
     }
 
-    private void extracted(Task task, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setString(1, task.getTitle());
-        preparedStatement.setInt(2, task.getStatus().getId());
-        preparedStatement.setDate(3, Date.valueOf(task.getDedline()));
-        preparedStatement.setString(4, task.getInfo());
+    /**
+     * @param counter           - counter, determines which element is added counting from 0
+     * @param task              - task
+     * @param preparedStatement
+     * @throws SQLException
+     */
+    private void extracted(int counter, Task task, PreparedStatement preparedStatement) throws SQLException {
+        preparedStatement.setString(1 + 4 * counter, task.getTitle());
+        preparedStatement.setString(2 + 4 * counter, task.getStatus().name());
+        preparedStatement.setDate(3 + 4 * counter,task.getDeadline()!=null?Date.valueOf(task.getDeadline()):null);
+        preparedStatement.setString(4 + 4 * counter, task.getInfo());
     }
 }

@@ -20,7 +20,7 @@ public class Role {
     }
 
     public void setRoleName(String roleName) {
-        this.roleName = roleName;
+        this.roleName = roleName.toUpperCase();
     }
 
     @Override

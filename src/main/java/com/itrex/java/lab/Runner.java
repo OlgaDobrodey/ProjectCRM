@@ -1,14 +1,15 @@
 package com.itrex.java.lab;
 
-import com.itrex.java.lab.entity.Role;
-import com.itrex.java.lab.repository.RoleRepository;
+import com.itrex.java.lab.entity.Status;
+import com.itrex.java.lab.entity.Task;
+import com.itrex.java.lab.repository.TaskRepository;
 import com.itrex.java.lab.repository.UserRepository;
-import com.itrex.java.lab.repository.impl.JDBCRoleRepositoryImpl;
+import com.itrex.java.lab.repository.impl.JDBCTaskRepositoryImpl;
 import com.itrex.java.lab.repository.impl.JDBCUserRepositoryImpl;
 import com.itrex.java.lab.service.FlywayService;
 import org.h2.jdbcx.JdbcConnectionPool;
 
-import java.util.List;
+import java.sql.SQLException;
 
 import static com.itrex.java.lab.properties.Properties.*;
 
@@ -24,35 +25,47 @@ public class Runner {
         JdbcConnectionPool jdbcConnectionPool = JdbcConnectionPool.create(H2_URL, H2_USER, H2_PSW);
 
         System.out.println("=================ROLE=============");
-        RoleRepository roleRepository = new JDBCRoleRepositoryImpl(jdbcConnectionPool);
-        System.out.println("SELECT_ALL" + roleRepository.selectAll());
-        System.out.println("SELECT_BY_ID" + roleRepository.selectById(1));
-
-        Role role = new Role();
-        role.setRoleName("doctor");
-
-        System.out.println("ADD" + roleRepository.add(role));
-        System.out.println("SELECT_ALL" + roleRepository.selectAll());
-
-        Role role2 = new Role();
-        role2.setRoleName("actor");
-        Role role3 = new Role();
-        role3.setRoleName("patient");
-
-        System.out.println("ADD_ALL" + roleRepository.addAll(List.of(role2, role3)));
-        System.out.println("SELECT_ALL" + roleRepository.selectAll());
-
-        Role role4 = new Role();
-        role4.setRoleName("USER");
-
-        System.out.println("UPDATE" + roleRepository.update(role4, 2));
-        System.out.println("SELECT_ALL" + roleRepository.selectAll());
-
-        System.out.println("REMOVE" + roleRepository.remove(1));
-        System.out.println("SELECT_ALL" + roleRepository.selectAll());
 
         UserRepository userRepository = new JDBCUserRepositoryImpl(jdbcConnectionPool);
-        System.out.println("SELECT_ALL_USERS" + userRepository.selectAll() + "\n");
+        TaskRepository taskRepository = new JDBCTaskRepositoryImpl(jdbcConnectionPool);
+
+        try {
+            System.out.println("SELECT ALL : " + taskRepository.selectAll());
+            Task task = new Task();
+            task.setTitle("title0");
+            task.setStatus(Status.NEW);
+            task.setInfo("task info1");
+            System.out.println("ADD :" + taskRepository.add(task));
+            Task task2 = new Task();
+            task2.setTitle("title100");
+            task2.setStatus(Status.NEW);
+            task2.setInfo("task info100");
+            Task task3 = new Task();
+            task3.setTitle("title012");
+            task3.setStatus(Status.NEW);
+            task3.setInfo("task info121");
+
+            System.out.println("UPDATE : " + taskRepository.update(task2, 1));
+            System.out.println("ALL USERS BY TASK :" + taskRepository.selectAllUsersByTask(taskRepository.selectById(2)));
+            taskRepository.addUserByTask(task, userRepository.selectById(2));
+            System.out.println("ADD USER BY TASK");
+            userRepository.printCrossTable();
+            taskRepository.removeUserByTask(task, userRepository.selectById(2));
+            userRepository.printCrossTable();
+            taskRepository.removeAllUsersByTask(taskRepository.selectById(1));
+            userRepository.printCrossTable();
+            Task task4 = new Task();
+            task4.setId(28);
+            task4.setTitle("title012111");
+            task4.setStatus(Status.NEW);
+            task4.setInfo("task info121");
+            boolean a = taskRepository.remove(task4);
+            System.out.println("REMOVE " + a);
+            System.out.println("ALL TASK" + taskRepository.selectAll());
+            userRepository.printCrossTable();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
 
         System.out.println("=========CLOSE ALL UNUSED CONNECTIONS=============");
         jdbcConnectionPool.dispose();

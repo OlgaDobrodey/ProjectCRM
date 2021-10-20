@@ -8,7 +8,7 @@ public class Task {
     private Integer id;
     private String title;
     private Status status;
-    private LocalDate dedline;
+    private LocalDate deadline;
     private String info;
 
     public Integer getId() {
@@ -35,12 +35,12 @@ public class Task {
         this.status = status;
     }
 
-    public LocalDate getDedline() {
-        return dedline;
+    public LocalDate getDeadline() {
+        return deadline;
     }
 
-    public void setDedline(LocalDate dedline) {
-        this.dedline = dedline;
+    public void setDeadline(LocalDate deadline) {
+        this.deadline = deadline;
     }
 
     public String getInfo() {
@@ -56,8 +56,8 @@ public class Task {
         return "\nTask{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", status=" + (status!=null?status.getStatusName():null) +
-                ", dedline=" + dedline +
+                ", status=" + status +
+                ", dedline=" + deadline +
                 ", info='" + info + '\'' +
                 '}';
     }
@@ -67,11 +67,11 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return Objects.equals(id, task.id) && Objects.equals(title, task.title) && Objects.equals(status, task.status) && Objects.equals(dedline, task.dedline) && Objects.equals(info, task.info);
+        return Objects.equals(id, task.id) && Objects.equals(title, task.title) && Objects.equals(status, task.status) && Objects.equals(deadline, task.deadline) && Objects.equals(info, task.info);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, status, dedline, info);
+        return Objects.hash(id, title, status, deadline, info);
     }
 }

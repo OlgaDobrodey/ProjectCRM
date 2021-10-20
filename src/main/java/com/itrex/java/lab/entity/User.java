@@ -6,7 +6,7 @@ public class User {
 
     private Integer id;
     private String login;
-    private Integer psw;
+    private String psw;
     private Role role;
     private String firstName;
     private String lastName;
@@ -27,11 +27,11 @@ public class User {
         this.login = login;
     }
 
-    public Integer getPsw() {
+    public String getPsw() {
         return psw;
     }
 
-    public void setPsw(Integer psw) {
+    public void setPsw(String psw) {
         this.psw = psw;
     }
 

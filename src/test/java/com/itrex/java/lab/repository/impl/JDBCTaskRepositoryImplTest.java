@@ -2,40 +2,32 @@ package com.itrex.java.lab.repository.impl;
 
 import com.itrex.java.lab.entity.Status;
 import com.itrex.java.lab.entity.Task;
+import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.repository.BaseRepositoryTest;
-import com.itrex.java.lab.repository.StatusRepository;
 import com.itrex.java.lab.repository.TaskRepository;
 import com.itrex.java.lab.repository.TestCategoryTest;
-import org.junit.jupiter.api.BeforeAll;
+import com.itrex.java.lab.repository.UserRepository;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
 
     private final TaskRepository repository;
-    private TestCategoryTest testCategoryTest;
-    private StatusRepository statusRepository;
+    private final UserRepository userRepository;
 
     public JDBCTaskRepositoryImplTest() {
         super();
         repository = new JDBCTaskRepositoryImpl(getConnectionPool());
-    }
-
-    @BeforeAll
-    private void createCategory() {
-        this.testCategoryTest = new TestCategoryTest();
-        this.statusRepository = new JDBCStatusRepositoryImpl(getConnectionPool());
+        userRepository = new JDBCUserRepositoryImpl(getConnectionPool());
     }
 
     @Test
-    public void selectAll_validData_shouldReturnExistTaskTest() {
+    public void selectAll_validData_shouldReturnExistTaskTest() throws SQLException {
         //given && when
         final List<Task> result = repository.selectAll();
 
@@ -44,99 +36,124 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void selectById_validData_receiveInteger_shouldReturnExistTaskTest() {
+    void selectById_validData_receiveInteger_shouldReturnExistTaskTest() throws SQLException {
         //given
         Integer idRole = 2;
 
         //when
         Task actual = repository.selectById(idRole);
-        Task expected = new Task();
-        expected.setId(2);
-        expected.setTitle("Prepare for implementation");
-
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        expected.setDedline(LocalDate.parse("2022-12-23", format));
-
-        expected.setStatus(statusRepository.selectById(1));
-        expected.setInfo("Identify production LPARs.");
 
         //then
-        assertEquals(expected, actual);
+        assertEquals(2, actual.getId());
+        assertEquals("task title 2", actual.getTitle(), "assert Title");
+        assertEquals(Status.NEW, actual.getStatus());
+        assertEquals(LocalDate.of(2022, 12, 23), actual.getDeadline());
+        assertEquals("task info 2", actual.getInfo());
     }
 
     @Test
-    void add_validData_receiveTask_shouldReturnExistTaskTest() {
+    void selectAllUsersByTask_receiverTask_shouldReturnListOfUser() throws SQLException{
         //given
-        Task task = testCategoryTest.createTestTasks(1).get(0);
+        Task task = repository.selectById(2);
 
-        Task expected = new Task();
-        expected.setId(repository.selectAll().size() + 1);
-        expected.setTitle(task.getTitle());
-        expected.setDedline(task.getDedline());
-        expected.setStatus(task.getStatus());
-        expected.setInfo(task.getInfo());
+        //when
+        List<User> actual = repository.selectAllUsersByTask(task);
+
+        //then
+        assertEquals(1, actual.get(0).getId());
+        assertEquals("Petrov", actual.get(0).getLogin());
+        assertEquals("123", actual.get(0).getPsw());
+        assertEquals("ADMIN", actual.get(0).getRole().getRoleName());
+        assertEquals("Petrov", actual.get(0).getLastName());
+        assertEquals("Petr", actual.get(0).getFirstName());
+        assertEquals(8, actual.get(1).getId());
+        assertEquals("Dropalo", actual.get(1).getLogin());
+        assertEquals("123", actual.get(1).getPsw());
+        assertEquals("USER", actual.get(1).getRole().getRoleName());
+        assertEquals("Dropalo", actual.get(1).getLastName());
+        assertEquals("Andrey", actual.get(1).getFirstName());
+
+    }
+
+    @Test
+    void add_validData_receiveTask_shouldReturnExistTaskTest() throws SQLException {
+        //given
+        Task task = TestCategoryTest.createTestTasks(1).get(0);
 
         //when
         Task actual = repository.add(task);
 
         //then
-        assertEquals(expected, actual);
+        assertEquals(21, actual.getId());
+        assertEquals("Task test 0", actual.getTitle(), "assert Title");
+        assertEquals(Status.NEW, actual.getStatus());
+        assertEquals(LocalDate.of(2001, 1, 1), actual.getDeadline());
+        assertEquals("Task test info 0", actual.getInfo());
     }
 
     @Test
-    void addAll_validData_receiveTask_shouldReturnExistTaskTest() {
+    void addAll_validData_receiveTask_shouldReturnExistTaskTest() throws SQLException {
         //given
-        List<Task> testTasks = testCategoryTest.createTestTasks(2);
-        Task test1 = testTasks.get(0);
-        Task test2 = testTasks.get(1);
-
-        Integer countSelectAllTask = repository.selectAll().size();
-        Task result1 = new Task();
-        result1.setTitle(test1.getTitle());
-        result1.setDedline(test1.getDedline());
-        result1.setStatus(test1.getStatus());
-        result1.setInfo(test1.getInfo());
-
-        result1.setId(countSelectAllTask + 1);
-
-        Task result2 = new Task();
-        result2.setTitle(test2.getTitle());
-        result2.setDedline(test2.getDedline());
-        result2.setStatus(test2.getStatus());
-        result2.setInfo(test2.getInfo());
-
-        result2.setId(countSelectAllTask + 2);
+        List<Task> testTasks = TestCategoryTest.createTestTasks(2);
 
         //when
-        List<Task> expected = List.of(result1, result2);
-        List<Task> actual = repository.addAll(List.of(test1, test2));
+        List<Task> actual = repository.addAll(testTasks);
 
         //then
-        assertEquals(expected, actual);
+        assertEquals(21, actual.get(0).getId());
+        assertEquals("Task test 0", actual.get(0).getTitle(), "assert Title");
+        assertEquals(Status.NEW, actual.get(0).getStatus());
+        assertEquals(LocalDate.of(2001, 1, 1), actual.get(0).getDeadline());
+        assertEquals("Task test info 0", actual.get(0).getInfo());
+        assertEquals(22, actual.get(1).getId());
+        assertEquals("Task test 1", actual.get(1).getTitle(), "assert Title");
+        assertEquals(Status.NEW, actual.get(1).getStatus());
+        assertEquals(LocalDate.of(2001, 1, 1), actual.get(1).getDeadline());
+        assertEquals("Task test info 1", actual.get(1).getInfo());
     }
 
     @Test
     void update_validData_receiveTaskAndInteger_shouldReturnExistTaskTest() {
         //given
-        Task expected = testCategoryTest.createTestTasks(1).get(0);
+        Task expected = TestCategoryTest.createTestTasks(1).get(0);
         Integer testId = 1;
 
         //when
         Task actual = repository.update(expected, 1);
 
         //then
-        assertEquals(expected, actual);
+        assertEquals(1, actual.getId());
+        assertEquals("Task test 0", actual.getTitle(), "assert Title");
+        assertEquals(Status.NEW, actual.getStatus());
+        assertEquals(LocalDate.of(2001, 1, 1), actual.getDeadline());
+        assertEquals("Task test info 0", actual.getInfo());
     }
 
     @Test
-    void removeTask_validData_receiveInteger_shouldReturnExistBooleanTest() {
+    void removeTask_validData_receiveTask_shouldReturnExistBooleanTest() throws SQLException {
         //given
-        Integer testId = 1;
+        Task task = repository.selectById(1);
 
-        //when
-        Boolean actual = repository.remove(testId);
+//        when
+        Boolean actual = repository.remove(task);
 
         //then
         assertTrue(actual);
+    }
+
+    @Test
+    void removeTaskByUser_validData_receiveUserAndTask_shouldReturnBooleanTest() throws SQLException {
+        //given
+        User user = userRepository.selectById(1);
+        Task taskTrue = repository.selectById(2);   //found on DataBase
+        Task taskFalse = repository.selectById(4);  //no found on DataBase
+
+        //when
+        Boolean actualTrue= repository.removeUserByTask(taskTrue,user);
+        Boolean actualFalse= repository.removeUserByTask(taskFalse,user);
+
+        //then
+        assertTrue(actualTrue);
+        assertFalse(actualFalse);
     }
 }

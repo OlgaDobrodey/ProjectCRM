@@ -1,16 +1,14 @@
 package com.itrex.java.lab.repository.impl;
 
-
 import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.repository.BaseRepositoryTest;
 import com.itrex.java.lab.repository.RoleRepository;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
@@ -23,70 +21,61 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    public void selectAll_validData_shouldReturnExistRoleTest() {
+    public void selectAll_validData_shouldReturnExistRoleTest() throws SQLException {
         //given && when
-        final List<Role> result = repository.selectAll();
+        List<Role> result = repository.selectAll();
 
         //then
         assertFalse(result.isEmpty());
     }
 
     @Test
-    void selectById_validData_receiveInteger_shouldReturnExistRoleTest() {
+    void selectById_validData_receiveInteger_shouldReturnExistRoleTest() throws SQLException {
         //given
         Integer idRole = 2;
 
         //when
         Role actual = repository.selectById(idRole);
-        Role expected = new Role();
-        expected.setId(2);
-        expected.setRoleName("user");
 
         //then
-        assertEquals(expected, actual);
+        assertEquals(2, actual.getId());
+        assertEquals("USER", actual.getRoleName());
     }
 
     @Test
-    void add_validData_receiveRole_shouldReturnExistRoleTest() {
+    void add_validData_receiveRole_shouldReturnExistRoleTest() throws SQLException {
         //given
         Role role = new Role();
         role.setRoleName("test");
-        Role expected = new Role();
-        expected.setId(3);
-        expected.setRoleName("test");
 
         //when
         Role actual = repository.add(role);
 
         //then
-        assertEquals(expected, actual);
+        assertEquals(4, actual.getId());
+        assertEquals("TEST", actual.getRoleName());
     }
 
     @Test
-    void addAll_validData_receiveRole_shouldReturnExistRoleTest() {
+    void addAll_validData_receiveRole_shouldReturnExistRoleTest() throws SQLException {
         //given
         Role roleTest1 = new Role();
         roleTest1.setRoleName("test1");
         Role roleTest2 = new Role();
         roleTest2.setRoleName("test2");
 
-        Role roleExpected1 = new Role();
-        roleExpected1.setRoleName("test1");
-        roleExpected1.setId(3);
-        Role roleExpected2 = new Role();
-        roleExpected2.setRoleName("test2");
-        roleExpected2.setId(4);
-
         //when
-        List<Role> expected = List.of(roleExpected1, roleExpected2);
         List<Role> actual = repository.addAll(List.of(roleTest1, roleTest2));
 
         //then
-        assertEquals(expected, actual);
+        assertEquals(4, actual.get(0).getId());
+        assertEquals("TEST1", actual.get(0).getRoleName());
+        assertEquals(5, actual.get(1).getId());
+        assertEquals("TEST2", actual.get(1).getRoleName());
     }
 
     @Test
-    void update_validData_receiveRoleAndInteger_shouldReturnExistRoleTest() {
+    void update_validData_receiveRoleAndInteger_shouldReturnExistRoleTest() throws SQLException {
         //given
         Role expected = new Role();
         expected.setRoleName("test");
@@ -96,18 +85,39 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
         Role actual = repository.update(expected, 1);
 
         //then
-        assertEquals(expected, actual);
+        assertEquals(1, actual.getId());
+        assertEquals("TEST", actual.getRoleName());
     }
 
     @Test
-    void remove_validData_receiveInteger_shouldReturnExistBooleanTest() {
+    void remove_validData_receiveRole_shouldReturnExistBooleanTest() throws SQLException {
         //given
-        Integer testId = 1;
+        Role role = repository.selectById(1);
+        Role roleUser = new Role();
+        roleUser.setId(8);
+        roleUser.setRoleName("NO ADMIN");
 
         //when
-        Boolean actual = repository.remove(testId);
+        Boolean actual = repository.remove(role);
+        Boolean actualFalse = repository.remove(roleUser);
 
         //then
         assertTrue(actual);
+        assertFalse(actualFalse);
+    }
+
+    @Test
+    void remove_validData_receiveRoleAndDefault_shouldReturnExistBooleanTest() throws SQLException {
+        //given
+        Role role = repository.selectById(1);
+        Role defaultRole = repository.selectById(3);
+
+        //when
+        Boolean actual = repository.remove(role, defaultRole);
+        Boolean actualFalse = repository.remove(role,role);
+
+        //then
+        assertTrue(actual);
+        assertFalse(actualFalse);
     }
 }
