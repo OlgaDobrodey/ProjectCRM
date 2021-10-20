@@ -5,8 +5,8 @@ import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.repository.BaseRepositoryTest;
 import com.itrex.java.lab.repository.TaskRepository;
-import com.itrex.java.lab.repository.TestCategoryTest;
 import com.itrex.java.lab.repository.UserRepository;
+import com.itrex.java.lab.repository.UtillCategory;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -14,7 +14,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 
 public class JDBCUserRepositoryImplTest extends BaseRepositoryTest {
 
@@ -83,7 +82,7 @@ public class JDBCUserRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void add_validData_receiveUser_shouldReturnExistUserTest() throws SQLException {
         //given
-        User user = TestCategoryTest.createTestUsers(1).get(0);
+        User user = UtillCategory.createTestUsers(1).get(0);
 
         //when
         User actual = repository.add(user);
@@ -100,7 +99,7 @@ public class JDBCUserRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void addAll_validData_receiveUser_shouldReturnExistUserTest() throws SQLException {
         //given
-        List<User> testUsers = TestCategoryTest.createTestUsers(2);
+        List<User> testUsers = UtillCategory.createTestUsers(2);
 
         //when
         List<User> actual = repository.addAll(testUsers);
@@ -123,7 +122,7 @@ public class JDBCUserRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void update_validData_receiveUserAndInteger_shouldReturnExistUserTest() throws SQLException {
         //given
-        User expected = TestCategoryTest.createTestUsers(1).get(0);
+        User expected = UtillCategory.createTestUsers(1).get(0);
         Integer testId = 1;
 
         //when

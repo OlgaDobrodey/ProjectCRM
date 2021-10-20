@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface UserRepository {
 
-
     List<User> selectAll() throws SQLException;
     User selectById(Integer id) throws SQLException;
     List<Task> selectAllTasksByUser(User user) throws SQLException;

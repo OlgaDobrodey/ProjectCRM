@@ -5,8 +5,8 @@ import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.repository.BaseRepositoryTest;
 import com.itrex.java.lab.repository.TaskRepository;
-import com.itrex.java.lab.repository.TestCategoryTest;
 import com.itrex.java.lab.repository.UserRepository;
+import com.itrex.java.lab.repository.UtillCategory;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -52,7 +52,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void selectAllUsersByTask_receiverTask_shouldReturnListOfUser() throws SQLException{
+    void selectAllUsersByTask_receiverTask_shouldReturnListOfUser() throws SQLException {
         //given
         Task task = repository.selectById(2);
 
@@ -72,13 +72,12 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
         assertEquals("USER", actual.get(1).getRole().getRoleName());
         assertEquals("Dropalo", actual.get(1).getLastName());
         assertEquals("Andrey", actual.get(1).getFirstName());
-
     }
 
     @Test
     void add_validData_receiveTask_shouldReturnExistTaskTest() throws SQLException {
         //given
-        Task task = TestCategoryTest.createTestTasks(1).get(0);
+        Task task = UtillCategory.createTestTasks(1).get(0);
 
         //when
         Task actual = repository.add(task);
@@ -94,7 +93,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void addAll_validData_receiveTask_shouldReturnExistTaskTest() throws SQLException {
         //given
-        List<Task> testTasks = TestCategoryTest.createTestTasks(2);
+        List<Task> testTasks = UtillCategory.createTestTasks(2);
 
         //when
         List<Task> actual = repository.addAll(testTasks);
@@ -115,7 +114,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void update_validData_receiveTaskAndInteger_shouldReturnExistTaskTest() {
         //given
-        Task expected = TestCategoryTest.createTestTasks(1).get(0);
+        Task expected = UtillCategory.createTestTasks(1).get(0);
         Integer testId = 1;
 
         //when
@@ -134,7 +133,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
         //given
         Task task = repository.selectById(1);
 
-//        when
+        //when
         Boolean actual = repository.remove(task);
 
         //then
@@ -149,8 +148,8 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
         Task taskFalse = repository.selectById(4);  //no found on DataBase
 
         //when
-        Boolean actualTrue= repository.removeUserByTask(taskTrue,user);
-        Boolean actualFalse= repository.removeUserByTask(taskFalse,user);
+        Boolean actualTrue = repository.removeUserByTask(taskTrue, user);
+        Boolean actualFalse = repository.removeUserByTask(taskFalse, user);
 
         //then
         assertTrue(actualTrue);

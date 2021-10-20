@@ -10,7 +10,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
 
     private final RoleRepository repository;
@@ -114,7 +113,7 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
 
         //when
         Boolean actual = repository.remove(role, defaultRole);
-        Boolean actualFalse = repository.remove(role,role);
+        Boolean actualFalse = repository.remove(role, role);
 
         //then
         assertTrue(actual);

@@ -12,7 +12,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class JDBCUserRepositoryImpl implements UserRepository {
 
     private static final String ID_USER_COLUMN = "id";
@@ -35,7 +34,6 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     private static final String DELETE_USER_QUERY = "DELETE FROM crm.user WHERE id = ?";
     private static final String DELETE_USER_ALL_TASKS_QUERY = "DELETE FROM crm.user_task WHERE user_id = ?";
     private static final String DELETE_TASK_BY_USER = "DELETE FROM crm.user_task WHERE user_id= ? AND task_id=?";
-
 
     private DataSource dataSource;
     private RoleRepository roleRepository;
@@ -229,8 +227,10 @@ public class JDBCUserRepositoryImpl implements UserRepository {
             preparedStatement.setInt(1, user.getId());
             preparedStatement.setInt(2, task.getId());
             int executeUpdate = preparedStatement.executeUpdate();
-            if(executeUpdate ==1){ return true;}
-           return false;
+            if (executeUpdate == 1) {
+                return true;
+            }
+            return false;
         } catch (SQLException ex) {
             throw new SQLException("ERROR: DELETE_TASK_BY_USER - " + user + ": " + ex);
         }

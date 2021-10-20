@@ -1,14 +1,11 @@
 package com.itrex.java.lab.repository;
 
-import static com.itrex.java.lab.properties.Properties.H2_PSW;
-import static com.itrex.java.lab.properties.Properties.H2_URL;
-import static com.itrex.java.lab.properties.Properties.H2_USER;
-
 import com.itrex.java.lab.service.FlywayService;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
+import static com.itrex.java.lab.properties.Properties.*;
 
 public abstract class BaseRepositoryTest {
 
