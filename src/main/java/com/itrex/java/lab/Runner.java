@@ -1,15 +1,17 @@
 package com.itrex.java.lab;
 
+import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.entity.Status;
 import com.itrex.java.lab.entity.Task;
+import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
+import com.itrex.java.lab.repository.RoleRepository;
 import com.itrex.java.lab.repository.TaskRepository;
 import com.itrex.java.lab.repository.UserRepository;
+import com.itrex.java.lab.repository.impl.JDBCRoleRepositoryImpl;
 import com.itrex.java.lab.repository.impl.JDBCTaskRepositoryImpl;
 import com.itrex.java.lab.repository.impl.JDBCUserRepositoryImpl;
 import com.itrex.java.lab.service.FlywayService;
 import org.h2.jdbcx.JdbcConnectionPool;
-
-import java.sql.SQLException;
 
 import static com.itrex.java.lab.properties.Properties.*;
 
@@ -28,8 +30,15 @@ public class Runner {
 
         UserRepository userRepository = new JDBCUserRepositoryImpl(jdbcConnectionPool);
         TaskRepository taskRepository = new JDBCTaskRepositoryImpl(jdbcConnectionPool);
+        RoleRepository roleRepository = new JDBCRoleRepositoryImpl(jdbcConnectionPool);
 
         try {
+
+            Role role = new Role();
+            role.setRoleName("ALLLL");
+
+            System.out.println("UPDATE ROLE " + roleRepository.update(role,991));
+            System.out.println("SELECT ALL" + roleRepository.selectAll());
             System.out.println("SELECT ALL : " + taskRepository.selectAll());
             Task task = new Task();
             task.setTitle("title0");
@@ -63,7 +72,8 @@ public class Runner {
             System.out.println("REMOVE " + a);
             System.out.println("ALL TASK" + taskRepository.selectAll());
             userRepository.printCrossTable();
-        } catch (SQLException e) {
+
+        } catch (CRMProjectRepositoryException e) {
             System.out.println(e);
         }
 

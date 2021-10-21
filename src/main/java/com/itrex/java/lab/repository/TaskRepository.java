@@ -2,27 +2,32 @@ package com.itrex.java.lab.repository;
 
 import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.entity.User;
+import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface TaskRepository {
 
-    List<Task> selectAll() throws SQLException;
-    Task selectById(Integer id) throws SQLException;
-    Task add(Task task) throws SQLException;
-    List<Task> addAll(List<Task> tasks) throws SQLException;
-    Task update(Task task, Integer id);
-    boolean remove(Task task) throws SQLException;
+    List<Task> selectAll() throws CRMProjectRepositoryException;
+
+    Task selectById(Integer id) throws CRMProjectRepositoryException;
+
+    Task add(Task task) throws CRMProjectRepositoryException;
+
+    List<Task> addAll(List<Task> tasks) throws CRMProjectRepositoryException;
+
+    Task update(Task task, Integer id) throws CRMProjectRepositoryException;
+
+    boolean remove(Task task) throws CRMProjectRepositoryException;
 
     //select All users for task
-    List<User> selectAllUsersByTask(Task task) throws SQLException;
+    List<User> selectAllUsersByTask(Task task) throws CRMProjectRepositoryException;
 
     //add task for user
-    void addUserByTask(Task task, User user) throws SQLException;
+    void addUserByTask(Task task, User user) throws CRMProjectRepositoryException;
 
     //remove a task from the list of tasks for the user
-    boolean removeUserByTask(Task task, User user) throws SQLException;
+    boolean removeUserByTask(Task task, User user) throws CRMProjectRepositoryException;
 
-    void removeAllUsersByTask(Task task) throws SQLException;
+    void removeAllUsersByTask(Task task) throws CRMProjectRepositoryException;
 }

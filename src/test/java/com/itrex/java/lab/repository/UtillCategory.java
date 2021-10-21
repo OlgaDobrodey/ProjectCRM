@@ -11,20 +11,26 @@ import java.util.List;
 
 public class UtillCategory {
 
-    public static Role createTestRole() {
-        Role role = new Role();
-        role.setRoleName("ADMIN");
-        role.setId(1);
-        return role;
+    public static List<Role> createTestRole(Integer count) {
+        List<Role> roles = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            Role role = new Role();
+            role.setRoleName("TEST " + i);
+            roles.add(role);
+        }
+        return roles;
     }
 
     public static List<User> createTestUsers(Integer count) {
         List<User> users = new ArrayList<>();
+        Role role = new Role();
+        role.setId(1);
+        role.setRoleName("ADMIN");
         for (int i = 0; i < count; i++) {
             User user = new User();
             user.setLogin("Test " + i);
             user.setPsw("123" + i);
-            user.setRole(createTestRole());
+            user.setRole(role);
             user.setLastName("Ivanov " + i);
             user.setFirstName("Ivan " + i);
             users.add(user);
