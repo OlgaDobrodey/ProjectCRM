@@ -1,4 +1,4 @@
-package com.itrex.java.lab.repository.impl;
+package com.itrex.java.lab.repository.impl.jdbc;
 
 import com.itrex.java.lab.entity.Status;
 import com.itrex.java.lab.entity.Task;

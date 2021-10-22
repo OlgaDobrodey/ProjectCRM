@@ -1,15 +1,34 @@
 package com.itrex.java.lab.entity;
 
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+@Entity
+@Table(name = "user", schema = "CRM")
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String login;
     private String psw;
-    private Role role;
+
+    @Column(name = "first_name")
     private String firstName;
+    @Column(name = "last_name")
     private String lastName;
+
+    @ManyToOne
+    @JoinColumn
+    private Role role;
+
+    @ManyToMany
+    @JoinTable(name = "user_task",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
+    private Set<Task> tasks = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -65,7 +84,7 @@ public class User {
                 "id=" + id +
                 ", login='" + login + '\'' +
                 ", psw=" + psw +
-                ", role=" + (role!=null?role.getRoleName():null )+
+                ", role=" + (role != null ? role.getRoleName() : null) +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 '}';

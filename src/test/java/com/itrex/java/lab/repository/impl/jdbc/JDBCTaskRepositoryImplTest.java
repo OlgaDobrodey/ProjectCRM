@@ -1,4 +1,4 @@
-package com.itrex.java.lab.repository.impl;
+package com.itrex.java.lab.repository.impl.jdbc;
 
 import com.itrex.java.lab.entity.Status;
 import com.itrex.java.lab.entity.Task;
@@ -27,7 +27,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    public void selectAll_validData_shouldReturnExistTaskTest() throws CRMProjectRepositoryException {
+    public void selectAll_validData_returnTaskTest() throws CRMProjectRepositoryException {
         //given && when
         final List<Task> result = repository.selectAll();
 
@@ -36,7 +36,18 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void selectById_validData_receiveInteger_shouldReturnExistTaskTest() throws CRMProjectRepositoryException {
+    void selectAll_shouldThrowRepositoryExceptionTest() {
+        //given && when
+        cleanDB();    //clean Data Base
+
+        //then
+        assertThrows(CRMProjectRepositoryException.class, () -> {
+            repository.selectAll();
+        });
+    }
+
+    @Test
+    void selectById_validData_existTaskID_returnTaskTest() throws CRMProjectRepositoryException {
         //given
         Integer idRole = 2;
 
@@ -52,7 +63,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void selectById_validData_receiveIDTaskNotDataBase_shouldReturnNULLTest() throws CRMProjectRepositoryException {
+    void selectById_validData_existIDTaskNonDataBase_returnNULLTest() throws CRMProjectRepositoryException {
         //given
         Integer idTask = 28;
 
@@ -64,7 +75,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void selectById_validData_shouldReturnCRMProjectRepositoryExceptionType() {
+    void selectById_returnThrowRepositoryExceptionTest() {
         //given && when
         cleanDB();    //clean Data Base
         Integer idTask = 2;
@@ -76,7 +87,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void selectAllUsersByTask_receiverTask_shouldReturnListOfUser() throws CRMProjectRepositoryException {
+    void selectAllUsersByTask_existTask_returnListOfUserTest() throws CRMProjectRepositoryException {
         //given
         Task task = repository.selectById(2);
 
@@ -99,7 +110,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void add_validData_receiveTask_shouldReturnExistTaskTest() throws CRMProjectRepositoryException {
+    void add_validData_existTask_returnExistTaskTest() throws CRMProjectRepositoryException {
         //given
         Task task = UtillCategory.createTestTasks(1).get(0);
 
@@ -115,7 +126,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void add_validData_receiveCopyTaskWithId2_shouldReturnCRMProjectRepositoryExceptionTypeTest() throws CRMProjectRepositoryException {
+    void add_existCopyTaskWithId2_returnThrowRepositoryExceptionTypeTest() throws CRMProjectRepositoryException {
         //given && when
         Task task = repository.selectById(2);  //There is Role "User" in Data Base
 
@@ -126,7 +137,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void addAll_validData_receiveTask_shouldReturnExistTaskTest() throws CRMProjectRepositoryException {
+    void addAll_validData_existTask_returnTaskTest() throws CRMProjectRepositoryException {
         //given
         List<Task> testTasks = UtillCategory.createTestTasks(2);
 
@@ -147,7 +158,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void addAll_validData_receiveCopyTaskById2_shouldReturnCRMProjectRepositoryExceptionTypeTest() throws CRMProjectRepositoryException {
+    void addAll_existCopyTaskById2_returnThrowRepositoryExceptionTypeTest() throws CRMProjectRepositoryException {
         //given && when
         Task test1 = UtillCategory.createTestTasks(1).get(0);
         Task test2 = repository.selectById(2);  //There is Role "User" in Data Base
@@ -159,7 +170,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void update_validData_receiveTaskAndInteger_shouldReturnExistTaskTest() throws CRMProjectRepositoryException {
+    void update_validData_existTaskAndInteger_returnTaskTest() throws CRMProjectRepositoryException {
         //given
         Task expected = UtillCategory.createTestTasks(1).get(0);
         Integer testId = 1;
@@ -176,7 +187,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void update_validData_receiveTaskAndIdTaskNotDB_shouldReturnNullTest() throws CRMProjectRepositoryException {
+    void update_validData_existTaskAndIdTaskNotDB_returnNullTest() throws CRMProjectRepositoryException {
         //given && when
         Task expected = UtillCategory.createTestTasks(1).get(0);
         Integer idNonDataBase = 99;
@@ -189,7 +200,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void update_validData__receiveIdTask_shouldReturnCRMProjectRepositoryExceptionType() {
+    void update_existIdTask_returnThrowRepositoryExceptionTest() {
         //given && when
         cleanDB();    //clean Data Base
         Task expected = UtillCategory.createTestTasks(1).get(0);
@@ -202,7 +213,7 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void removeTask_validData_receiveTask_shouldReturnExistBooleanTest() throws CRMProjectRepositoryException {
+    void remove_validData_existTask_returnTRUETest() throws CRMProjectRepositoryException {
         //given
         Task task = repository.selectById(1);
 
@@ -214,23 +225,46 @@ public class JDBCTaskRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void removeTaskByUser_validData_receiveUserAndTask_shouldReturnBooleanTest() throws CRMProjectRepositoryException {
+    void remove_validData_existTask_returnFalseTest() throws CRMProjectRepositoryException {
+        //given
+        Task task = UtillCategory.createTestTasks(1).get(0);
+        task.setId(25);
+
+        //when
+        Boolean actual = repository.remove(task);
+
+        //then
+        assertFalse(actual);
+    }
+
+    @Test
+    void removeTaskByUser_existUserAndTaskNonDB_shouldReturnTrueTest() throws CRMProjectRepositoryException {
         //given
         User user = userRepository.selectById(1);
         Task taskTrue = repository.selectById(2);   //found on DataBase
-        Task taskFalse = repository.selectById(4);  //no found on DataBase
 
         //when
         Boolean actualTrue = repository.removeUserByTask(taskTrue, user);
-        Boolean actualFalse = repository.removeUserByTask(taskFalse, user);
 
         //then
         assertTrue(actualTrue);
+    }
+
+    @Test
+    void removeTaskByUser_existUserAndTask_shouldReturnFalseTest() throws CRMProjectRepositoryException {
+        //given
+        User user = userRepository.selectById(1);
+        Task taskFalse = repository.selectById(4);  //no found on DataBase
+
+        //when
+        Boolean actualFalse = repository.removeUserByTask(taskFalse, user);
+
+        //then
         assertFalse(actualFalse);
     }
 
     @Test
-    void remove_validData_receiveTask_shouldReturnCRMProjectRepositoryExceptionType() {
+    void remove_existTask_shouldReturnThrowRepositoryExceptionTest() {
         //given && when
         cleanDB();    //clean Data Base
 

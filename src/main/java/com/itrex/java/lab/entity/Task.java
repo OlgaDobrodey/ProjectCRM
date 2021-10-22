@@ -1,15 +1,31 @@
 package com.itrex.java.lab.entity;
 
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+@Entity
+@Table(name = "task", schema = "CRM")
 public class Task {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String title;
+
+    @Enumerated(EnumType.STRING)
     private Status status;
+
+    @Column(name = "deadline")
     private LocalDate deadline;
+
     private String info;
+
+    @ManyToMany(mappedBy = "tasks")
+    private Set<User> users = new HashSet<>();
 
     public Integer getId() {
         return id;

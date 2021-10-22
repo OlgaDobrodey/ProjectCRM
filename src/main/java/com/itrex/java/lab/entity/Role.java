@@ -1,11 +1,21 @@
 package com.itrex.java.lab.entity;
 
-import java.util.Objects;
+import javax.persistence.*;
+import java.util.List;
 
+@Entity
+@Table(name = "role", schema = "CRM")
 public class Role {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "role_name")
     private String roleName;
+
+    @OneToMany(mappedBy = "role")
+    private List<User> users;
 
     public Integer getId() {
         return id;
@@ -30,17 +40,5 @@ public class Role {
                 ", roleName='" + roleName + '\'' +
                 '}';
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Role role = (Role) o;
-        return Objects.equals(id, role.id) && Objects.equals(roleName, role.roleName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, roleName);
-    }
 }
+

@@ -1,4 +1,4 @@
-package com.itrex.java.lab.repository.impl;
+package com.itrex.java.lab.repository.impl.jdbc;
 
 import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
@@ -21,7 +21,7 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    public void selectAll_validData_shouldReturnExistRoleTest() throws CRMProjectRepositoryException {
+    public void selectAll_validData_returnRoleTest() throws CRMProjectRepositoryException {
         //given && when
         List<Role> result = repository.selectAll();
 
@@ -30,7 +30,7 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void selectAll_validData_shouldReturnCRMProjectRepositoryExceptionType() {
+    void selectAll_shouldThrowRepositoryExceptionTest() {
         //given && when
         cleanDB();    //clean Data Base
 
@@ -41,7 +41,7 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void selectById_validData_receiveIDRole_shouldReturnExistUSERRoleTest() throws CRMProjectRepositoryException {
+    void selectById_validData_existIDRole_returnUSERRoleTest() throws CRMProjectRepositoryException {
         //given
         Integer idRole = 2;
 
@@ -54,7 +54,7 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void selectById_validData_receiveIDRoleNotDataBase_shouldReturnNULLTest() throws CRMProjectRepositoryException {
+    void selectById_validData_existIDRoleNotDataBase_returnNullTest() throws CRMProjectRepositoryException {
         //given
         Integer idRole = 28;
 
@@ -66,7 +66,7 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void selectById_validData_shouldReturnCRMProjectRepositoryExceptionType() {
+    void selectById_existRoleId_shouldThrowRepositoryExceptionTest() {
         //given && when
         cleanDB();    //clean Data Base
         Integer idRole = 2;
@@ -78,7 +78,7 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void add_validData_receiveRole_shouldReturnExistRoleTest() throws CRMProjectRepositoryException {
+    void add_validData_existRole_returnRoleTest() throws CRMProjectRepositoryException {
         //given
         Role role = UtillCategory.createTestRole(1).get(0);
 
@@ -91,7 +91,7 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void add_validData_receiveCopyRoleUSER_shouldReturnCRMProjectRepositoryExceptionTypeTest() throws CRMProjectRepositoryException {
+    void add_existRole_shouldThrowRepositoryExceptionTest() throws CRMProjectRepositoryException {
         //given && when
         Role role = repository.selectById(2);  //There is Role "User" in Data Base
 
@@ -102,7 +102,7 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void addAll_validData_receiveRoles_shouldReturnExistRoleTest() throws CRMProjectRepositoryException {
+    void addAll_validData_existRoles_returnRoleTest() throws CRMProjectRepositoryException {
         //given
         List<Role> roles = UtillCategory.createTestRole(2);
 
@@ -117,7 +117,7 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void addAll_validData_receiveCopyRoleUSER_shouldReturnCRMProjectRepositoryExceptionTypeTest() throws CRMProjectRepositoryException {
+    void addAll_existCopyRoleNameUSER_shouldThrowRepositoryExceptionTest() throws CRMProjectRepositoryException {
         //given && when
         Role test1 = UtillCategory.createTestRole(1).get(0);
         Role test2 = repository.selectById(2);  //There is Role "User" in Data Base
@@ -129,7 +129,7 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void update_validData_receiveRoleAndIdRole_shouldReturnExistRoleTest() throws CRMProjectRepositoryException {
+    void update_validData_existRoleAndIdRole_returnRoleTest() throws CRMProjectRepositoryException {
         //given
         Role expected = UtillCategory.createTestRole(1).get(0);
         Integer testId = 1;
@@ -143,7 +143,7 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void update_validData_receiveRoleAndIdRoleNotDB_shouldReturnNullTest() throws CRMProjectRepositoryException {
+    void update_validData_existRoleAndIdRoleNonDB_returnNullTest() throws CRMProjectRepositoryException {
         //given && when
         Role expected = UtillCategory.createTestRole(1).get(0);
         Integer idNonDataBase = 99;
@@ -156,7 +156,7 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void update_validData__receiveIdRole_shouldReturnCRMProjectRepositoryExceptionType() {
+    void update_existIdRole_shouldThrowRepositoryExceptionTest() {
         //given && when
         cleanDB();    //clean Data Base
         Role expected = UtillCategory.createTestRole(1).get(0);
@@ -169,23 +169,32 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void remove_validData_receiveRole_shouldReturnExistBooleanTest() throws CRMProjectRepositoryException {
+    void remove_validData_existRole_returnTRUETest() throws CRMProjectRepositoryException {
         //given
         Role role = repository.selectById(1);
+
+        //when
+        Boolean actual = repository.remove(role);
+
+        //then
+        assertTrue(actual);
+    }
+
+    @Test
+    void remove_validData_existRoleNonDB_returnFALSETest() throws CRMProjectRepositoryException {
+        //given
         Role roleNonDB = UtillCategory.createTestRole(1).get(0);              //There is no such role in the database
         roleNonDB.setId(8);
 
         //when
-        Boolean actual = repository.remove(role);
         Boolean actualFalse = repository.remove(roleNonDB);
 
         //then
-        assertTrue(actual);
         assertFalse(actualFalse);
     }
 
     @Test
-    void remove_validData_receiveRoleUSER_shouldReturnCRMProjectRepositoryExceptionTest() throws CRMProjectRepositoryException {
+    void remove_receiveRoleUSER_shouldThrowRepositoryExceptionTest() throws CRMProjectRepositoryException {
         //given && when
         Role expected = repository.selectById(2); //expected == default role "USER"
 
@@ -194,24 +203,34 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void remove_validData_receiveRoleAndDefault_shouldReturnExistBooleanTest() throws CRMProjectRepositoryException {
+    void remove_validData_existRoleAndDefault_returnTRUETest() throws CRMProjectRepositoryException {
         //given
         Role role = repository.selectById(1);
         Role defaultRole = repository.selectById(3);
+
+        //when
+        Boolean actual = repository.remove(role, defaultRole);
+
+        //then
+        assertTrue(actual);
+    }
+
+    @Test
+    void remove_validData_existRoleAndDefault_returnFalseTest() throws CRMProjectRepositoryException {
+        //given
+        Role role = repository.selectById(1);
         Role falseRole = UtillCategory.createTestRole(1).get(0);
         falseRole.setId(25);
 
         //when
-        Boolean actual = repository.remove(role, defaultRole);
         Boolean actualFalse = repository.remove(falseRole, role);
 
         //then
-        assertTrue(actual);
         assertFalse(actualFalse);
     }
 
     @Test
-    void remove_validData_receiveRoleUSEREqualsRoleDefault_shouldReturnCRMProjectRepositoryExceptionTest() throws CRMProjectRepositoryException {
+    void remove_existRoleUSEREqualsRoleDefault_shouldThrowRepositoryExceptionTest() throws CRMProjectRepositoryException {
         //given && when
         Role expected = repository.selectById(2); //expected == default role "USER"
 
@@ -220,7 +239,7 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void remove_validData_receiveRole_shouldReturnCRMProjectRepositoryExceptionType() {
+    void remove_existRoleCleanDB_shouldThrowRepositoryExceptionTest() {
         //given && when
         cleanDB();    //clean Data Base
 
@@ -231,7 +250,7 @@ public class JDBCRoleRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
-    void remove_validData_receiveRoleAndDefaultRole_shouldReturnCRMProjectRepositoryExceptionType() {
+    void remove_existRoleAndDefaultRole_returnThrowRepositoryExceptionTest() {
         //given && when
         cleanDB();    //clean Data Base
 
