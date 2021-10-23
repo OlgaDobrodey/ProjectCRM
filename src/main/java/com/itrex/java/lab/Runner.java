@@ -1,20 +1,13 @@
 package com.itrex.java.lab;
 
-import com.itrex.java.lab.entity.Role;
+import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
-import com.itrex.java.lab.repository.RoleRepository;
-import com.itrex.java.lab.repository.TaskRepository;
-import com.itrex.java.lab.repository.UserRepository;
-import com.itrex.java.lab.repository.impl.jdbc.JDBCRoleRepositoryImpl;
-import com.itrex.java.lab.repository.impl.jdbc.JDBCTaskRepositoryImpl;
-import com.itrex.java.lab.repository.impl.jdbc.JDBCUserRepositoryImpl;
+import com.itrex.java.lab.repository.impl.hibernate.HibernateTaskRepositoryImpl;
 import com.itrex.java.lab.service.FlywayService;
-import org.h2.jdbcx.JdbcConnectionPool;
-import org.hibernate.Session;
+import com.itrex.java.lab.util.HibernateUtil;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 
-import static com.itrex.java.lab.properties.Properties.*;
+import java.util.List;
 
 public class Runner {
 
@@ -25,22 +18,17 @@ public class Runner {
         flywayService.migrate();
 
         System.out.println("============CREATE CONNECTION POOL================");
-        try (SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-             Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            Role role = new Role();
-            role.setRoleName("Doctor");
-            session.save(role);
-            session.getTransaction().commit();
-            JdbcConnectionPool jdbcConnectionPool = JdbcConnectionPool.create(H2_URL, H2_USER, H2_PSW);
+        try (SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        ) {
+            HibernateTaskRepositoryImpl taskRepository = new HibernateTaskRepositoryImpl(sessionFactory);
+            System.out.println("SELECT ALL "+ taskRepository.selectAll());
+            System.out.println("SELECT ID "+ taskRepository.selectById(5));
 
-            System.out.println("=================ROLE=============");
-
-            UserRepository userRepository = new JDBCUserRepositoryImpl(jdbcConnectionPool);
-            TaskRepository taskRepository = new JDBCTaskRepositoryImpl(jdbcConnectionPool);
-            RoleRepository roleRepository = new JDBCRoleRepositoryImpl(jdbcConnectionPool);
-
-            System.out.println("SELECT ALL"+ roleRepository.selectAll());
+            List<Task> tasks = UtillCategory.createTestTasks(4);
+            System.out.println("ADD TASK " + taskRepository.add(tasks.get(0)));
+            System.out.println("ADD TASKS "+ taskRepository.addAll(List.of(tasks.get(1),tasks.get(2))));
+            System.out.println("UPDATE "+ taskRepository.update(tasks.get(3),4));
+            System.out.println("SELECT ALL "+ taskRepository.selectAll());
         } catch (CRMProjectRepositoryException e) {
             e.printStackTrace();
         }
