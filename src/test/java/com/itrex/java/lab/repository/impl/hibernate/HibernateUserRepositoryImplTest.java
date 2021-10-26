@@ -8,6 +8,7 @@ import com.itrex.java.lab.repository.BaseRepositoryTest;
 import com.itrex.java.lab.repository.TaskRepository;
 import com.itrex.java.lab.repository.UserRepository;
 import com.itrex.java.lab.repository.UtillCategory;
+import org.hibernate.Session;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -178,6 +179,20 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
     }
 
     @Test
+    void addTaskByUser_validData_existUserAndTaskTest() throws CRMProjectRepositoryException{
+        //given
+        try(Session session = getSessionFactory().openSession()) {
+            User user = session.find(User.class,2);
+            Task task = taskRepository.selectById(6);
+
+        //when
+        repository.addTaskByUser(task,user);
+
+        //then
+        assertTrue(user.getTasks().contains(task));  }
+    }
+
+    @Test
     void update_validData_existUserAndInteger_returnUserTest() throws CRMProjectRepositoryException {
         //given
         User expected = UtillCategory.createTestUsers(1).get(0);
@@ -268,5 +283,22 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
         assertThrows(CRMProjectRepositoryException.class, () -> {
             repository.remove(repository.selectById(1));
         });
+    }
+
+    @Test
+    void removeAllTasksByUser_existUserTest_() throws CRMProjectRepositoryException {
+
+        try(Session session = getSessionFactory().openSession()){
+            //given
+            User user = session.get(User.class, 2);
+
+
+            //when
+            repository.removeAllTasksByUser(user);
+
+            //then
+            assertEquals(0,user.getTasks().size());
+        }
+
     }
 }

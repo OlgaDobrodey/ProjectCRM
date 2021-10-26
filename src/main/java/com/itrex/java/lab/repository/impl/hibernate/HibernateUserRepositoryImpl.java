@@ -76,9 +76,11 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     @Override
     public void printCrossTable() throws CRMProjectRepositoryException {
         try (Session session = sessionFactory.openSession()) {
-
-            session.createSQLQuery(SELECT_CROSS_TABLE).list().forEach((a) -> System.out.println("  " + a));
-//            System.out.println(list.toString());
+            List<User> users = selectAll();
+            for (User user : users) {
+                List<Task> tasks = session.get(User.class, user.getId()).getTasks();
+                tasks.forEach((task) -> System.out.printf("%d - %s : %d - %s\n", user.getId(), user.getLogin(), task.getId(), task.getTitle()));
+            }
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: SELECT ALL CROSS TABLE: ", ex);
         }
