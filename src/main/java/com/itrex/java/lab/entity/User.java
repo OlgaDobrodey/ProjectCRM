@@ -1,13 +1,14 @@
 package com.itrex.java.lab.entity;
 
 import javax.persistence.*;
-import java.util.HashSet;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "user", schema = "CRM")
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,14 +22,16 @@ public class User {
     private String lastName;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "role_id")
     private Role role;
 
-    @ManyToMany
-    @JoinTable(name = "user_task",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
-    private Set<Task> tasks = new HashSet<>();
+    @ManyToMany(cascade = { CascadeType.PERSIST })
+    @JoinTable(
+            name = "user_task", schema = "CRM",
+            joinColumns = {@JoinColumn(name = "users_id")},
+            inverseJoinColumns = {@JoinColumn(name = "tasks_id")}
+    )
+    private List<Task> tasks = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -76,6 +79,14 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
     @Override

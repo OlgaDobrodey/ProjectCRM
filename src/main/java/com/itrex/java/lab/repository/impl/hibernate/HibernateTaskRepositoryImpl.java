@@ -18,7 +18,6 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
     private static final String INFO_TASK = "info";
     private static final String ID_TASK = "id";
 
-
     private static final String SELECT_ALL = "from Task t";
     private static final String UPDATE = "update Task set title = :title, status =:status, deadline =:deadline," +
             " info=:info where id = :id";
@@ -64,7 +63,7 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
 
     @Override
     public Task update(Task task, Integer id) throws CRMProjectRepositoryException {
-        Task roleUpdate = null;
+        Task tastUpdate = null;
         try (Session session = sessionFactory.openSession()) {
             try {
                 session.getTransaction().begin();
@@ -80,9 +79,9 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
                 session.getTransaction().rollback();
                 throw new CRMProjectRepositoryException("ERROR: UPDATE TASK " + task, e);
             }
-            roleUpdate = session.get(Task.class, id);
+            tastUpdate = session.get(Task.class, id);
         }
-        return roleUpdate;
+        return tastUpdate;
     }
 
     @Override
@@ -92,6 +91,11 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
 
     @Override
     public List<User> selectAllUsersByTask(Task task) throws CRMProjectRepositoryException {
+        try (Session session = sessionFactory.openSession()) {
+            List<User> users = task.getUsers();
+            System.out.println(users);
+        }
+
         return null;
     }
 

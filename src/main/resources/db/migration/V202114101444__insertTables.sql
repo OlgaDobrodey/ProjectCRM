@@ -3,7 +3,7 @@ VALUES (1, 'ADMIN'),
        (2, 'USER'),
        (3, 'CONTROLLER');
 
-INSERT INTO user(id, login, psw, role, last_name, first_name)
+INSERT INTO user(id, login, psw, role_id, last_name, first_name)
 VALUES (1, 'Petrov', '123', 1, 'Petrov', 'Petr'),
        (2, 'Ivanov', '123', 1, 'Ivanov', 'Ivan'),
        (3, 'Sidorov', '123', 1, 'Sidorov', 'Sidr'),
@@ -37,7 +37,7 @@ VALUES (1, 'task_title 1', 'NEW', '2022-10-23', 'task info 1'),
        (19, 'task title 19', 'NEW', '2025-12-30', 'task info 19'),
        (20, 'task title 20', 'DELETED', '2020-11-28', 'task info 20');
 
-INSERT INTO user_task(user_id, task_id)
+INSERT INTO user_task(users_id, tasks_id)
 VALUES (1, 1),
        (1, 2),
        (1, 3),
@@ -78,3 +78,5 @@ VALUES (1, 1),
        (9, 18),
        (10, 19),
        (1, 20);
+
+COMMIT

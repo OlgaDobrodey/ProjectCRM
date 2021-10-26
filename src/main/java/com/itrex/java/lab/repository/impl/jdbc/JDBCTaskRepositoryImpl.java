@@ -19,15 +19,15 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
     private static final String STATUS_TASK_COLUMN = "status";
     private static final String DEADLINE_TASK_COLUMN = "deadline";
     private static final String INFO_TASK_COLUMN = "info";
-    private static final String CROSS_TABLE_ID_USER = "user_id";
+    private static final String CROSS_TABLE_ID_USER = "users_id";
 
     private static final String SELECT_ALL_QUERY = "SELECT * FROM crm.task";
     private static final String SELECT_TASK_BY_ID_QUERY = "SELECT * FROM crm.task WHERE id = ";
-    private static final String SELECT_ALL_USERS_FOR_TASK = "SELECT user_id FROM crm.user_task WHERE task_id = ";
+    private static final String SELECT_ALL_USERS_FOR_TASK = "SELECT users_id FROM crm.user_task WHERE tasks_id = ";
     private static final String INSERT_TASK_QUERY = "INSERT INTO crm.task(title, status, deadline, info) VALUES (?, ?, ?, ?)";
     private static final String UPDATE_TASK_QUERY = "UPDATE crm.task SET title=?, status=?, deadline=?, info=?  WHERE id = ?";
     private static final String DELETE_TASK_QUERTY = "DELETE FROM crm.task WHERE id = ?";
-    private static final String DELETE_ALL_USERS_BY_TASK = "DELETE FROM crm.user_task WHERE task_id = ?";
+    private static final String DELETE_ALL_USERS_BY_TASK = "DELETE FROM crm.user_task WHERE tasks_id = ?";
 
     private DataSource dataSource;
 

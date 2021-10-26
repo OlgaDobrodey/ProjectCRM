@@ -1,14 +1,15 @@
 package com.itrex.java.lab.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "task", schema = "CRM")
-public class Task {
+public class Task implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +26,10 @@ public class Task {
     private String info;
 
     @ManyToMany(mappedBy = "tasks")
-    private Set<User> users = new HashSet<>();
+//    @JoinTable(name = "user_task",
+//            joinColumns = @JoinColumn(name = "tasks_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"))
+    private List<User> users = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -89,5 +93,13 @@ public class Task {
     @Override
     public int hashCode() {
         return Objects.hash(id, title, status, deadline, info);
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }
