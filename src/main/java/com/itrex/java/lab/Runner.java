@@ -15,8 +15,8 @@ public class Runner {
         System.out.println("============CREATE CONNECTION POOL================");
         try (SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         ) {
-          RoleRep.chek(sessionFactory);
-  //          UserREpo.chek(sessionFactory);
+//          RoleRep.chek(sessionFactory);
+          UserREpo.chek(sessionFactory);
 //            TaskRepo.chek(sessionFactory);
 
         }

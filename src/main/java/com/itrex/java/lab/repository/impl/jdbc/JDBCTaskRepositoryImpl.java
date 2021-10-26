@@ -165,7 +165,7 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
 
     @Override
     public boolean removeUserByTask(Task task, User user) throws CRMProjectRepositoryException {
-        JDBCUserRepositoryImpl userRepository = new JDBCUserRepositoryImpl(dataSource);
+        UserRepository userRepository = new JDBCUserRepositoryImpl(dataSource);
         return userRepository.removeTaskByUser(task, user);
     }
 

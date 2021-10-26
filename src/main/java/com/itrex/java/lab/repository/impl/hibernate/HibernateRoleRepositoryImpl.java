@@ -4,6 +4,7 @@ import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.repository.RoleRepository;
+import com.itrex.java.lab.repository.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -28,6 +29,7 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
 
     @Override
     public List<Role> selectAll() throws CRMProjectRepositoryException {
+
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery(SELECT_ALL, Role.class).list();
         } catch (Exception e) {
@@ -37,6 +39,7 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
 
     @Override
     public Role selectById(Integer id) throws CRMProjectRepositoryException {
+
         try (Session session = sessionFactory.openSession()) {
             return session.get(Role.class, id);
         } catch (Exception ex) {
@@ -46,6 +49,7 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
 
     @Override
     public Role add(Role role) throws CRMProjectRepositoryException {
+
         try (Session session = sessionFactory.openSession()) {
             session.save(role);
             return role;
@@ -69,6 +73,7 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
 
     @Override
     public Role update(Role role, Integer id) throws CRMProjectRepositoryException {
+
         Role roleUpdate = null;
         try (Session session = sessionFactory.openSession()) {
             try {
@@ -91,23 +96,30 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
 
     @Override
     public boolean remove(Role role) throws CRMProjectRepositoryException {
+
         return remove(role, selectById(DEFAULT_ROLE));
     }
 
     @Override
     @Transactional
     public boolean remove(Role role, Role defaultRole) throws CRMProjectRepositoryException {
-        if (role.equals(defaultRole)) {
-            throw new CRMProjectRepositoryException("ERROR : Role equals default role");
-        }
-        try (Session session = sessionFactory.openSession()) {
-            List<User> users = role.getUsers();
-            System.out.println(users);
 
-            session.delete(role);
+        try (Session session = sessionFactory.openSession()) {
+
+            Role roleDB = session.get(Role.class, role.getId());
+
+            if (roleDB == null) {
+                return false;
+            } else if (role.getRoleName().equals(defaultRole.getRoleName())) {
+                throw new CRMProjectRepositoryException("ERROR : Role equals default role");
+            } else {
+                UserRepository userRepository = new HibernateUserRepositoryImpl(sessionFactory);
+                List<User> users = userRepository.updateRoleOnDefaultByUsers(role, defaultRole);
+                session.delete(roleDB);
+                return true;
+            }
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: REMOVE_ROLE - " + role + ": ", ex);
         }
-        return false;
     }
 }

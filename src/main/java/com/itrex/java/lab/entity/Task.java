@@ -26,9 +26,6 @@ public class Task implements Serializable {
     private String info;
 
     @ManyToMany(mappedBy = "tasks")
-//    @JoinTable(name = "user_task",
-//            joinColumns = @JoinColumn(name = "tasks_id", referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"))
     private List<User> users = new ArrayList<>();
 
     public Integer getId() {

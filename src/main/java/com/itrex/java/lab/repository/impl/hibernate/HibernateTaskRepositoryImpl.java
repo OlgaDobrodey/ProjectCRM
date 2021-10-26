@@ -4,10 +4,12 @@ import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.repository.TaskRepository;
+import com.itrex.java.lab.repository.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HibernateTaskRepositoryImpl implements TaskRepository {
@@ -30,39 +32,52 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
 
     @Override
     public List<Task> selectAll() throws CRMProjectRepositoryException {
+
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery(SELECT_ALL, Task.class).list();
+        } catch (Exception ex) {
+            throw new CRMProjectRepositoryException("ERROR: SELECT ALL TASK: " + ex);
         }
     }
 
 
     @Override
     public Task selectById(Integer id) throws CRMProjectRepositoryException {
+
         try (Session session = sessionFactory.openSession()) {
             return session.get(Task.class, id);
+        } catch (Exception ex) {
+            throw new CRMProjectRepositoryException("ERROR: SELECT TASK BY ID: " + ex);
         }
     }
 
     @Override
     public Task add(Task task) throws CRMProjectRepositoryException {
+
         try (Session session = sessionFactory.openSession()) {
             session.save(task);
-            return task;
+        } catch (Exception ex) {
+            throw new CRMProjectRepositoryException("ERROR: INSERT INTO TASK- " + task + ": ", ex);
         }
+        return task;
     }
 
     @Override
     public List<Task> addAll(List<Task> tasks) throws CRMProjectRepositoryException {
+
         try (Session session = sessionFactory.openSession()) {
             for (Task task : tasks) {
                 session.save(task);
             }
+        } catch (Exception ex) {
+            throw new CRMProjectRepositoryException("ERROR: INSERT INTO THESE USERS - " + tasks + ": ", ex);
         }
         return tasks;
     }
 
     @Override
     public Task update(Task task, Integer id) throws CRMProjectRepositoryException {
+
         Task tastUpdate = null;
         try (Session session = sessionFactory.openSession()) {
             try {
@@ -86,31 +101,61 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
 
     @Override
     public boolean remove(Task task) throws CRMProjectRepositoryException {
-        return false;
+
+        try (Session session = sessionFactory.openSession()) {
+            session.getTransaction().begin();
+            task = session.get(Task.class, task.getId());
+            if (task == null) {
+                return false;
+            }
+            removeAllUsersByTask(task);
+            session.delete(task);
+            session.getTransaction().commit();
+        } catch (Exception ex) {
+            throw new CRMProjectRepositoryException("ERROR: REMOVE_TASK - " + task + ": ", ex);
+        }
+        return true;
     }
 
     @Override
     public List<User> selectAllUsersByTask(Task task) throws CRMProjectRepositoryException {
-        try (Session session = sessionFactory.openSession()) {
-            List<User> users = task.getUsers();
-            System.out.println(users);
-        }
 
-        return null;
+        List<User> users;
+        try (Session session = sessionFactory.openSession()) {
+            session.getTransaction().begin();
+            Task taskDB = session.get(Task.class, task.getId());
+            users = new ArrayList<>(taskDB.getUsers());
+            session.getTransaction().commit();
+        } catch (Exception ex) {
+            throw new CRMProjectRepositoryException("ERROR: SELECT ALL USERS FOR TASK: ", ex);
+        }
+        return users;
     }
 
     @Override
     public void addUserByTask(Task task, User user) throws CRMProjectRepositoryException {
-
+        UserRepository userRepository = new HibernateUserRepositoryImpl(sessionFactory);
+        userRepository.addTaskByUser(task, user);
     }
 
     @Override
     public boolean removeUserByTask(Task task, User user) throws CRMProjectRepositoryException {
-        return false;
+        UserRepository userRepository = new HibernateUserRepositoryImpl(sessionFactory);
+        return userRepository.removeTaskByUser(task, user);
     }
 
     @Override
-    public void removeAllUsersByTask(Task task) throws CRMProjectRepositoryException {
 
+    public void removeAllUsersByTask(Task task) throws CRMProjectRepositoryException {
+        try (Session session = sessionFactory.openSession()) {
+            session.getTransaction().begin();
+            List<User> users = task.getUsers();
+            for (User user : users) {
+                user.getTasks().remove(task);
+            }
+            session.getTransaction().commit();
+        } catch (Exception ex) {
+            throw new CRMProjectRepositoryException("ERROR: DELETE_USER_ALL_TASK - " + task + ": ", ex);
+        }
     }
 }
