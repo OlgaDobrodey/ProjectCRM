@@ -68,6 +68,14 @@ public class Task implements Serializable {
         this.info = info;
     }
 
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
     @Override
     public String toString() {
         return "\nTask{" +
@@ -90,13 +98,5 @@ public class Task implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, title, status, deadline, info);
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
     }
 }
