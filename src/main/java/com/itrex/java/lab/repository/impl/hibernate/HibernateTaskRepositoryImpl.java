@@ -78,7 +78,6 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
     @Override
     public Task update(Task task, Integer id) throws CRMProjectRepositoryException {
 
-        Task tastUpdate = null;
         try (Session session = sessionFactory.openSession()) {
             try {
                 session.getTransaction().begin();
@@ -94,9 +93,8 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
                 session.getTransaction().rollback();
                 throw new CRMProjectRepositoryException("ERROR: UPDATE TASK " + task, e);
             }
-            tastUpdate = session.get(Task.class, id);
+            return session.get(Task.class, id);
         }
-        return tastUpdate;
     }
 
     @Override
@@ -120,16 +118,15 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
     @Override
     public List<User> selectAllUsersByTask(Task task) throws CRMProjectRepositoryException {
 
-        List<User> users;
         try (Session session = sessionFactory.openSession()) {
             session.getTransaction().begin();
             Task taskDB = session.get(Task.class, task.getId());
-            users = new ArrayList<>(taskDB.getUsers());
+            List<User> users = new ArrayList<>(taskDB.getUsers());
             session.getTransaction().commit();
+            return users;
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: SELECT ALL USERS FOR TASK: ", ex);
         }
-        return users;
     }
 
     @Override
@@ -145,7 +142,6 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-
     public void removeAllUsersByTask(Task task) throws CRMProjectRepositoryException {
         try (Session session = sessionFactory.openSession()) {
             session.getTransaction().begin();

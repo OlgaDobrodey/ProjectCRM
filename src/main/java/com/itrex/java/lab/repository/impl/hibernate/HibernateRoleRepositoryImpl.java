@@ -9,7 +9,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 import java.util.List;
 
 public class HibernateRoleRepositoryImpl implements RoleRepository {
@@ -74,7 +73,6 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
     @Override
     public Role update(Role role, Integer id) throws CRMProjectRepositoryException {
 
-        Role roleUpdate = null;
         try (Session session = sessionFactory.openSession()) {
             try {
                 session.getTransaction().begin();
@@ -87,11 +85,10 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
                 session.getTransaction().rollback();
                 throw new CRMProjectRepositoryException("ERROR: UPDATE ROLE " + role, e);
             }
-            roleUpdate = session.get(Role.class, id);
+            return session.get(Role.class, id);
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: UPDATE_ROLE - " + role, ex);
         }
-        return roleUpdate;
     }
 
     @Override
@@ -101,17 +98,20 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    @Transactional
     public boolean remove(Role role, Role defaultRole) throws CRMProjectRepositoryException {
 
+        if (role.getRoleName() == null || role.getId() == null) {
+            return false;
+        }
+        if (role.getRoleName().equals(defaultRole.getRoleName())) {
+            throw new CRMProjectRepositoryException("ERROR : Role equals default role");
+        }
         try (Session session = sessionFactory.openSession()) {
 
             Role roleDB = session.get(Role.class, role.getId());
 
             if (roleDB == null) {
                 return false;
-            } else if (role.getRoleName().equals(defaultRole.getRoleName())) {
-                throw new CRMProjectRepositoryException("ERROR : Role equals default role");
             } else {
                 UserRepository userRepository = new HibernateUserRepositoryImpl(sessionFactory);
                 List<User> users = userRepository.updateRoleOnDefaultByUsers(role, defaultRole);

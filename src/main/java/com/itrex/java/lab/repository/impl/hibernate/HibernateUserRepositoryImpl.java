@@ -9,7 +9,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,18 +58,15 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    @Transactional
     public List<Task> selectAllTasksByUser(User user) throws CRMProjectRepositoryException {
 
-        List<Task> tasks;
         try (Session session = sessionFactory.openSession()) {
 
             User userDB = session.get(User.class, user.getId());
-            tasks = new ArrayList<>(userDB.getTasks());
+            return new ArrayList<>(userDB.getTasks());
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: SELECT ALL TASK FOR USER: ", ex);
         }
-        return tasks;
     }
 
     @Override
@@ -126,9 +122,8 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    @Transactional
     public User update(User user, Integer id) throws CRMProjectRepositoryException {
-        User userUpdate = null;
+
         try (Session session = sessionFactory.openSession()) {
             try {
                 session.getTransaction().begin();
@@ -145,11 +140,10 @@ public class HibernateUserRepositoryImpl implements UserRepository {
                 session.getTransaction().rollback();
                 throw new CRMProjectRepositoryException("ERROR: UPDATE TASK " + user, e);
             }
-            userUpdate = session.get(User.class, id);
+            return session.get(User.class, id);
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: UPDATE_USER - " + user + ": ", ex);
         }
-        return userUpdate;
     }
 
     @Override
