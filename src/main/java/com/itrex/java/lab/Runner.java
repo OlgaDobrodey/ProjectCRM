@@ -12,12 +12,14 @@ public class Runner {
         FlywayService flywayService = new FlywayService();
         flywayService.migrate();
 
-        System.out.println("============CREATE CONNECTION POOL================");
         try (SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         ) {
-//          RoleRep.chek(sessionFactory);
-          UserREpo.chek(sessionFactory);
-//            TaskRepo.chek(sessionFactory);
+
+            //visual representation of how methods work
+
+//          RoleLookWorkMethods.chek(sessionFactory);
+//          UserLookWorkMethods.chek(sessionFactory);
+//          TaskLookWorkMethods.chek(sessionFactory);
 
         }
     }
