@@ -17,6 +17,14 @@ public interface UserRepository {
     User add(User user) throws CRMProjectRepositoryException;
     List<User> addAll(List<User> users) throws CRMProjectRepositoryException;
     void addTaskByUser(Task task, User user) throws CRMProjectRepositoryException; //add task for user
+
+    /**
+     * update user, if user is not founded in DB return null;
+     * @param user -all param's user for change
+     * @param id - user id to change
+     * @return changed user
+     * @throws CRMProjectRepositoryException
+     */
     User update(User user, Integer id) throws CRMProjectRepositoryException;  //update user by id
 
     //update All users, who have old role on default role

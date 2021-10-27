@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The Task class is responsible for the task's for users.
+ * task and user are linked in a cross table crm.user_task
+ */
+
 @Entity
 @Table(name = "task", schema = "CRM")
 public class Task implements Serializable {

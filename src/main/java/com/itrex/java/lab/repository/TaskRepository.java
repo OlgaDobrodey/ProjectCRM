@@ -16,6 +16,13 @@ public interface TaskRepository {
 
     List<Task> addAll(List<Task> tasks) throws CRMProjectRepositoryException;
 
+    /**
+     * update task, if task is not founded in DB return null;
+     * @param task -all param's task for change
+     * @param id - task id to change
+     * @return changed task
+     * @throws CRMProjectRepositoryException
+     */
     Task update(Task task, Integer id) throws CRMProjectRepositoryException;
 
     boolean remove(Task task) throws CRMProjectRepositoryException;

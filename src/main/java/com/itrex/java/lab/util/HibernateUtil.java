@@ -9,6 +9,10 @@ public class HibernateUtil {
     private static SessionFactory sessionFactory;
 
     public static SessionFactory getSessionFactory() {
+        if(sessionFactory!=null){
+            return sessionFactory;
+        }
+        synchronized (SessionFactory.class){
         if (sessionFactory == null) {
             try {
                 sessionFactory = new Configuration().configure().buildSessionFactory();
@@ -16,6 +20,6 @@ public class HibernateUtil {
                 System.err.println("Failed to create sessionFactory object." + e);
             }
         }
-        return sessionFactory;
+        return sessionFactory;}
     }
 }

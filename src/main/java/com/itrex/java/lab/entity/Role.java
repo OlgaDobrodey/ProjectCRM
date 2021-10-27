@@ -5,6 +5,14 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+
+/**
+ * The role class is responsible for the user's role.
+ * role's name is only roleName.toUpperCase();
+ * Default role = Role {id = 2, roleName = "User"}
+ * If the this.role is removed, this.role is changed to default role in all users
+ */
+
 @Entity
 @Table(name = "role", schema = "CRM")
 public class Role implements Serializable {
