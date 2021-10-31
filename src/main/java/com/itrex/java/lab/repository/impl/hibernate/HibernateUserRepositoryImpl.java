@@ -21,15 +21,12 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     private static final String LAST_NAME_USER = "lastName";
     private static final String ID_USER = "id";
     private static final String ROLE_DEFAULT_USER = "roleDefault";
-    private static final String CROSS_TABLE_ID_USER = "users_id";
-    private static final String CROSS_TABLE_ID_TASK = "tasks_id";
 
     private static final String SELECT_ALL = "from User u";
-    private static final String SELECT_CROSS_TABLE = "SELECT users_id, tasks_id  FROM crm.user_task";
     private static final String UPDATE = "update User set login = :login, psw =:psw, " +
             "role_id =:role, firstName=:firstName, lastName=:lastName where id = :id";
     private static final String UPDATE_USER_ON_DEFAULT_ROLE = "update User u set role_id =:roleDefault where role_id =:role";
-    private static final String DELETE_TASK_BY_USER = "DELETE FROM crm.user_task WHERE users_id= %d AND tasks_id= %d";
+
 
     private final SessionFactory sessionFactory;
 
@@ -74,7 +71,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
         try (Session session = sessionFactory.openSession()) {
             List<User> users = selectAll();
             for (User user : users) {
-                List<Task> tasks = session.get(User.class, user.getId()).getTasks();
+               List<Task> tasks = session.get(User.class, user.getId()).getTasks();
                 tasks.forEach((task) -> System.out.printf("%d - %s : %d - %s\n", user.getId(), user.getLogin(), task.getId(), task.getTitle()));
             }
         } catch (Exception ex) {
