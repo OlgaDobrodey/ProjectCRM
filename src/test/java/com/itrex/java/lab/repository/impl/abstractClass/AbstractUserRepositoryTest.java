@@ -22,7 +22,6 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
 
     public AbstractUserRepositoryTest() {
         super();
-
     }
 
     public void postConstruct(UserRepository repository, TaskRepository taskRepository) {

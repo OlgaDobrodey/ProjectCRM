@@ -6,19 +6,16 @@ import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.repository.RoleRepository;
 import com.itrex.java.lab.repository.TaskRepository;
 import com.itrex.java.lab.repository.UserRepository;
-import com.itrex.java.lab.repository.impl.hibernate.HibernateRoleRepositoryImpl;
-import com.itrex.java.lab.repository.impl.hibernate.HibernateTaskRepositoryImpl;
-import com.itrex.java.lab.repository.impl.hibernate.HibernateUserRepositoryImpl;
-import org.hibernate.SessionFactory;
+import org.springframework.context.ApplicationContext;
 
 import java.util.List;
 
 public class UserLookWorkMethods {
 
-    public static void chek(SessionFactory sessionFactory) {
-        UserRepository userRepository = new HibernateUserRepositoryImpl(sessionFactory);
-        RoleRepository roleRepository = new HibernateRoleRepositoryImpl(sessionFactory);
-        TaskRepository taskRepository = new HibernateTaskRepositoryImpl(sessionFactory);
+    public static void chek(ApplicationContext ctx) {
+        UserRepository userRepository = ctx.getBean(UserRepository.class);
+        RoleRepository roleRepository = ctx.getBean(RoleRepository.class);
+        TaskRepository taskRepository = ctx.getBean(TaskRepository.class);
 
         try {
             System.out.println("SELECT ID " + userRepository.selectById(1));
@@ -26,7 +23,7 @@ public class UserLookWorkMethods {
 
             List<Task> yask = userRepository.selectAllTasksByUser(user);
             System.out.println("1selectAllTasksByUser" + yask);
-            userRepository.addTaskByUser(taskRepository.selectById(6),user );
+            userRepository.addTaskByUser(taskRepository.selectById(6), user);
             System.out.println("2selectAllTasksByUser" + userRepository.selectAllTasksByUser(user));
 
             List<User> users = UtillCategory.createTestUsers(4);
@@ -40,19 +37,19 @@ public class UserLookWorkMethods {
             System.out.println("UPDATE ROLE " + userRepository.updateRoleOnDefaultByUsers(roleRepository.selectById(1), roleRepository.selectById(2)));
             System.out.println("SELECT ALL " + userRepository.selectAll());
 
-            System.out.println("REMOVE USER"+ userRepository.remove(user));
+            System.out.println("REMOVE USER" + userRepository.remove(user));
 
-            System.out.println("SELECT ALL"+ userRepository.selectAll());
-            System.out.println("TASK $=4"+ taskRepository.selectAllUsersByTask(taskRepository.selectById(4)));
-            System.out.println("TASK $=5"+ taskRepository.selectAllUsersByTask(taskRepository.selectById(5)));
-            System.out.println("TASK $=11"+ taskRepository.selectAllUsersByTask(taskRepository.selectById(11)));
-            userRepository.addTaskByUser(taskRepository.selectById(8),user );
-            System.out.println("REMOVE TASK AND USER"+ userRepository.removeTaskByUser(taskRepository.selectById(4),user ));
+            System.out.println("SELECT ALL" + userRepository.selectAll());
+            System.out.println("TASK $=4" + taskRepository.selectAllUsersByTask(taskRepository.selectById(4)));
+            System.out.println("TASK $=5" + taskRepository.selectAllUsersByTask(taskRepository.selectById(5)));
+            System.out.println("TASK $=11" + taskRepository.selectAllUsersByTask(taskRepository.selectById(11)));
+            userRepository.addTaskByUser(taskRepository.selectById(8), user);
+            System.out.println("REMOVE TASK AND USER" + userRepository.removeTaskByUser(taskRepository.selectById(4), user));
             userRepository.printCrossTable();
-            System.out.println("ALL TASK"+ userRepository.selectAllTasksByUser(user));
-
+            System.out.println("ALL TASK" + userRepository.selectAllTasksByUser(user));
         } catch (CRMProjectRepositoryException e) {
             e.printStackTrace();
         }
     }
 }
+

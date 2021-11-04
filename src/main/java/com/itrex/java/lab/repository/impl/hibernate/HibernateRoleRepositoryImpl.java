@@ -7,10 +7,12 @@ import com.itrex.java.lab.repository.RoleRepository;
 import com.itrex.java.lab.repository.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 import java.util.List;
 
+@Repository
 public class HibernateRoleRepositoryImpl implements RoleRepository {
 
     private static final int DEFAULT_ROLE = 2;
@@ -107,15 +109,17 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
             throw new CRMProjectRepositoryException("ERROR : Role equals default role");
         }
         try (Session session = sessionFactory.openSession()) {
-
+            session.getTransaction().begin();
             Role roleDB = session.get(Role.class, role.getId());
 
             if (roleDB == null) {
+                session.getTransaction().commit();
                 return false;
             } else {
                 UserRepository userRepository = new HibernateUserRepositoryImpl(sessionFactory);
                 List<User> users = userRepository.updateRoleOnDefaultByUsers(role, defaultRole);
                 session.delete(roleDB);
+                session.getTransaction().commit();
                 return true;
             }
         } catch (Exception ex) {

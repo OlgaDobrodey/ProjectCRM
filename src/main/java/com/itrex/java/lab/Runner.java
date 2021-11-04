@@ -1,26 +1,26 @@
 package com.itrex.java.lab;
 
+import com.itrex.java.lab.config.MyApplicationContextConfiguration;
 import com.itrex.java.lab.service.FlywayService;
-import com.itrex.java.lab.util.HibernateUtil;
-import org.hibernate.SessionFactory;
+import com.itrex.java.lab.workMethodschek.RoleLookWorkMethods;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Runner {
 
     public static void main(String[] args) {
         System.out.println("===================START APP======================");
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(MyApplicationContextConfiguration.class);
+
         System.out.println("================START MIGRATION===================");
-        FlywayService flywayService = new FlywayService();
+        FlywayService flywayService = ctx.getBean(FlywayService.class);
         flywayService.migrate();
 
-        try (SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        ) {
+        //visual representation of how methods work
 
-            //visual representation of how methods work
+          RoleLookWorkMethods.chek(ctx);
+//          UserLookWorkMethods.chek(ctx);
+//          TaskLookWorkMethods.chek(ctx);
 
-//          RoleLookWorkMethods.chek(sessionFactory);
-//          UserLookWorkMethods.chek(sessionFactory);
-//          TaskLookWorkMethods.chek(sessionFactory);
-
-        }
     }
 }

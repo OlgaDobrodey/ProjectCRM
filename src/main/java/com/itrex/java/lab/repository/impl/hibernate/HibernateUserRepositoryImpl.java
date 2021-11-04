@@ -7,11 +7,13 @@ import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.repository.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class HibernateUserRepositoryImpl implements UserRepository {
 
     private static final String LOGIN_USER = "login";
