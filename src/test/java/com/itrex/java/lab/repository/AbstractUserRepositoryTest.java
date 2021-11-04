@@ -1,13 +1,9 @@
-package com.itrex.java.lab.repository.impl.abstractClass;
+package com.itrex.java.lab.repository;
 
 import com.itrex.java.lab.entity.Status;
 import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
-import com.itrex.java.lab.repository.BaseRepositoryTest;
-import com.itrex.java.lab.repository.TaskRepository;
-import com.itrex.java.lab.repository.UserRepository;
-import com.itrex.java.lab.repository.UtillCategory;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -116,7 +112,7 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
     @Test
     void add_validData_existUser_returnUserTest() throws CRMProjectRepositoryException {
         //given
-        User user = UtillCategory.createTestUsers(1).get(0);
+        User user = RepositoryTestUtils.createTestUsers(1).get(0);
 
         //when
         User actual = repository.add(user);
@@ -142,7 +138,7 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
     @Test
     void addAll_validData_existUser_returnUserTest() throws CRMProjectRepositoryException {
         //given
-        List<User> testUsers = UtillCategory.createTestUsers(2);
+        List<User> testUsers = RepositoryTestUtils.createTestUsers(2);
 
         //when
         List<User> actual = repository.addAll(testUsers);
@@ -165,7 +161,7 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
     @Test
     void addAll_existCopyUserById2_shouldThrowRepositoryExceptionTest() throws CRMProjectRepositoryException {
         //given && when
-        User test1 = UtillCategory.createTestUsers(1).get(0);
+        User test1 = RepositoryTestUtils.createTestUsers(1).get(0);
         User test2 = repository.selectById(2);  //There is Role "User" in Data Base
 
         //then
@@ -188,7 +184,7 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
     @Test
     void update_validData_existUserAndInteger_returnUserTest() throws CRMProjectRepositoryException {
         //given
-        User expected = UtillCategory.createTestUsers(1).get(0);
+        User expected = RepositoryTestUtils.createTestUsers(1).get(0);
         Integer testId = 1;
 
         //when
@@ -206,7 +202,7 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
     @Test
     void update_validData_existUserAndIdUserNotDB_returnNullTest() throws CRMProjectRepositoryException {
         //given && when
-        User expected = UtillCategory.createTestUsers(1).get(0);
+        User expected = RepositoryTestUtils.createTestUsers(1).get(0);
         Integer idNonDataBase = 99;
 
         //when
@@ -220,7 +216,7 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
     void update_existIdUser_shouldThrowRepositoryExceptionTest() {
         //given && when
         cleanDB();    //clean Data Base
-        User expected = UtillCategory.createTestUsers(1).get(0);
+        User expected = RepositoryTestUtils.createTestUsers(1).get(0);
         Integer id = 1;
 
         //then

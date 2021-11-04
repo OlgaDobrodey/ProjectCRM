@@ -6,12 +6,16 @@ import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.repository.TaskRepository;
 import com.itrex.java.lab.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
+@Qualifier("JDBCTaskRepository")
 public class JDBCTaskRepositoryImpl implements TaskRepository {
 
     private static final String ID_TASK_COLUMN = "id";

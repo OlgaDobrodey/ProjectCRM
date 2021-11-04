@@ -1,13 +1,9 @@
-package com.itrex.java.lab.repository.impl.abstractClass;
+package com.itrex.java.lab.repository;
 
 import com.itrex.java.lab.entity.Status;
 import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
-import com.itrex.java.lab.repository.BaseRepositoryTest;
-import com.itrex.java.lab.repository.TaskRepository;
-import com.itrex.java.lab.repository.UserRepository;
-import com.itrex.java.lab.repository.UtillCategory;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -111,7 +107,7 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
     @Test
     void add_validData_existTask_returnExistTaskTest() throws CRMProjectRepositoryException {
         //given
-        Task task = UtillCategory.createTestTasks(1).get(0);
+        Task task = RepositoryTestUtils.createTestTasks(1).get(0);
 
         //when
         Task actual = repository.add(task);
@@ -136,7 +132,7 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
     @Test
     void addAll_validData_existTask_returnTaskTest() throws CRMProjectRepositoryException {
         //given
-        List<Task> testTasks = UtillCategory.createTestTasks(2);
+        List<Task> testTasks = RepositoryTestUtils.createTestTasks(2);
 
         //when
         List<Task> actual = repository.addAll(testTasks);
@@ -157,7 +153,7 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
     @Test
     void addAll_existCopyTaskById2_returnThrowRepositoryExceptionTypeTest() throws CRMProjectRepositoryException {
         //given && when
-        Task test1 = UtillCategory.createTestTasks(1).get(0);
+        Task test1 = RepositoryTestUtils.createTestTasks(1).get(0);
         Task test2 = repository.selectById(2);  //There is Role "User" in Data Base
 
         //then
@@ -167,7 +163,7 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
     @Test
     void update_validData_existTaskAndInteger_returnTaskTest() throws CRMProjectRepositoryException {
         //given
-        Task expected = UtillCategory.createTestTasks(1).get(0);
+        Task expected = RepositoryTestUtils.createTestTasks(1).get(0);
         Integer testId = 1;
 
         //when
@@ -184,7 +180,7 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
     @Test
     void update_validData_existTaskAndIdTaskNotDB_returnNullTest() throws CRMProjectRepositoryException {
         //given && when
-        Task expected = UtillCategory.createTestTasks(1).get(0);
+        Task expected = RepositoryTestUtils.createTestTasks(1).get(0);
         Integer idNonDataBase = 99;
 
         //when
@@ -198,7 +194,7 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
     void update_existIdTask_returnThrowRepositoryExceptionTest() {
         //given && when
         cleanDB();    //clean Data Base
-        Task expected = UtillCategory.createTestTasks(1).get(0);
+        Task expected = RepositoryTestUtils.createTestTasks(1).get(0);
         Integer id = 1;
 
         //then
@@ -220,7 +216,7 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
     @Test
     void remove_validData_existTask_returnFalseTest() throws CRMProjectRepositoryException {
         //given
-        Task task = UtillCategory.createTestTasks(1).get(0);
+        Task task = RepositoryTestUtils.createTestTasks(1).get(0);
         task.setId(25);
 
         //when

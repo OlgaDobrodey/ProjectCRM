@@ -7,11 +7,13 @@ import com.itrex.java.lab.repository.RoleRepository;
 import com.itrex.java.lab.repository.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 import java.util.List;
 
+@Primary
 @Repository
 public class HibernateRoleRepositoryImpl implements RoleRepository {
 

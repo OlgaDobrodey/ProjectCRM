@@ -1,14 +1,15 @@
 package com.itrex.java.lab.repository.impl.hibernate;
 
+import com.itrex.java.lab.repository.AbstractRoleRepositoryTest;
 import com.itrex.java.lab.repository.RoleRepository;
-import com.itrex.java.lab.repository.impl.abstractClass.AbstractRoleRepositoryTest;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class HibernateRoleRepositoryImplTest extends AbstractRoleRepositoryTest {
 
-    public HibernateRoleRepositoryImplTest(ApplicationContext ctx) {
+    @Autowired
+    public HibernateRoleRepositoryImplTest(RoleRepository roleRepository) {
         super();
-        postConstruct(ctx.getBean(RoleRepository.class));
+        postConstruct(roleRepository);
     }
 }
 

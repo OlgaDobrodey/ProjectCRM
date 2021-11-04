@@ -1,10 +1,7 @@
-package com.itrex.java.lab.repository.impl.abstractClass;
+package com.itrex.java.lab.repository;
 
 import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
-import com.itrex.java.lab.repository.BaseRepositoryTest;
-import com.itrex.java.lab.repository.RoleRepository;
-import com.itrex.java.lab.repository.UtillCategory;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -79,7 +76,7 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
     @Test
     void add_validData_existRole_returnRoleTest() throws CRMProjectRepositoryException {
         //given
-        Role role = UtillCategory.createTestRole(1).get(0);
+        Role role = RepositoryTestUtils.createTestRole(1).get(0);
 
         //when
         Role actual = repository.add(role);
@@ -101,7 +98,7 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
     @Test
     void addAll_validData_existRoles_returnRoleTest() throws CRMProjectRepositoryException {
         //given
-        List<Role> roles = UtillCategory.createTestRole(2);
+        List<Role> roles = RepositoryTestUtils.createTestRole(2);
 
         //when
         List<Role> actual = repository.addAll(roles);
@@ -116,7 +113,7 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
     @Test
     void addAll_existCopyRoleNameUSER_shouldThrowRepositoryExceptionTest() throws CRMProjectRepositoryException {
         //given && when
-        Role test1 = UtillCategory.createTestRole(1).get(0);
+        Role test1 = RepositoryTestUtils.createTestRole(1).get(0);
         Role test2 = repository.selectById(2);  //There is Role "User" in Data Base
 
         //then
@@ -126,7 +123,7 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
     @Test
     void update_validData_existRoleAndIdRole_returnRoleTest() throws CRMProjectRepositoryException {
         //given
-        Role expected = UtillCategory.createTestRole(1).get(0);
+        Role expected = RepositoryTestUtils.createTestRole(1).get(0);
         Integer testId = 1;
 
         //when
@@ -140,7 +137,7 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
     @Test
     void update_validData_existRoleAndIdRoleNonDB_returnNullTest() throws CRMProjectRepositoryException {
         //given && when
-        Role expected = UtillCategory.createTestRole(1).get(0);
+        Role expected = RepositoryTestUtils.createTestRole(1).get(0);
         Integer idNonDataBase = 99;
 
         //when
@@ -154,7 +151,7 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
     void update_existIdRole_shouldThrowRepositoryExceptionTest() {
         //given && when
         cleanDB();    //clean Data Base
-        Role expected = UtillCategory.createTestRole(1).get(0);
+        Role expected = RepositoryTestUtils.createTestRole(1).get(0);
         Integer idRole = 1;
 
         //then
@@ -176,7 +173,7 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
     @Test
     void remove_validData_existRoleNonDB_returnFALSETest() throws CRMProjectRepositoryException {
         //given
-        Role roleNonDB = UtillCategory.createTestRole(1).get(0);              //There is no such role in the database
+        Role roleNonDB = RepositoryTestUtils.createTestRole(1).get(0);              //There is no such role in the database
         roleNonDB.setId(8);
 
         //when
@@ -212,7 +209,7 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
     void remove_validData_existRoleAndDefault_returnFalseTest() throws CRMProjectRepositoryException {
         //given
         Role role = repository.selectById(1);
-        Role falseRole = UtillCategory.createTestRole(1).get(0);
+        Role falseRole = RepositoryTestUtils.createTestRole(1).get(0);
         falseRole.setId(25);
 
         //when

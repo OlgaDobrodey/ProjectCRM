@@ -4,12 +4,16 @@ import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.repository.RoleRepository;
 import com.itrex.java.lab.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
+@Qualifier("JDBCRoleRepository")
 public class JDBCRoleRepositoryImpl implements RoleRepository {
 
     private static final int DEFAULT_ROLE = 2; //User

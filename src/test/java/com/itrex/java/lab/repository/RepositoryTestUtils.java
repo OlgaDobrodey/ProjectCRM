@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UtillCategory {
+public class RepositoryTestUtils {
 
     public static List<Role> createTestRole(Integer count) {
         List<Role> roles = new ArrayList<>();

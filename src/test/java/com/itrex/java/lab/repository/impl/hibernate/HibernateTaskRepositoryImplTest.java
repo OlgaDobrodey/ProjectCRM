@@ -1,14 +1,15 @@
 package com.itrex.java.lab.repository.impl.hibernate;
 
+import com.itrex.java.lab.repository.AbstractTaskRepositoryTest;
 import com.itrex.java.lab.repository.TaskRepository;
 import com.itrex.java.lab.repository.UserRepository;
-import com.itrex.java.lab.repository.impl.abstractClass.AbstractTaskRepositoryTest;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class HibernateTaskRepositoryImplTest extends AbstractTaskRepositoryTest {
 
-    public HibernateTaskRepositoryImplTest(ApplicationContext ctx) {
+    @Autowired
+    public HibernateTaskRepositoryImplTest(TaskRepository taskRepository, UserRepository userRepository) {
         super();
-        postConstruct(ctx.getBean(TaskRepository.class), ctx.getBean(UserRepository.class));
+        postConstruct(taskRepository, userRepository);
     }
 }
