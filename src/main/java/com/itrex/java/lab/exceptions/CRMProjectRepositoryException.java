@@ -1,6 +1,6 @@
 package com.itrex.java.lab.exceptions;
 
-public class CRMProjectRepositoryException extends Exception{
+public class CRMProjectRepositoryException extends Exception {
 
     public CRMProjectRepositoryException(String message) {
         super(message);
@@ -9,5 +9,4 @@ public class CRMProjectRepositoryException extends Exception{
     public CRMProjectRepositoryException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }

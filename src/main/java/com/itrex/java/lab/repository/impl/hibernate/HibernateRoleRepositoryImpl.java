@@ -128,4 +128,17 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
             throw new CRMProjectRepositoryException("ERROR: REMOVE_ROLE - " + role + ": ", ex);
         }
     }
+
+    @Override
+    public boolean removeRole(Role role) throws CRMProjectRepositoryException {
+
+        try (Session session = sessionFactory.openSession()) {
+            session.getTransaction().begin();
+            session.delete(role);
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
 }

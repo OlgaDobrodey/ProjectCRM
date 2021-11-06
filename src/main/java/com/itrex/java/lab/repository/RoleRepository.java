@@ -44,4 +44,6 @@ public interface RoleRepository {
      * @return true - if role remove; false -if basa date don't have
      */
     boolean remove(Role role, Role defaultRole) throws CRMProjectRepositoryException;
+
+    boolean removeRole(Role role) throws CRMProjectRepositoryException;
 }

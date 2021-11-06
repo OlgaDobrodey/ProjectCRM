@@ -1,5 +1,5 @@
 Simple CRM sistema
-1. Users - существуют 2 роли admin и user;
+1. Users - существуют 3 роли ADMIN, USER(DEFAULT) и CONTROLLER;
 2. Tasks - задачи для выполнения, у одной задачи несколько исполнителей;
 3. Задача имеет статус: new, performed, completed, время исполнения - dedline и info;
 4. У одного user может быть несколько задач;
