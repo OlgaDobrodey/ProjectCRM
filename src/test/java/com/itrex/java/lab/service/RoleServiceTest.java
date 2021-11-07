@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.itrex.java.lab.utils.Convector.convertRoleToDto;
+import static com.itrex.java.lab.utils.Convert.convertRoleToDto;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 

@@ -13,8 +13,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.itrex.java.lab.utils.Convector.convertRoleToDto;
-import static com.itrex.java.lab.utils.Convector.convertRoleToEntity;
+import static com.itrex.java.lab.utils.Convert.convertRoleToDto;
+import static com.itrex.java.lab.utils.Convert.convertRoleToEntity;
 
 @Service
 public class RoleServiceImpl implements RoleService {

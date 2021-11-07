@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.itrex.java.lab.utils.Convector.*;
+import static com.itrex.java.lab.utils.Convert.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -38,7 +38,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getById(Integer id) throws CRMProjectServiceException {
         try {
-            return convertUserToDto(userRepository.selectById(id));
+            User user = userRepository.selectById(id);
+            return user!=null? convertUserToDto(user):null;
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: SELECT USER BY ID: ", ex);
         }
@@ -93,9 +94,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO update(UserDTO user, Integer id) throws CRMProjectServiceException {
+    public UserDTO update(UserDTO userDTO, Integer id) throws CRMProjectServiceException {
         try {
-            return convertUserToDto(userRepository.update(convertUserToEntity(user),id));
+            User user = userRepository.update(convertUserToEntity(userDTO),id);
+            return user!= null?convertUserToDto(user):null;
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: UPDATE USER:", ex);
         }

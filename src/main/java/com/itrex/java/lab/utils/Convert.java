@@ -7,7 +7,7 @@ import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.entity.User;
 
-public class Convector {
+public class Convert {
 
     public static RoleDTO convertRoleToDto(Role role) {
         return new RoleDTO(role);
@@ -17,7 +17,12 @@ public class Convector {
     public static Role convertRoleToEntity(RoleDTO roleDTO) {
         Role role = new Role();
         role.setRoleName(roleDTO.getRoleName());
-        role.setId(roleDTO.getId());
+        try {
+            role.setId(roleDTO.getId());
+        } catch (NullPointerException e) {
+            role.setId(null);
+        }
+
         return role;
     }
 
@@ -35,7 +40,11 @@ public class Convector {
 
     public static User convertUserToEntity(UserDTO userDTO) {
         User user = new User();
-        user.setId(userDTO.getId());
+        try {
+            user.setId(userDTO.getId());
+        } catch (NullPointerException e) {
+            user.setId(null);
+        }
         user.setLogin(userDTO.getLogin());
         user.setPsw(userDTO.getPsw());
         user.setRole(convertRoleToEntity(userDTO.getRole()));
@@ -56,7 +65,11 @@ public class Convector {
 
     public static Task convertTaskToEntity(TaskDTO taskDTO) {
         Task task = new Task();
-        task.setId(taskDTO.getId());
+        try {
+            task.setId(taskDTO.getId());
+        } catch (NullPointerException e) {
+            task.setId(null);
+        }
         task.setTitle(taskDTO.getTitle());
         task.setStatus(taskDTO.getStatus());
         task.setInfo(taskDTO.getInfo());

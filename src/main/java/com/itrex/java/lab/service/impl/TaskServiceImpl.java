@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.itrex.java.lab.utils.Convector.*;
+import static com.itrex.java.lab.utils.Convert.*;
 
 @Service
 public class TaskServiceImpl implements TaskService {
