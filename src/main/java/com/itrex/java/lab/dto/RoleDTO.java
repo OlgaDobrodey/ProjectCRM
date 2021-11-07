@@ -24,6 +24,9 @@ public class RoleDTO {
         this.roleName = roleName;
     }
 
+    public RoleDTO() {
+    }
+
     public Integer getId() {
         return id;
     }

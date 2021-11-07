@@ -9,7 +9,7 @@ import org.springframework.context.annotation.DependsOn;
 
 import static com.itrex.java.lab.properties.Properties.*;
 
-@ComponentScan("com.itrex.java.lab.repository")
+@ComponentScan("com.itrex.java.lab")
 public class CRMTestContextConfiguration {
 
     @Bean(initMethod = "migrate")

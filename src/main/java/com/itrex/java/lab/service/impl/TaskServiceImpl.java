@@ -37,7 +37,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskDTO getById(Integer id) throws CRMProjectServiceException {
         try {
-            return convertTaskToDto(taskRepository.selectById(id));
+            Task task = taskRepository.selectById(id);
+            return task != null ? convertTaskToDto(task) : null;
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: GET BY ID TASK:", ex);
         }
@@ -87,7 +88,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskDTO update(TaskDTO task, Integer id) throws CRMProjectServiceException {
         try {
-            return convertTaskToDto(taskRepository.update(convertTaskToEntity(task), id));
+            Task taskEntity = taskRepository.update(convertTaskToEntity(task), id);
+            return taskEntity!=null?convertTaskToDto(taskEntity):null;
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: UPDATE TASK:", ex);
         }
@@ -105,7 +107,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public boolean removeUserByTask(TaskDTO task, UserDTO user) throws CRMProjectServiceException {
         try {
-            return taskRepository.removeUserByTask(convertTaskToEntity(task),convertUserToEntity(user));
+            return taskRepository.removeUserByTask(convertTaskToEntity(task), convertUserToEntity(user));
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: DELETE USER BY TASK:", ex);
         }

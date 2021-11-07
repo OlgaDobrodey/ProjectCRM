@@ -43,7 +43,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public RoleDTO selectById(Integer id) throws CRMProjectServiceException {
         try {
-            return convertRoleToDto(roleRepository.selectById(id));
+            Role role = roleRepository.selectById(id);
+            return role!=null? convertRoleToDto(role):null;
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: SELECT ROLE BY ID: ", ex);
         }
@@ -61,8 +62,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public RoleDTO updateRole(Integer id, RoleDTO roleDTO) throws CRMProjectServiceException {
         try {
-            Role role = convertRoleToEntity(roleDTO);
-            return convertRoleToDto(roleRepository.update(role, id));
+            Role role = roleRepository.update(convertRoleToEntity(roleDTO), id);
+            return role != null ? convertRoleToDto(role) : null;
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: UPDATE ROLE - " + roleDTO.getRoleName() + " : ", ex);
         }
@@ -79,11 +80,10 @@ public class RoleServiceImpl implements RoleService {
         }
         try {
             Role role = convertRoleToEntity(roleDTO);
-            userRepository.updateRoleOnDefaultByUsers(role, convertRoleToEntity(selectById(DEFAULT_ROLE)));
+            userRepository.updateRoleOnDefaultByUsers(role, roleRepository.selectById(DEFAULT_ROLE));
             return roleRepository.removeRole(role);
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: DELETE ROLE(CHANGE ON DEFAULT ROLE) - " + roleDTO.getRoleName() + " : ", ex);
         }
     }
-
 }
