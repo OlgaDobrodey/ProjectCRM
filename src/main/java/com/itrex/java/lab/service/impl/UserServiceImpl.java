@@ -11,9 +11,11 @@ import com.itrex.java.lab.repository.TaskRepository;
 import com.itrex.java.lab.repository.UserRepository;
 import com.itrex.java.lab.service.UserService;
 import com.itrex.java.lab.utils.Convert;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final TaskRepository taskRepository;
 
+    @Autowired
     public UserServiceImpl(UserRepository userRepository, TaskRepository taskRepository) {
         this.userRepository = userRepository;
         this.taskRepository = taskRepository;
@@ -123,6 +126,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(propagation= Propagation.NESTED)
     public List<UserDTO> updateRoleOnDefaultByUsers(RoleDTO role, RoleDTO defaultRole) throws CRMProjectServiceException {
         try {
             return userRepository.updateRoleOnDefaultByUsers(convertRoleToEntity(role), convertRoleToEntity(defaultRole))

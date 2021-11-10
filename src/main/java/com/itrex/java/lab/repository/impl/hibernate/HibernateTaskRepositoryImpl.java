@@ -6,6 +6,7 @@ import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.repository.TaskRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
@@ -30,6 +31,7 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
 
     private final SessionFactory sessionFactory;
 
+    @Autowired
     public HibernateTaskRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }

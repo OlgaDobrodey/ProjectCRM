@@ -1,9 +1,12 @@
 package com.itrex.java.lab.entity;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -15,10 +18,13 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "role", schema = "CRM")
+@EqualsAndHashCode
+@Getter
 public class Role implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter
     private Integer id;
 
     @Column(name = "role_name")
@@ -31,20 +37,8 @@ public class Role implements Serializable {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
     public void setRoleName(String roleName) {
         this.roleName = roleName.toUpperCase();
-    }
-
-    public List<User> getUsers() {
-        return users;
     }
 
     public void setUsers(List<User> users) {
@@ -57,19 +51,6 @@ public class Role implements Serializable {
                 "id=" + id +
                 ", roleName='" + roleName + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Role role = (Role) o;
-        return Objects.equals(id, role.id) && Objects.equals(roleName, role.roleName) && Objects.equals(users, role.users);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, roleName, users);
     }
 }
 

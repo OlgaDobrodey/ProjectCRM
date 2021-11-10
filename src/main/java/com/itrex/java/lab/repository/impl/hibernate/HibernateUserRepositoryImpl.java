@@ -7,6 +7,7 @@ import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.repository.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
@@ -35,6 +36,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
 
     private final SessionFactory sessionFactory;
 
+    @Autowired
     public HibernateUserRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
@@ -190,7 +192,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
             List<Task> tasks = userDB.getTasks();
             tasks.remove(taskDB);
 
-           session.getTransaction().commit();
+            session.getTransaction().commit();
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: DELETE_TASK_BY_USER - " + idUser + ": ", ex);
         }

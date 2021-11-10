@@ -7,6 +7,7 @@ import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.repository.RoleRepository;
 import com.itrex.java.lab.repository.TaskRepository;
 import com.itrex.java.lab.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
@@ -42,6 +43,7 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     private DataSource dataSource;
     private RoleRepository roleRepository;
 
+    @Autowired
     public JDBCUserRepositoryImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }

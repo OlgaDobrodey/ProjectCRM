@@ -10,7 +10,4 @@ public class CRMProjectRepositoryException extends Exception {
         super(message, cause);
     }
 
-     public CRMProjectRepositoryException() {
-
-    }
 }

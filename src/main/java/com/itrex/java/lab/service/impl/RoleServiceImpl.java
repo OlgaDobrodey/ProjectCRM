@@ -8,6 +8,7 @@ import com.itrex.java.lab.repository.RoleRepository;
 import com.itrex.java.lab.repository.UserRepository;
 import com.itrex.java.lab.service.RoleService;
 import com.itrex.java.lab.utils.Convert;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
 
+    @Autowired
     public RoleServiceImpl(RoleRepository roleRepository, UserRepository userRepository) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
