@@ -3,12 +3,12 @@ package com.itrex.java.lab.config;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.flywaydb.core.Flyway;
 import org.h2.jdbcx.JdbcConnectionPool;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.hibernate.cfg.Environment;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.*;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -16,61 +16,84 @@ import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 import java.util.Properties;
 
-import static com.itrex.java.lab.properties.Properties.*;
-
 @Configuration
 @ComponentScan("com.itrex.java.lab")
+@PropertySource("classpath:/application.properties")
 @EnableTransactionManagement
 public class CRMContextConfiguration {
+
+    @Value("${database.url}")
+    private String url;
+    @Value("${database.user}")
+    private String user;
+    @Value("${database.password}")
+    private String password;
+    @Value("${database.migration.location}")
+    private String migrationLocation;
+    @Value("${database.schema}")
+    private String schema;
+    @Value("${entity.package.to.scan}")
+    private String entityPackageScan;
+    @Value("${database.driver}")
+    String driver;
+    @Value("${hibernate.dialect.property}")
+    String dialect;
+    @Value("${hibernate.show_sql.property}")
+    String showSql;
+    @Value("${hibernate.format_sql.property}")
+    String formatSql;
+
 
     @Bean(initMethod = "migrate")
     public Flyway flyway() {
         return Flyway.configure()
-                .dataSource(H2_URL, H2_USER, H2_PSW)
-                .locations(H2_LOCATIONS)
-                .schemas(H2_SCHEMA)
+                .dataSource(url, user, password)
+                .locations(migrationLocation)
+                .schemas(schema)
                 .load();
     }
 
     @Bean
     @DependsOn("flyway")
     public JdbcConnectionPool jdbcConnectionPool() {
-        return JdbcConnectionPool.create(H2_URL, H2_USER, H2_PSW);
+        return JdbcConnectionPool.create(url, user, password);
     }
 
     @Bean
     @DependsOn("flyway")
     public DataSource dataSource() throws PropertyVetoException {
         ComboPooledDataSource cpds = new ComboPooledDataSource();
-        cpds.setDriverClass("org.h2.Driver");
-        cpds.setJdbcUrl("jdbc:h2:mem:CRM;DB_CLOSE_DELAY=-1");
-        cpds.setUser("sa");
-        cpds.setPassword("");
+        cpds.setDriverClass(driver);
+        cpds.setJdbcUrl(url);
+        cpds.setUser(user);
+        cpds.setPassword(password);
         return cpds;
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactory() throws PropertyVetoException {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+    public LocalContainerEntityManagerFactoryBean sessionFactory() throws PropertyVetoException {
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        vendorAdapter.setGenerateDdl(false);
+        LocalContainerEntityManagerFactoryBean sessionFactory = new LocalContainerEntityManagerFactoryBean();
+        sessionFactory.setJpaVendorAdapter(vendorAdapter);
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("com.itrex.java.lab.entity");
+        sessionFactory.setPackagesToScan(entityPackageScan);
 
         Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+        properties.setProperty(Environment.DIALECT, dialect);
 
-        properties.setProperty("format_sql", "true");
-        properties.setProperty("show_sql", "true");
-        properties.setProperty("hibernate.default_schema", "crm");
+        properties.setProperty(Environment.SHOW_SQL, showSql);
+        properties.setProperty(Environment.FORMAT_SQL, formatSql);
 
-        sessionFactory.setHibernateProperties(properties);
+        sessionFactory.setJpaProperties(properties);
         return sessionFactory;
     }
 
     @Bean
     public PlatformTransactionManager transactionManager() throws PropertyVetoException {
-        HibernateTransactionManager transactionManager
-                = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(sessionFactory().getObject());
-        return transactionManager;
+
+        JpaTransactionManager txManager = new JpaTransactionManager();
+        txManager.setEntityManagerFactory(sessionFactory().getObject());
+        return txManager;
     }
 }
