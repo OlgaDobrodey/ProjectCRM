@@ -82,7 +82,7 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
         Role actual = repository.add(role);
 
         //then
-        assertEquals(4, actual.getId());
+        assertEquals(5, actual.getId());
         assertEquals("TEST 0", actual.getRoleName());
     }
 
@@ -104,9 +104,9 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
         List<Role> actual = repository.addAll(roles);
 
         //then
-        assertEquals(4, actual.get(0).getId());
+        assertEquals(5, actual.get(0).getId());
         assertEquals("TEST 0", actual.get(0).getRoleName());
-        assertEquals(5, actual.get(1).getId());
+        assertEquals(6, actual.get(1).getId());
         assertEquals("TEST 1", actual.get(1).getRoleName());
     }
 
@@ -124,10 +124,10 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
     void update_validData_existRoleAndIdRole_returnRoleTest() throws CRMProjectRepositoryException {
         //given
         Role expected = RepositoryTestUtils.createTestRole(1).get(0);
-        Integer testId = 1;
+        expected.setId(1);
 
         //when
-        Role actual = repository.update(expected, testId);
+        Role actual = repository.update(expected);
 
         //then
         assertEquals(1, actual.getId());
@@ -135,16 +135,13 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
     }
 
     @Test
-    void update_validData_existRoleAndIdRoleNonDB_returnNullTest() throws CRMProjectRepositoryException {
+    void update_validData_existRoleAndIdRoleNonDB_shouldCRMProjectRepositoryExceptionTest() throws CRMProjectRepositoryException {
         //given && when
         Role expected = RepositoryTestUtils.createTestRole(1).get(0);
-        Integer idNonDataBase = 99;
-
-        //when
-        Role actual = repository.update(expected, idNonDataBase);
+        expected.setId(99);
 
         //then
-        assertNull(actual);
+        assertThrows(CRMProjectRepositoryException.class, () -> repository.update(expected));
     }
 
     @Test
@@ -152,97 +149,33 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
         //given && when
         cleanDB();    //clean Data Base
         Role expected = RepositoryTestUtils.createTestRole(1).get(0);
-        Integer idRole = 1;
+        expected.setId(1);
 
         //then
-        assertThrows(CRMProjectRepositoryException.class, () -> repository.update(expected, 2));
+        assertThrows(CRMProjectRepositoryException.class, () -> repository.update(expected));
     }
 
     @Test
-    void remove_validData_existRole_returnTRUETest() throws CRMProjectRepositoryException {
+    void removeRole_validData_existRoleIdTest() throws CRMProjectRepositoryException {
         //given
-        Role role = repository.selectById(1);
+        List<Role> rolesGiven = repository.selectAll();
+        Role roleForDelete = repository.selectById(4);
 
         //when
-        boolean actual = repository.remove(role);
+        repository.removeRole(4);
+        List<Role> rolesWhen = repository.selectAll();
 
         //then
-        assertTrue(actual);
+        assertFalse(rolesWhen.contains(roleForDelete));
+        assertEquals(roleForDelete.getRoleName(), rolesGiven.get(3).getRoleName());
     }
 
-    @Test
-    void remove_validData_existRoleNonDB_returnFALSETest() throws CRMProjectRepositoryException {
-        //given
-        Role roleNonDB = RepositoryTestUtils.createTestRole(1).get(0);              //There is no such role in the database
-        roleNonDB.setId(8);
-
-        //when
-        boolean actualFalse = repository.remove(roleNonDB);
-
-        //then
-        assertFalse(actualFalse);
-    }
-
-    @Test
-    void remove_receiveRoleUSER_shouldThrowRepositoryExceptionTest() throws CRMProjectRepositoryException {
+    void removeRole_validData_existRoleId_shouldCRMProjectRepositoryExceptionTest() throws CRMProjectRepositoryException {
         //given && when
-        Role expected = repository.selectById(2); //expected == default role "USER"
+        Integer idRoleNoFoundDB = 89;
 
         //then
-        assertThrows(CRMProjectRepositoryException.class, () -> repository.remove(expected));
-    }
+        assertThrows(CRMProjectRepositoryException.class, () -> repository.removeRole(idRoleNoFoundDB));
 
-    @Test
-    void remove_validData_existRoleAndDefault_returnTRUETest() throws CRMProjectRepositoryException {
-        //given
-        Role role = repository.selectById(1);
-        Role defaultRole = repository.selectById(3);
-
-        //when
-        boolean actual = repository.remove(role, defaultRole);
-
-        //then
-        assertTrue(actual);
-    }
-
-    @Test
-    void remove_validData_existRoleAndDefault_returnFalseTest() throws CRMProjectRepositoryException {
-        //given
-        Role role = repository.selectById(1);
-        Role falseRole = RepositoryTestUtils.createTestRole(1).get(0);
-        falseRole.setId(25);
-
-        //when
-        boolean actualFalse = repository.remove(falseRole, role);
-
-        //then
-        assertFalse(actualFalse);
-    }
-
-    @Test
-    void remove_existRoleUSEREqualsRoleDefault_shouldThrowRepositoryExceptionTest() throws CRMProjectRepositoryException {
-        //given && when
-        Role expected = repository.selectById(2); //expected == default role "USER"
-
-        //then
-        assertThrows(CRMProjectRepositoryException.class, () -> repository.remove(expected, expected));
-    }
-
-    @Test
-    void remove_existRoleCleanDB_shouldThrowRepositoryExceptionTest() {
-        //given && when
-        cleanDB();    //clean Data Base
-
-        //then
-        assertThrows(CRMProjectRepositoryException.class, () -> repository.remove(repository.selectById(1)));
-    }
-
-    @Test
-    void remove_existRoleAndDefaultRole_returnThrowRepositoryExceptionTest() {
-        //given && when
-        cleanDB();    //clean Data Base
-
-        //then
-        assertThrows(CRMProjectRepositoryException.class, () -> repository.remove(repository.selectById(1), repository.selectById(3)));
     }
 }

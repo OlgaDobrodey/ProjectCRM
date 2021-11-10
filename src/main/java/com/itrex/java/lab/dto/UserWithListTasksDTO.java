@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
  * The User class is responsible for the user.
  * task and user are linked in a cross table crm.user_task
@@ -12,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserDTO {
+public class UserWithListTasksDTO {
 
     private Integer id;
     private String login;
@@ -20,17 +22,18 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private RoleDTO role;
-
+    private List<TaskDTO> taskDTOS;
 
     @Override
     public String toString() {
-        return "\nUserDTO{" +
+        return "\nUserWithListTasksDTO{" +
                 "id=" + id +
                 ", login='" + login + '\'' +
                 ", psw='" + psw + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", role=" + role +
+                ", taskDTOS=" + taskDTOS +
                 '}';
     }
 }

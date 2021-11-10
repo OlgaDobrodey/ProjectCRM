@@ -9,4 +9,8 @@ public class CRMProjectRepositoryException extends Exception {
     public CRMProjectRepositoryException(String message, Throwable cause) {
         super(message, cause);
     }
+
+     public CRMProjectRepositoryException() {
+
+    }
 }

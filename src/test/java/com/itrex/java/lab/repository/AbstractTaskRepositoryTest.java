@@ -14,16 +14,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
 
     private TaskRepository repository;
-    private UserRepository userRepository;
 
     public AbstractTaskRepositoryTest() {
         super();
     }
 
-    public void postConstruct(TaskRepository repository, UserRepository userRepository) {
+    public void postConstruct(TaskRepository repository) {
         this.repository = repository;
-        this.userRepository = userRepository;
-    }
+            }
 
     @Test
     public void selectAll_validData_returnTaskTest() throws CRMProjectRepositoryException {
@@ -161,13 +159,12 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
     }
 
     @Test
-    void update_validData_existTaskAndInteger_returnTaskTest() throws CRMProjectRepositoryException {
+    void update_validData_existTask_returnTaskTest() throws CRMProjectRepositoryException {
         //given
-        Task expected = RepositoryTestUtils.createTestTasks(1).get(0);
-        Integer testId = 1;
+        Task expected = RepositoryTestUtils.createTestTasksWithId(0, 1).get(0);
 
         //when
-        Task actual = repository.update(expected, 1);
+        Task actual = repository.update(expected);
 
         //then
         assertEquals(1, actual.getId());
@@ -178,16 +175,12 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
     }
 
     @Test
-    void update_validData_existTaskAndIdTaskNotDB_returnNullTest() throws CRMProjectRepositoryException {
+    void update_validData_existTaskNotDB_shouldThrowRepositoryExceptionTest() throws CRMProjectRepositoryException {
         //given && when
-        Task expected = RepositoryTestUtils.createTestTasks(1).get(0);
-        Integer idNonDataBase = 99;
-
-        //when
-        Task actual = repository.update(expected, idNonDataBase);
+        Task expected = RepositoryTestUtils.createTestTasksWithId(98, 1).get(0);
 
         //then
-        assertNull(actual);
+        assertThrows(CRMProjectRepositoryException.class, () -> repository.update(expected));
     }
 
     @Test
@@ -195,69 +188,24 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
         //given && when
         cleanDB();    //clean Data Base
         Task expected = RepositoryTestUtils.createTestTasks(1).get(0);
-        Integer id = 1;
 
         //then
-        assertThrows(CRMProjectRepositoryException.class, () -> repository.update(expected, id));
+        assertThrows(CRMProjectRepositoryException.class, () -> repository.update(expected));
     }
 
     @Test
-    void remove_validData_existTask_returnTRUETest() throws CRMProjectRepositoryException {
-        //given
-        Task task = repository.selectById(1);
-
-        //when
-        boolean actual = repository.remove(task);
+    void remove_validData_existTaskID_Test() throws CRMProjectRepositoryException {
+        //given&&when
+        repository.remove(20);
 
         //then
-        assertTrue(actual);
+        assertEquals(19, repository.selectAll().size());
     }
 
     @Test
     void remove_validData_existTask_returnFalseTest() throws CRMProjectRepositoryException {
-        //given
-        Task task = RepositoryTestUtils.createTestTasks(1).get(0);
-        task.setId(25);
-
-        //when
-        boolean actual = repository.remove(task);
-
-        //then
-        assertFalse(actual);
+        //given && when && then
+        assertThrows(CRMProjectRepositoryException.class, () -> repository.remove(25));
     }
 
-    @Test
-    void removeTaskByUser_existUserAndTaskNonDB_shouldReturnTrueTest() throws CRMProjectRepositoryException {
-        //given
-        User user = userRepository.selectById(1);
-        Task taskTrue = repository.selectById(2);   //found on DataBase
-
-        //when
-        boolean actualTrue = repository.removeUserByTask(taskTrue, user);
-
-        //then
-        assertTrue(actualTrue);
-    }
-
-    @Test
-    void removeTaskByUser_existUserAndTask_shouldReturnFalseTest() throws CRMProjectRepositoryException {
-        //given
-        User user = userRepository.selectById(1);
-        Task taskFalse = repository.selectById(4);  //no found on DataBase
-
-        //when
-        boolean actualFalse = repository.removeUserByTask(taskFalse, user);
-
-        //then
-        assertFalse(actualFalse);
-    }
-
-    @Test
-    void remove_existTask_shouldReturnThrowRepositoryExceptionTest() {
-        //given && when
-        cleanDB();    //clean Data Base
-
-        //then
-        assertThrows(CRMProjectRepositoryException.class, () -> repository.remove(repository.selectById(1)));
-    }
 }

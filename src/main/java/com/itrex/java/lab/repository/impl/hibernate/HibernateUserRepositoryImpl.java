@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Primary
 @Repository
@@ -62,24 +63,9 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     public List<Task> selectAllTasksByUser(User user) throws CRMProjectRepositoryException {
 
         try (Session session = sessionFactory.openSession()) {
-
-            User userDB = session.get(User.class, user.getId());
-            return new ArrayList<>(userDB.getTasks());
+            return new ArrayList<>(session.get(User.class, user.getId()).getTasks());
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: SELECT ALL TASK FOR USER: ", ex);
-        }
-    }
-
-    @Override
-    public void printCrossTable() throws CRMProjectRepositoryException {
-        try (Session session = sessionFactory.openSession()) {
-            List<User> users = selectAll();
-            for (User user : users) {
-               List<Task> tasks = session.get(User.class, user.getId()).getTasks();
-                tasks.forEach((task) -> System.out.printf("%d - %s : %d - %s\n", user.getId(), user.getLogin(), task.getId(), task.getTitle()));
-            }
-        } catch (Exception ex) {
-            throw new CRMProjectRepositoryException("ERROR: SELECT ALL CROSS TABLE: ", ex);
         }
     }
 
@@ -113,9 +99,8 @@ public class HibernateUserRepositoryImpl implements UserRepository {
         try (Session session = sessionFactory.openSession()) {
             session.getTransaction().begin();
             User userBD = session.get(User.class, user.getId());
-            List<Task> tasks = userBD.getTasks();
-            tasks.add(task);
-            userBD.setTasks(tasks);
+            userBD.getTasks().add(task);
+            userBD.setTasks(userBD.getTasks());
             session.getTransaction().commit();
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: INSERT INTO USER AND TASK IN CROSS TABLE - " + user + "\n" + task + ": " + ex);
@@ -123,7 +108,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User update(User user, Integer id) throws CRMProjectRepositoryException {
+    public User update(User user) throws CRMProjectRepositoryException {
 
         try (Session session = sessionFactory.openSession()) {
             try {
@@ -134,14 +119,15 @@ public class HibernateUserRepositoryImpl implements UserRepository {
                 query.setParameter(ROLE_USER, user.getRole());
                 query.setParameter(FIRST_NAME_USER, user.getFirstName());
                 query.setParameter(LAST_NAME_USER, user.getLastName());
-                query.setParameter(ID_USER, id);
+                query.setParameter(ID_USER, user.getId());
                 query.executeUpdate();
                 session.getTransaction().commit();
             } catch (Exception e) {
                 session.getTransaction().rollback();
                 throw new CRMProjectRepositoryException("ERROR: UPDATE TASK " + user, e);
             }
-            return session.get(User.class, id);
+            return Optional.ofNullable(session.get(User.class, user.getId()))
+                    .orElseThrow(() -> new CRMProjectRepositoryException("ERROR: UPDATE_USER - " + user + " NO FOUND DATA BASE"));
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: UPDATE_USER - " + user + ": ", ex);
         }
@@ -171,50 +157,42 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean remove(User user) throws CRMProjectRepositoryException {
+    public void remove(Integer idUser) throws CRMProjectRepositoryException {
         try (Session session = sessionFactory.openSession()) {
             session.getTransaction().begin();
-            session.remove(user);
+            session.remove(session.get(User.class, idUser));
             session.getTransaction().commit();
         } catch (Exception ex) {
-            throw new CRMProjectRepositoryException("ERROR: REMOVE_USER - " + user + ": ", ex);
-        }
-        return true;
-    }
-
-    @Override
-    public void removeAllTasksByUser(User user) throws CRMProjectRepositoryException {
-        try (Session session = sessionFactory.openSession()) {
-            session.getTransaction().begin();
-
-            User userDB = session.get(User.class, user.getId());
-            userDB.setTasks(new ArrayList<>());
-
-            session.getTransaction().commit();
-        } catch (Exception ex) {
-            throw new CRMProjectRepositoryException("ERROR: DELETE_ALL_TASKS_BY_USER - " + user + ": ", ex);
+            throw new CRMProjectRepositoryException("ERROR: REMOVE_USER - " + idUser + ": ", ex);
         }
     }
 
     @Override
-    public boolean removeTaskByUser(Task task, User user) throws CRMProjectRepositoryException {
+    public void removeAllTasksByUser(Integer idUser) throws CRMProjectRepositoryException {
         try (Session session = sessionFactory.openSession()) {
 
-            User userDB = session.get(User.class, user.getId());
-            Task taskDB = session.get(Task.class, task.getId());
+            session.getTransaction().begin();
+            session.get(User.class, idUser).setTasks(new ArrayList<>());
+            session.getTransaction().commit();
+        } catch (Exception ex) {
+            throw new CRMProjectRepositoryException("ERROR: DELETE_ALL_TASKS_BY_USER_ID - " + idUser + ": ", ex);
+        }
+    }
 
-            if (userDB == null || taskDB == null) {
-                return false;
-            }
+    @Override
+    public void removeTaskByUser(Integer idTask, Integer idUser) throws CRMProjectRepositoryException {
+        try (Session session = sessionFactory.openSession()) {
+            session.getTransaction().begin();
+
+            User userDB = session.get(User.class, idUser);
+            Task taskDB = session.get(Task.class, idTask);
 
             List<Task> tasks = userDB.getTasks();
+            tasks.remove(taskDB);
 
-            if (tasks.contains(taskDB)) {
-                tasks.remove(taskDB);
-                return true;
-            } else return false;
+           session.getTransaction().commit();
         } catch (Exception ex) {
-            throw new CRMProjectRepositoryException("ERROR: DELETE_TASK_BY_USER - " + user + ": ", ex);
+            throw new CRMProjectRepositoryException("ERROR: DELETE_TASK_BY_USER - " + idUser + ": ", ex);
         }
     }
 }

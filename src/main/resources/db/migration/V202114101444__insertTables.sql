@@ -1,7 +1,9 @@
 INSERT INTO role(id, role_name)
 VALUES (1, 'ADMIN'),
        (2, 'USER'),
-       (3, 'CONTROLLER');
+       (3, 'CONTROLLER'),
+       (4, 'TEST');
+
 
 INSERT INTO user(id, login, psw, role_id, last_name, first_name)
 VALUES (1, 'Petrov', '123', 1, 'Petrov', 'Petr'),
@@ -57,8 +59,7 @@ VALUES (1, 1),
        (7, 17),
        (7, 18),
        (7, 19),
-       (7, 20),
-       (8, 1),
+       (7, 3),
        (8, 2),
        (8, 3),
        (9, 4),
@@ -77,6 +78,6 @@ VALUES (1, 1),
        (8, 17),
        (9, 18),
        (10, 19),
-       (1, 20);
+       (1, 19);
 
 COMMIT

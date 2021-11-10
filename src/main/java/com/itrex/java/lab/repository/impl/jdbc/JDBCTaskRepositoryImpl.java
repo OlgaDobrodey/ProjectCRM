@@ -99,7 +99,7 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
             tasks.add(task);
             insert(tasks, preparedStatement);
         } catch (SQLException ex) {
-            throw new CRMProjectRepositoryException("ERROR: INSERT INTO TASK- " + task + ": ",ex);
+            throw new CRMProjectRepositoryException("ERROR: INSERT INTO TASK- " + task + ": ", ex);
         }
         return tasks.get(0);
     }
@@ -120,67 +120,41 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public Task update(Task task, Integer id) throws CRMProjectRepositoryException {
+    public Task update(Task task) throws CRMProjectRepositoryException {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_TASK_QUERY)) {
             extracted(0, task, preparedStatement);
 
-            preparedStatement.setInt(5, id);
+            preparedStatement.setInt(5, task.getId());
             if (preparedStatement.executeUpdate() > 0) {
-                task.setId(id);
-            } else task = null;
+                task.setId(task.getId());
+            } else throw new CRMProjectRepositoryException("TASK NO FOUND DATA BASE");
         } catch (SQLException ex) {
-            throw new CRMProjectRepositoryException("ERROR: UPDATE TASK BY ID- " + task + ": " ,ex);
+            throw new CRMProjectRepositoryException("ERROR: UPDATE TASK BY ID- " + task + ": ", ex);
         }
         return task;
     }
 
     @Override
-    public boolean remove(Task task) throws CRMProjectRepositoryException {
+    public void remove(Integer idTask) throws CRMProjectRepositoryException {
         try (Connection conn = dataSource.getConnection()) {
             conn.setAutoCommit(false);
             try {
-                removeAllUsersByTask(task);
                 try (PreparedStatement preparedStatement = conn.prepareStatement(DELETE_TASK_QUERTY)) {
-                    preparedStatement.setInt(1, task.getId());
-                    int a = preparedStatement.executeUpdate();
-                    if (a == 1) {
-                        return true;
+                    preparedStatement.setInt(1, idTask);
+                    if (preparedStatement.executeUpdate() != 1) {
+                        throw new CRMProjectRepositoryException("ERROR: REMOVE_TASK - " + idTask);
                     }
                 }
                 conn.commit();
             } catch (SQLException ex) {
                 conn.rollback();
-                throw new SQLException("TRANSACTION ROLLBACK: ",ex);
+                throw new SQLException("TRANSACTION ROLLBACK: ", ex);
             } finally {
                 conn.setAutoCommit(true);
             }
         } catch (SQLException ex) {
-            throw new CRMProjectRepositoryException("ERROR: REMOVE_TASK - " + task + ": " ,ex);
-        }
-        return false;
-    }
-
-    @Override
-    public void addUserByTask(Task task, User user) throws CRMProjectRepositoryException {
-        JDBCUserRepositoryImpl userRepository = new JDBCUserRepositoryImpl(dataSource);
-        userRepository.addTaskByUser(task, user);
-    }
-
-    @Override
-    public boolean removeUserByTask(Task task, User user) throws CRMProjectRepositoryException {
-        UserRepository userRepository = new JDBCUserRepositoryImpl(dataSource);
-        return userRepository.removeTaskByUser(task, user);
-    }
-
-    @Override
-    public void removeAllUsersByTask(Task task) throws CRMProjectRepositoryException {
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement preparedStatement = conn.prepareStatement(DELETE_ALL_USERS_BY_TASK)) {
-            preparedStatement.setInt(1, task.getId());
-            preparedStatement.executeUpdate();
-        } catch (SQLException ex) {
-            throw new CRMProjectRepositoryException("ERROR: DELETE_USER_ALL_TASK - " + task + ": ",ex);
+            throw new CRMProjectRepositoryException("ERROR: REMOVE_TASK - " + idTask + ": ", ex);
         }
     }
 

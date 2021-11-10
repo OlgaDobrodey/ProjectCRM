@@ -4,7 +4,6 @@ import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.repository.TaskRepository;
-import com.itrex.java.lab.repository.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Primary;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Primary
 @Repository
@@ -80,7 +80,7 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public Task update(Task task, Integer id) throws CRMProjectRepositoryException {
+    public Task update(Task task) throws CRMProjectRepositoryException {
 
         try (Session session = sessionFactory.openSession()) {
             try {
@@ -90,33 +90,30 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
                 query.setParameter(STATUS_TASK, task.getStatus());
                 query.setParameter(DEADLINE_TASK, task.getDeadline());
                 query.setParameter(INFO_TASK, task.getInfo());
-                query.setParameter(ID_TASK, id);
+                query.setParameter(ID_TASK, task.getId());
                 query.executeUpdate();
                 session.getTransaction().commit();
             } catch (Exception e) {
                 session.getTransaction().rollback();
                 throw new CRMProjectRepositoryException("ERROR: UPDATE TASK " + task, e);
             }
-            return session.get(Task.class, id);
+            return Optional.ofNullable(session.get(Task.class, task.getId()))
+                    .orElseThrow(()->new CRMProjectRepositoryException("TASK NO FOUND DATA BASE"));
         }
     }
 
     @Override
-    public boolean remove(Task task) throws CRMProjectRepositoryException {
+    public void remove(Integer idTask) throws CRMProjectRepositoryException {
 
         try (Session session = sessionFactory.openSession()) {
             session.getTransaction().begin();
-            task = session.get(Task.class, task.getId());
-            if (task == null) {
-                return false;
-            }
-            removeAllUsersByTask(task);
+            Task task = session.get(Task.class, idTask);
             session.delete(task);
             session.getTransaction().commit();
         } catch (Exception ex) {
-            throw new CRMProjectRepositoryException("ERROR: REMOVE_TASK - " + task + ": ", ex);
+            throw new CRMProjectRepositoryException("ERROR: REMOVE_TASK - " + idTask + ": ", ex);
         }
-        return true;
+
     }
 
     @Override
@@ -124,8 +121,7 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
 
         try (Session session = sessionFactory.openSession()) {
             session.getTransaction().begin();
-            Task taskDB = session.get(Task.class, task.getId());
-            List<User> users = new ArrayList<>(taskDB.getUsers());
+            List<User> users = new ArrayList<>(session.get(Task.class, task.getId()).getUsers());
             session.getTransaction().commit();
             return users;
         } catch (Exception ex) {
@@ -133,29 +129,4 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
         }
     }
 
-    @Override
-    public void addUserByTask(Task task, User user) throws CRMProjectRepositoryException {
-        UserRepository userRepository = new HibernateUserRepositoryImpl(sessionFactory);
-        userRepository.addTaskByUser(task, user);
-    }
-
-    @Override
-    public boolean removeUserByTask(Task task, User user) throws CRMProjectRepositoryException {
-        UserRepository userRepository = new HibernateUserRepositoryImpl(sessionFactory);
-        return userRepository.removeTaskByUser(task, user);
-    }
-
-    @Override
-    public void removeAllUsersByTask(Task task) throws CRMProjectRepositoryException {
-        try (Session session = sessionFactory.openSession()) {
-            session.getTransaction().begin();
-            List<User> users = task.getUsers();
-            for (User user : users) {
-                user.getTasks().remove(task);
-            }
-            session.getTransaction().commit();
-        } catch (Exception ex) {
-            throw new CRMProjectRepositoryException("ERROR: DELETE_USER_ALL_TASK - " + task + ": ", ex);
-        }
-    }
 }

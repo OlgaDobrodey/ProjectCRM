@@ -7,20 +7,24 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import static com.itrex.java.lab.properties.Properties.*;
 
 @Configuration
 @ComponentScan("com.itrex.java.lab")
+@EnableTransactionManagement
 public class CRMContextConfiguration {
 
     @Bean(initMethod = "migrate")
     public Flyway flyway() {
         return Flyway.configure()
-          .dataSource(H2_URL, H2_USER, H2_PSW)
-          .locations(H2_LOCATIONS)
-          .schemas(H2_SCHEMA)
-          .load();
+                .dataSource(H2_URL, H2_USER, H2_PSW)
+                .locations(H2_LOCATIONS)
+                .schemas(H2_SCHEMA)
+                .load();
     }
 
     @Bean
@@ -35,4 +39,8 @@ public class CRMContextConfiguration {
         return JdbcConnectionPool.create(H2_URL, H2_USER, H2_PSW);
     }
 
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+        return new DataSourceTransactionManager(jdbcConnectionPool());
+    }
 }

@@ -3,13 +3,17 @@ package com.itrex.java.lab.service.impl;
 import com.itrex.java.lab.dto.RoleDTO;
 import com.itrex.java.lab.dto.TaskDTO;
 import com.itrex.java.lab.dto.UserDTO;
+import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.exceptions.CRMProjectServiceException;
+import com.itrex.java.lab.repository.TaskRepository;
 import com.itrex.java.lab.repository.UserRepository;
 import com.itrex.java.lab.service.UserService;
+import com.itrex.java.lab.utils.Convert;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,9 +23,11 @@ import static com.itrex.java.lab.utils.Convert.*;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final TaskRepository taskRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, TaskRepository taskRepository) {
         this.userRepository = userRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override
@@ -31,7 +37,7 @@ public class UserServiceImpl implements UserService {
                     .map(user -> convertUserToDto(user))
                     .collect(Collectors.toList());
         } catch (CRMProjectRepositoryException ex) {
-           throw new CRMProjectServiceException("ERROR SERVICE: GET ALL USER:", ex);
+            throw new CRMProjectServiceException("ERROR SERVICE: GET ALL USER:", ex);
         }
     }
 
@@ -39,7 +45,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO getById(Integer id) throws CRMProjectServiceException {
         try {
             User user = userRepository.selectById(id);
-            return user!=null? convertUserToDto(user):null;
+            return user != null ? convertUserToDto(user) : null;
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: SELECT USER BY ID: ", ex);
         }
@@ -59,7 +65,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public void printCrossTable() throws CRMProjectServiceException {
         try {
-            userRepository.printCrossTable();
+            userRepository.selectAll().forEach(user -> {
+                        try {
+                            userRepository
+                                    .selectAllTasksByUser(user)
+                                    .forEach(task -> System.out.printf("%d - %s : %d - %s\n",
+                                            user.getId(), user.getLogin(), task.getId(), task.getTitle()));
+                        } catch (CRMProjectRepositoryException e) {
+                            e.printStackTrace();
+                        }
+                    }
+            );
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: PRINT CROSS TABLE: ", ex);
         }
@@ -86,18 +102,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addTaskByUser(TaskDTO task, UserDTO user) throws CRMProjectServiceException {
-        try{
-            userRepository.addTaskByUser(convertTaskToEntity(task),convertUserToEntity(user));
+        try {
+            userRepository.addTaskByUser(convertTaskToEntity(task), convertUserToEntity(user));
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: ADD TASK BY USER:", ex);
         }
     }
 
     @Override
-    public UserDTO update(UserDTO userDTO, Integer id) throws CRMProjectServiceException {
+    public UserDTO update(UserDTO userDTO) throws CRMProjectServiceException {
         try {
-            User user = userRepository.update(convertUserToEntity(userDTO),id);
-            return user!= null?convertUserToDto(user):null;
+            if (userRepository.selectById(userDTO.getId()) == null) {
+                throw new CRMProjectServiceException("ERROR SERVICE: UPDATE USER: USER BY ID "
+                        + userDTO.getId() + " NO FOUND DATA BASE");
+            }
+            return convertUserToDto(userRepository.update(convertUserToEntity(userDTO)));
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: UPDATE USER:", ex);
         }
@@ -106,36 +125,46 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDTO> updateRoleOnDefaultByUsers(RoleDTO role, RoleDTO defaultRole) throws CRMProjectServiceException {
         try {
-            return userRepository.updateRoleOnDefaultByUsers(convertRoleToEntity(role),convertRoleToEntity(defaultRole))
-                    .stream().map(user -> convertUserToDto(user))
+            return userRepository.updateRoleOnDefaultByUsers(convertRoleToEntity(role), convertRoleToEntity(defaultRole))
+                    .stream().map(Convert::convertUserToDto)
                     .collect(Collectors.toList());
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: UPDATE ROLE ON DEFAULT ROLE FOR USERS:", ex);
         }
     }
 
+    @Transactional
     @Override
-    public boolean remove(UserDTO user) throws CRMProjectServiceException {
+    public void remove(Integer idUser) throws CRMProjectServiceException {
         try {
-            return userRepository.remove(convertUserToEntity(user));
+            if (userRepository.selectById(idUser) == null) {
+                throw new CRMProjectServiceException("ERROR SERVICE: DELETE USER: no found Data BASE");
+            }
+            userRepository.remove(idUser);
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: DELETE USER:", ex);
         }
     }
 
+    @Transactional
     @Override
-    public boolean removeTaskByUser(TaskDTO task, UserDTO user) throws CRMProjectServiceException {
+    public void removeTaskByUser(Integer idTask, Integer idUser) throws CRMProjectServiceException {
         try {
-            return userRepository.removeTaskByUser(convertTaskToEntity(task),convertUserToEntity(user));
+            Task task = taskRepository.selectById(idTask);
+            User user = userRepository.selectById(idUser);
+            if (user == null || task == null) {
+                throw new CRMProjectServiceException("ERROR SERVICE: DELETE TASK BY USER:");
+            }
+            userRepository.removeTaskByUser(idTask, idUser);
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: DELETE TASK BY USER:", ex);
         }
     }
 
     @Override
-    public void removeAllTasksByUser(UserDTO user) throws CRMProjectServiceException {
+    public void removeAllTasksByUser(Integer idUser) throws CRMProjectServiceException {
         try {
-            userRepository.removeAllTasksByUser(convertUserToEntity(user));
+            userRepository.removeAllTasksByUser(idUser);
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: DELETE ALL TASKS BY USER:", ex);
         }

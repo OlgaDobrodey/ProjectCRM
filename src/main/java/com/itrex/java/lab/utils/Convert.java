@@ -10,22 +10,19 @@ import com.itrex.java.lab.entity.User;
 public class Convert {
 
     public static RoleDTO convertRoleToDto(Role role) {
-        return new RoleDTO(role);
+        RoleDTO roleDTO = new RoleDTO();
+        roleDTO.setId(role.getId());
+        roleDTO.setRoleName(role.getRoleName());
+        return roleDTO;
     }
 
 
     public static Role convertRoleToEntity(RoleDTO roleDTO) {
         Role role = new Role();
         role.setRoleName(roleDTO.getRoleName());
-        try {
-            role.setId(roleDTO.getId());
-        } catch (NullPointerException e) {
-            role.setId(null);
-        }
-
+        role.setId(roleDTO.getId());
         return role;
     }
-
 
     public static UserDTO convertUserToDto(User user) {
         UserDTO userDTO = new UserDTO();
@@ -40,11 +37,7 @@ public class Convert {
 
     public static User convertUserToEntity(UserDTO userDTO) {
         User user = new User();
-        try {
-            user.setId(userDTO.getId());
-        } catch (NullPointerException e) {
-            user.setId(null);
-        }
+        user.setId(userDTO.getId());
         user.setLogin(userDTO.getLogin());
         user.setPsw(userDTO.getPsw());
         user.setRole(convertRoleToEntity(userDTO.getRole()));
@@ -65,11 +58,7 @@ public class Convert {
 
     public static Task convertTaskToEntity(TaskDTO taskDTO) {
         Task task = new Task();
-        try {
-            task.setId(taskDTO.getId());
-        } catch (NullPointerException e) {
-            task.setId(null);
-        }
+        task.setId(taskDTO.getId());
         task.setTitle(taskDTO.getTitle());
         task.setStatus(taskDTO.getStatus());
         task.setInfo(taskDTO.getInfo());

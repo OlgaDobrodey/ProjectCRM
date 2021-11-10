@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Task class is responsible for the task's for users.
@@ -15,22 +17,24 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TaskDTO {
+public class TaskWithListUsersDTO {
 
     private Integer id;
     private String title;
     private Status status;
     private LocalDate deadline;
     private String info;
+    private List<UserDTO> users = new ArrayList<>();
 
     @Override
     public String toString() {
-        return "\nTaskDTO{" +
+        return "\nTaskWithListUsersDTO{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", status=" + status +
                 ", deadline=" + deadline +
                 ", info='" + info + '\'' +
+                ", users=" + users +
                 '}';
     }
 }

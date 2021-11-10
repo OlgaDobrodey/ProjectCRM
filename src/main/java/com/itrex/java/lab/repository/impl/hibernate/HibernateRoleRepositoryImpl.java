@@ -1,10 +1,8 @@
 package com.itrex.java.lab.repository.impl.hibernate;
 
 import com.itrex.java.lab.entity.Role;
-import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.repository.RoleRepository;
-import com.itrex.java.lab.repository.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Primary;
@@ -12,12 +10,12 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 import java.util.List;
+import java.util.Optional;
 
 @Primary
 @Repository
 public class HibernateRoleRepositoryImpl implements RoleRepository {
 
-    private static final int DEFAULT_ROLE = 2;
     private static final String ROLE_NAME = "roleName";
     private static final String ID_ROLE = "idRole";
     private static final String SELECT_ALL = "from Role r";
@@ -34,9 +32,14 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
     public List<Role> selectAll() throws CRMProjectRepositoryException {
 
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery(SELECT_ALL, Role.class).list();
+            session.getTransaction().begin();
+            List<Role> roles =  session.createQuery(SELECT_ALL, Role.class).list();
+            session.getTransaction().commit();
+            return roles;
         } catch (Exception e) {
             throw new CRMProjectRepositoryException("ERROR: SELECT ALL ROLES: ", e);
+        } finally {
+
         }
     }
 
@@ -75,70 +78,35 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public Role update(Role role, Integer id) throws CRMProjectRepositoryException {
-
+    public Role update(Role role) throws CRMProjectRepositoryException {
         try (Session session = sessionFactory.openSession()) {
             try {
                 session.getTransaction().begin();
                 Query query = session.createQuery(UPDATE);
                 query.setParameter(ROLE_NAME, role.getRoleName());
-                query.setParameter(ID_ROLE, id);
+                query.setParameter(ID_ROLE, role.getId());
                 query.executeUpdate();
                 session.getTransaction().commit();
             } catch (Exception e) {
                 session.getTransaction().rollback();
                 throw new CRMProjectRepositoryException("ERROR: UPDATE ROLE " + role, e);
             }
-            return session.get(Role.class, id);
+            return Optional.ofNullable(session.get(Role.class, role.getId())).orElseThrow(() -> new CRMProjectRepositoryException("ROLE NO FOUND DATA BASE"));
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: UPDATE_ROLE - " + role, ex);
         }
     }
 
     @Override
-    public boolean remove(Role role) throws CRMProjectRepositoryException {
-
-        return remove(role, selectById(DEFAULT_ROLE));
-    }
-
-    @Override
-    public boolean remove(Role role, Role defaultRole) throws CRMProjectRepositoryException {
-
-        if (role.getRoleName() == null || role.getId() == null) {
-            return false;
-        }
-        if (role.getRoleName().equals(defaultRole.getRoleName())) {
-            throw new CRMProjectRepositoryException("ERROR : Role equals default role");
-        }
-        try (Session session = sessionFactory.openSession()) {
-            session.getTransaction().begin();
-            Role roleDB = session.get(Role.class, role.getId());
-
-            if (roleDB == null) {
-                session.getTransaction().commit();
-                return false;
-            } else {
-                UserRepository userRepository = new HibernateUserRepositoryImpl(sessionFactory);
-                List<User> users = userRepository.updateRoleOnDefaultByUsers(role, defaultRole);
-                session.delete(roleDB);
-                session.getTransaction().commit();
-                return true;
-            }
-        } catch (Exception ex) {
-            throw new CRMProjectRepositoryException("ERROR: REMOVE_ROLE - " + role + ": ", ex);
-        }
-    }
-
-    @Override
-    public boolean removeRole(Role role) throws CRMProjectRepositoryException {
+    public void removeRole(Integer idRole) throws CRMProjectRepositoryException {
 
         try (Session session = sessionFactory.openSession()) {
             session.getTransaction().begin();
+            Role role = session.get(Role.class, idRole);
             session.delete(role);
             session.getTransaction().commit();
-            return true;
         } catch (Exception ex) {
-            return false;
+            throw new CRMProjectRepositoryException("ERROR: REMOVE_ROLE_BY_ID - " + idRole, ex);
         }
     }
 }
