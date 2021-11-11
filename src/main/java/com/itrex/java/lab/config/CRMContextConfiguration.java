@@ -6,10 +6,8 @@ import org.h2.jdbcx.JdbcConnectionPool;
 import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
@@ -71,11 +69,9 @@ public class CRMContextConfiguration {
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean sessionFactory() throws PropertyVetoException {
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setGenerateDdl(false);
-        LocalContainerEntityManagerFactoryBean sessionFactory = new LocalContainerEntityManagerFactoryBean();
-        sessionFactory.setJpaVendorAdapter(vendorAdapter);
+    public LocalSessionFactoryBean sessionFactory() throws PropertyVetoException {
+
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setPackagesToScan(entityPackageScan);
 
@@ -85,15 +81,15 @@ public class CRMContextConfiguration {
         properties.setProperty(Environment.SHOW_SQL, showSql);
         properties.setProperty(Environment.FORMAT_SQL, formatSql);
 
-        sessionFactory.setJpaProperties(properties);
+        sessionFactory.setHibernateProperties(properties);
         return sessionFactory;
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager() throws PropertyVetoException {
+    public HibernateTransactionManager transactionManager() throws PropertyVetoException {
 
-        JpaTransactionManager txManager = new JpaTransactionManager();
-        txManager.setEntityManagerFactory(sessionFactory().getObject());
+        HibernateTransactionManager txManager = new HibernateTransactionManager();
+        txManager.setSessionFactory(sessionFactory().getObject());
         return txManager;
     }
 }
