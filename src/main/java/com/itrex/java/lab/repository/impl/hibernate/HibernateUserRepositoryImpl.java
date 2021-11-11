@@ -43,9 +43,11 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public List<User> selectAll() throws CRMProjectRepositoryException {
 
-        try (Session session = sessionFactory.openSession()) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
             return session.createQuery(SELECT_ALL, User.class).list();
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: SELECT ALL USERS: ", ex);
@@ -53,9 +55,11 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public User selectById(Integer id) throws CRMProjectRepositoryException {
 
-        try (Session session = sessionFactory.openSession()) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
             return session.get(User.class, id);
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: SELECT TASK BY ID: " + ex);
@@ -63,9 +67,11 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public List<Task> selectAllTasksByUser(User user) throws CRMProjectRepositoryException {
 
-        try (Session session = sessionFactory.openSession()) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
             return new ArrayList<>(session.get(User.class, user.getId()).getTasks());
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: SELECT ALL TASK FOR USER: ", ex);
@@ -73,9 +79,11 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public User add(User user) throws CRMProjectRepositoryException {
 
-        try (Session session = sessionFactory.openSession()) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
             session.save(user);
             return user;
         } catch (Exception ex) {
@@ -84,9 +92,11 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public List<User> addAll(List<User> users) throws CRMProjectRepositoryException {
 
-        try (Session session = sessionFactory.openSession()) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
             for (User user : users) {
                 session.save(user);
             }
@@ -97,104 +107,99 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public void addTaskByUser(Task task, User user) throws CRMProjectRepositoryException {
 
-        try (Session session = sessionFactory.openSession()) {
-            session.getTransaction().begin();
+        try {
+            Session session = sessionFactory.getCurrentSession();
+
             User userBD = session.get(User.class, user.getId());
             userBD.getTasks().add(task);
             userBD.setTasks(userBD.getTasks());
-            session.getTransaction().commit();
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: INSERT INTO USER AND TASK IN CROSS TABLE - " + user + "\n" + task + ": " + ex);
         }
     }
 
     @Override
+    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public User update(User user) throws CRMProjectRepositoryException {
 
-        try (Session session = sessionFactory.openSession()) {
-            try {
-                session.getTransaction().begin();
-                Query query = session.createQuery(UPDATE);
-                query.setParameter(LOGIN_USER, user.getLogin());
-                query.setParameter(PSW_USER, user.getPsw());
-                query.setParameter(ROLE_USER, user.getRole());
-                query.setParameter(FIRST_NAME_USER, user.getFirstName());
-                query.setParameter(LAST_NAME_USER, user.getLastName());
-                query.setParameter(ID_USER, user.getId());
-                query.executeUpdate();
-                session.getTransaction().commit();
-            } catch (Exception e) {
-                session.getTransaction().rollback();
-                throw new CRMProjectRepositoryException("ERROR: UPDATE TASK " + user, e);
-            }
+        try {
+            Session session = sessionFactory.getCurrentSession();
+
+            Query query = session.createQuery(UPDATE);
+            query.setParameter(LOGIN_USER, user.getLogin());
+            query.setParameter(PSW_USER, user.getPsw());
+            query.setParameter(ROLE_USER, user.getRole());
+            query.setParameter(FIRST_NAME_USER, user.getFirstName());
+            query.setParameter(LAST_NAME_USER, user.getLastName());
+            query.setParameter(ID_USER, user.getId());
+            query.executeUpdate();
+
             return Optional.ofNullable(session.get(User.class, user.getId()))
                     .orElseThrow(() -> new CRMProjectRepositoryException("ERROR: UPDATE_USER - " + user + " NO FOUND DATA BASE"));
-        } catch (Exception ex) {
-            throw new CRMProjectRepositoryException("ERROR: UPDATE_USER - " + user + ": ", ex);
+        } catch (Exception e) {
+            throw new CRMProjectRepositoryException("ERROR: UPDATE TASK " + user, e);
         }
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public List<User> updateRoleOnDefaultByUsers(Role role, Role defaultRole) throws CRMProjectRepositoryException {
 
         List<User> users = new ArrayList<>();
-        try (Session session = sessionFactory.openSession()) {
-            try {
-                session.getTransaction().begin();
-                int count = session.createQuery(UPDATE_USER_ON_DEFAULT_ROLE)
-                        .setParameter(ROLE_DEFAULT_USER, defaultRole)
-                        .setParameter(ROLE_USER, role)
-                        .executeUpdate();
-                for (int i = 1; i <= count; i++) {
-                    users.add(session.get(User.class, i));
-                }
-                session.getTransaction().commit();
-            } catch (Exception e) {
-                session.getTransaction().rollback();
-                throw new CRMProjectRepositoryException("ERROR: UPDATE User " + users, e);
+        try {
+            Session session = sessionFactory.getCurrentSession();
+
+            int count = session.createQuery(UPDATE_USER_ON_DEFAULT_ROLE)
+                    .setParameter(ROLE_DEFAULT_USER, defaultRole)
+                    .setParameter(ROLE_USER, role)
+                    .executeUpdate();
+            for (int i = 1; i <= count; i++) {
+                users.add(session.get(User.class, i));
             }
+            return users;
+        } catch (Exception e) {
+            throw new CRMProjectRepositoryException("ERROR: UPDATE User " + users, e);
         }
-        return users;
     }
 
     @Override
+    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public void remove(Integer idUser) throws CRMProjectRepositoryException {
-        try (Session session = sessionFactory.openSession()) {
-            session.getTransaction().begin();
+        try {
+
+            Session session = sessionFactory.getCurrentSession();
             session.remove(session.get(User.class, idUser));
-            session.getTransaction().commit();
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: REMOVE_USER - " + idUser + ": ", ex);
         }
     }
 
     @Override
+    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public void removeAllTasksByUser(Integer idUser) throws CRMProjectRepositoryException {
-        try (Session session = sessionFactory.openSession()) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
 
-            session.getTransaction().begin();
             session.get(User.class, idUser).setTasks(new ArrayList<>());
-            session.getTransaction().commit();
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: DELETE_ALL_TASKS_BY_USER_ID - " + idUser + ": ", ex);
         }
     }
 
     @Override
+    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public void removeTaskByUser(Integer idTask, Integer idUser) throws CRMProjectRepositoryException {
-        try (Session session = sessionFactory.openSession()) {
-            session.getTransaction().begin();
+        try {
+            Session session = sessionFactory.getCurrentSession();
 
             User userDB = session.get(User.class, idUser);
             Task taskDB = session.get(Task.class, idTask);
 
             List<Task> tasks = userDB.getTasks();
             tasks.remove(taskDB);
-
-            session.getTransaction().commit();
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: DELETE_TASK_BY_USER - " + idUser + ": ", ex);
         }

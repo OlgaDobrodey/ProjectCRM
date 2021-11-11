@@ -3,6 +3,7 @@ package com.itrex.java.lab.config;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.flywaydb.core.Flyway;
 import org.h2.jdbcx.JdbcConnectionPool;
+import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
@@ -86,10 +87,10 @@ public class CRMContextConfiguration {
     }
 
     @Bean
-    public HibernateTransactionManager transactionManager() throws PropertyVetoException {
+    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
 
         HibernateTransactionManager txManager = new HibernateTransactionManager();
-        txManager.setSessionFactory(sessionFactory().getObject());
+        txManager.setSessionFactory(sessionFactory);
         return txManager;
     }
 }
