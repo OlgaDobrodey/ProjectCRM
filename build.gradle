@@ -24,9 +24,17 @@ dependencies {
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.0.0'
     implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.6.0.Final'
 
-    implementation group: 'org.springframework', name: 'spring-context', version: '5.3.11'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.32'
+    implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.32'
+
+    implementation (group: 'org.springframework', name: 'spring-context', version: '5.3.11') {
+        exclude module: 'commons-logging'
+    }
     implementation group: 'org.springframework', name: 'spring-core', version: '5.3.11'
     implementation group: 'org.springframework', name: 'spring-orm', version: '5.3.11'
+
+    implementation group: 'org.springframework', name: 'spring-aspects', version: '5.3.11'
+    implementation group: 'org.springframework', name: 'spring-aop', version: '5.3.11'
 
     implementation group: 'com.mchange', name: 'c3p0', version: '0.9.5.5'
 

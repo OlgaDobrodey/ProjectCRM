@@ -19,6 +19,7 @@ import java.util.Properties;
 @ComponentScan("com.itrex.java.lab")
 @PropertySource("classpath:/application.properties")
 @EnableTransactionManagement
+@EnableAspectJAutoProxy
 public class CRMContextConfiguration {
 
     @Value("${database.url}")
