@@ -165,9 +165,8 @@ class RoleServiceTest {
         roleDefault.setId(2);
         roleDefault.setRoleName("USER");
 
-        Mockito.when(roleRepository.selectById(2)).thenReturn(roleDefault);
         Mockito.when(roleRepository.selectById(1)).thenReturn(role);
-        Mockito.when(userRepository.updateRoleOnDefaultByUsers(role, roleDefault)).thenReturn(new ArrayList<>());
+        Mockito.when(userRepository.updateRoleOnDefaultByUsers(role.getId(), roleDefault.getId())).thenReturn(new ArrayList<>());
         Mockito.doNothing().when(roleRepository).removeRole(1);
 
         //when
@@ -176,7 +175,7 @@ class RoleServiceTest {
         //then
         Mockito.verify(roleRepository).removeRole(any());
         Mockito.verify(userRepository).updateRoleOnDefaultByUsers(any(), any());
-        Mockito.verify(roleRepository, Mockito.times(2)).selectById(any());
+        Mockito.verify(roleRepository).selectById(any());
     }
 
     @Test
@@ -190,15 +189,14 @@ class RoleServiceTest {
         roleDefault.setRoleName("USER");
 
         Mockito.when(roleRepository.selectById(1)).thenReturn(role);
-        Mockito.when(roleRepository.selectById(2)).thenReturn(roleDefault);
-        Mockito.when(userRepository.updateRoleOnDefaultByUsers(role, roleDefault)).thenReturn(new ArrayList<>());
+        Mockito.when(userRepository.updateRoleOnDefaultByUsers(role.getId(), roleDefault.getId())).thenReturn(new ArrayList<>());
         Mockito.doThrow(CRMProjectRepositoryException.class).when(roleRepository).removeRole(role.getId());
 
         //then
         assertThrows(CRMProjectServiceException.class, () -> roleService.removeRole(role.getId()));
         Mockito.verify(roleRepository).removeRole(any());
         Mockito.verify(userRepository).updateRoleOnDefaultByUsers(any(), any());
-        Mockito.verify(roleRepository, Mockito.times(2)).selectById(any());
+        Mockito.verify(roleRepository).selectById(any());
     }
 
     @Test
@@ -222,9 +220,8 @@ class RoleServiceTest {
         roleDefault.setId(2);
         roleDefault.setRoleName("USER");
 
-        Mockito.when(roleRepository.selectById(2)).thenReturn(roleDefault);
-        Mockito.when(roleRepository.selectById(1)).thenReturn(role);
-        Mockito.when(userRepository.updateRoleOnDefaultByUsers(role, roleDefault)).thenReturn(new ArrayList<>());
+        Mockito.when(roleRepository.selectById(1)).thenReturn(roleDefault);
+        Mockito.when(userRepository.updateRoleOnDefaultByUsers(role.getId(), roleDefault.getId())).thenReturn(new ArrayList<>());
         Mockito.doNothing().when(roleRepository).removeRole(1);
 
         //when
@@ -233,7 +230,7 @@ class RoleServiceTest {
         //then
         Mockito.verify(roleRepository).removeRole(any());
         Mockito.verify(userRepository).updateRoleOnDefaultByUsers(any(), any());
-        Mockito.verify(roleRepository, Mockito.times(2)).selectById(any());
+        Mockito.verify(roleRepository).selectById(any());
     }
 
     @Test
@@ -247,15 +244,14 @@ class RoleServiceTest {
         roleDefault.setRoleName("USER");
 
         Mockito.when(roleRepository.selectById(1)).thenReturn(role);
-        Mockito.when(roleRepository.selectById(2)).thenReturn(roleDefault);
-        Mockito.when(userRepository.updateRoleOnDefaultByUsers(role, roleDefault)).thenReturn(new ArrayList<>());
+        Mockito.when(userRepository.updateRoleOnDefaultByUsers(role.getId(), roleDefault.getId())).thenReturn(new ArrayList<>());
         Mockito.doThrow(CRMProjectRepositoryException.class).when(roleRepository).removeRole(1);
 
         //then
         assertThrows(CRMProjectServiceException.class, () -> roleService.removeRole(1));
         Mockito.verify(roleRepository).removeRole(any());
         Mockito.verify(userRepository).updateRoleOnDefaultByUsers(any(), any());
-        Mockito.verify(roleRepository, Mockito.times(2)).selectById(any());
+        Mockito.verify(roleRepository).selectById(any());
     }
 
     @Test

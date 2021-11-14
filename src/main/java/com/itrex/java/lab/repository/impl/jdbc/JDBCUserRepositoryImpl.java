@@ -1,6 +1,5 @@
 package com.itrex.java.lab.repository.impl.jdbc;
 
-import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
@@ -84,11 +83,11 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<Task> selectAllTasksByUser(User user) throws CRMProjectRepositoryException {
+    public List<Task> selectAllTasksByUser(Integer idUser) throws CRMProjectRepositoryException {
         List<Task> tasks = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              Statement stm = conn.createStatement();
-             ResultSet resultSet = stm.executeQuery(SELECT_ALL_TASKS_FOR_USER + user.getId())) {
+             ResultSet resultSet = stm.executeQuery(SELECT_ALL_TASKS_FOR_USER + idUser)) {
             TaskRepository taskRepository = new JDBCTaskRepositoryImpl(dataSource);
             while (resultSet.next()) {
                 Task task = taskRepository.selectById(resultSet.getInt(CROSS_TABLE_ID_TASK));
@@ -129,11 +128,11 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void addTaskByUser(Task task, User user) throws CRMProjectRepositoryException {
+    public void addTaskByUser(Integer idTask, Integer idUser) throws CRMProjectRepositoryException {
         try (Connection con = dataSource.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement(INSERT_TASK_FOR_USER, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setInt(1, user.getId());
-            preparedStatement.setInt(2, task.getId());
+            preparedStatement.setInt(1, idUser);
+            preparedStatement.setInt(2, idTask);
 
             preparedStatement.executeUpdate();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
@@ -143,7 +142,7 @@ public class JDBCUserRepositoryImpl implements UserRepository {
                 generatedKeys.getInt(CROSS_TABLE_ID_TASK);
             }
         } catch (SQLException ex) {
-            throw new CRMProjectRepositoryException("ERROR: INSERT INTO USER AND TASK IN CROSS TABLE - " + user + "\n" + task + ": " + ex);
+            throw new CRMProjectRepositoryException("ERROR: INSERT INTO USER AND TASK IN CROSS TABLE - " + idUser + "\n" + idTask + ": " + ex);
         }
     }
 
@@ -165,12 +164,12 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> updateRoleOnDefaultByUsers(Role role, Role defaultRole) throws CRMProjectRepositoryException {
+    public List<User> updateRoleOnDefaultByUsers(Integer idRole, Integer idDefaultRole) throws CRMProjectRepositoryException {
         List<User> users = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_USER_ON_DEFAULT_ROLE_QUERY, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setInt(1, defaultRole.getId());
-            preparedStatement.setInt(2, role.getId());
+            preparedStatement.setInt(1, idDefaultRole);
+            preparedStatement.setInt(2, idRole);
 
             int executeUpdate = preparedStatement.executeUpdate();
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys();) {
@@ -181,7 +180,7 @@ public class JDBCUserRepositoryImpl implements UserRepository {
                 }
             }
         } catch (SQLException ex) {
-            throw new CRMProjectRepositoryException("ERROR: UPDATE_USERS_ON_ROLE - " + role + ": ", ex);
+            throw new CRMProjectRepositoryException("ERROR: UPDATE_USERS_ON_ROLE BY ID = - " + idRole + ": ", ex);
         }
         return users;
     }

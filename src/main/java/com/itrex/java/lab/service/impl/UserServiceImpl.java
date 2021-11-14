@@ -1,6 +1,5 @@
 package com.itrex.java.lab.service.impl;
 
-import com.itrex.java.lab.dto.RoleDTO;
 import com.itrex.java.lab.dto.TaskDTO;
 import com.itrex.java.lab.dto.UserDTO;
 import com.itrex.java.lab.entity.Task;
@@ -55,32 +54,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<TaskDTO> getAllTasksByUser(UserDTO user) throws CRMProjectServiceException {
+    public List<TaskDTO> getAllTasksByUser(Integer idUser) throws CRMProjectServiceException {
         try {
-            return userRepository.selectAllTasksByUser(convertUserToEntity(user)).stream()
+            return userRepository.selectAllTasksByUser(idUser).stream()
                     .map(task -> convertTaskToDto(task))
                     .collect(Collectors.toList());
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: SELECT TASK BY USER: ", ex);
-        }
-    }
-
-    @Override
-    public void printCrossTable() throws CRMProjectServiceException {
-        try {
-            userRepository.selectAll().forEach(user -> {
-                        try {
-                            userRepository
-                                    .selectAllTasksByUser(user)
-                                    .forEach(task -> System.out.printf("%d - %s : %d - %s\n",
-                                            user.getId(), user.getLogin(), task.getId(), task.getTitle()));
-                        } catch (CRMProjectRepositoryException e) {
-                            e.printStackTrace();
-                        }
-                    }
-            );
-        } catch (CRMProjectRepositoryException ex) {
-            throw new CRMProjectServiceException("ERROR SERVICE: PRINT CROSS TABLE: ", ex);
         }
     }
 
@@ -104,9 +84,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addTaskByUser(TaskDTO task, UserDTO user) throws CRMProjectServiceException {
+    public void addTaskByUser(Integer idTask, Integer idUser) throws CRMProjectServiceException {
         try {
-            userRepository.addTaskByUser(convertTaskToEntity(task), convertUserToEntity(user));
+            userRepository.addTaskByUser(idTask, idUser);
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: ADD TASK BY USER:", ex);
         }
@@ -127,9 +107,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation= Propagation.NESTED)
-    public List<UserDTO> updateRoleOnDefaultByUsers(RoleDTO role, RoleDTO defaultRole) throws CRMProjectServiceException {
+    public List<UserDTO> updateRoleOnDefaultByUsers(Integer idRole, Integer idDefaultRole) throws CRMProjectServiceException {
         try {
-            return userRepository.updateRoleOnDefaultByUsers(convertRoleToEntity(role), convertRoleToEntity(defaultRole))
+            return userRepository.updateRoleOnDefaultByUsers(idRole,idDefaultRole)
                     .stream().map(Convert::convertUserToDto)
                     .collect(Collectors.toList());
         } catch (CRMProjectRepositoryException ex) {

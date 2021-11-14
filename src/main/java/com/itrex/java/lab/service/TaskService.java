@@ -12,7 +12,7 @@ public interface TaskService {
     List<TaskDTO> getAll() throws CRMProjectServiceException;
     TaskDTO getById(Integer id) throws CRMProjectServiceException;
     //select All users for task
-    List<UserDTO> getAllUsersByTaskDTO(TaskDTO task) throws CRMProjectServiceException;
+    List<UserDTO> getAllUsersByTaskDTO(Integer idTask) throws CRMProjectServiceException;
 
     TaskDTO add(TaskDTO task) throws CRMProjectServiceException;
     List<TaskDTO> addAll(List<TaskDTO> tasks) throws CRMProjectServiceException;
@@ -20,6 +20,5 @@ public interface TaskService {
     TaskDTO update(TaskDTO task) throws CRMProjectServiceException;
 
     void remove(Integer idTask) throws CRMProjectServiceException;
-
     void removeAllUsersByTask(Integer idTask) throws CRMProjectServiceException;
 }

@@ -77,11 +77,11 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public List<User> selectAllUsersByTask(Task task) throws CRMProjectRepositoryException {
+    public List<User> selectAllUsersByTask(Integer idTask) throws CRMProjectRepositoryException {
         List<User> users = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              Statement stm = conn.createStatement();
-             ResultSet resultSet = stm.executeQuery(SELECT_ALL_USERS_FOR_TASK + task.getId())) {
+             ResultSet resultSet = stm.executeQuery(SELECT_ALL_USERS_FOR_TASK + idTask)) {
             UserRepository userRepository = new JDBCUserRepositoryImpl(dataSource);
             while (resultSet.next()) {
                 User user = userRepository.selectById(resultSet.getInt(CROSS_TABLE_ID_USER));

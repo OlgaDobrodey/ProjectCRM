@@ -85,10 +85,10 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
     @Test
     void selectAllTaskByUser_existUser_returnListOfTaskTest() throws CRMProjectRepositoryException {
         //given
-        User user = repository.selectById(2);
+        Integer idUser = 2;
 
         //when
-        List<Task> actual = repository.selectAllTasksByUser(user);
+        List<Task> actual = repository.selectAllTasksByUser(idUser);
 
         //then
         assertEquals(3, actual.size());
@@ -171,14 +171,14 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
     @Test
     void addTaskByUser_validData_existUserAndTaskTest() throws CRMProjectRepositoryException {
         //given
-        User user = repository.selectById(2);
+        Integer idUser = 2;
         Task task = taskRepository.selectById(6);
 
         //when
-        repository.addTaskByUser(task, user);
+        repository.addTaskByUser(task.getId(), idUser);
 
         //then
-        assertTrue(repository.selectAllTasksByUser(user).contains(task));
+        assertTrue(repository.selectAllTasksByUser(idUser).contains(task));
     }
 
     @Test
@@ -237,13 +237,13 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
         //given
         User user = repository.selectById(1);
         Task taskTrue = taskRepository.selectById(2);
-        List<Task> allTaskByUser = repository.selectAllTasksByUser(user);
+        List<Task> allTaskByUser = repository.selectAllTasksByUser(user.getId());
 
         //when
         repository.removeTaskByUser(taskTrue.getId(), user.getId());
 
         //then
-        assertEquals(repository.selectAllTasksByUser(user).size() + 1, allTaskByUser.size());
+        assertEquals(repository.selectAllTasksByUser(user.getId()).size() + 1, allTaskByUser.size());
     }
 
     @Test
@@ -276,13 +276,13 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
     void removeAllTasksByUser_existUserIDTest_() throws CRMProjectRepositoryException {
 
         //given
-        User user = repository.selectById(2);
+        Integer idUser = 2;
 
         //when
-        repository.removeAllTasksByUser(2);
+        repository.removeAllTasksByUser(idUser);
 
         //then
-        assertEquals(0, repository.selectAllTasksByUser(user).size());
+        assertEquals(0, repository.selectAllTasksByUser(idUser).size());
     }
 }
 

@@ -129,12 +129,12 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
 
     @Override
     @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
-    public List<User> selectAllUsersByTask(Task task) throws CRMProjectRepositoryException {
+    public List<User> selectAllUsersByTask(Integer idTask) throws CRMProjectRepositoryException {
 
         try {
             Session session = sessionFactory.getCurrentSession();
 
-            return new ArrayList<>(session.get(Task.class, task.getId()).getUsers());
+            return new ArrayList<>(session.get(Task.class, idTask).getUsers());
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: SELECT ALL USERS FOR TASK: ", ex);
         }

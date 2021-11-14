@@ -104,7 +104,6 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
 
             Role role = session.get(Role.class, idRole);
             session.delete(role);
-
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: REMOVE_ROLE_BY_ID - " + idRole, ex);
         }

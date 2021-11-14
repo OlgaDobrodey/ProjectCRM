@@ -111,10 +111,10 @@ public class TaskServiceTest {
         List<User> users = RepositoryTestUtils.createTestUsers(2);
         users.get(0).setId(1);
         users.get(1).setId(2);
-        when(taskRepository.selectAllUsersByTask(task)).thenReturn(users);
+        when(taskRepository.selectAllUsersByTask(task.getId())).thenReturn(users);
 
         //when
-        List<UserDTO> actual = taskService.getAllUsersByTaskDTO(convertTaskToDto(task));
+        List<UserDTO> actual = taskService.getAllUsersByTaskDTO(task.getId());
 
         //then
         assertEquals(1, actual.get(0).getId());
@@ -129,7 +129,7 @@ public class TaskServiceTest {
         assertEquals("ADMIN", actual.get(1).getRole().getRoleName());
         assertEquals("Ivanov 1", actual.get(1).getLastName());
         assertEquals("Ivan 1", actual.get(1).getFirstName());
-        verify(taskRepository).selectAllUsersByTask(task);
+        verify(taskRepository).selectAllUsersByTask(task.getId());
     }
 
     @Test
@@ -238,7 +238,7 @@ public class TaskServiceTest {
         Task task = RepositoryTestUtils.createTestTasksWithId(0, 1).get(0);
         List <User> users = RepositoryTestUtils.createTestUsersWithId(0,1);
         when(taskRepository.selectById(1)).thenReturn(task);
-        when(taskRepository.selectAllUsersByTask(task)).thenReturn(users);
+        when(taskRepository.selectAllUsersByTask(task.getId())).thenReturn(users);
         doNothing().when(userRepository).removeTaskByUser(task.getId(),users.get(0).getId());
         doNothing().when(taskRepository).remove(1);
 
@@ -247,9 +247,9 @@ public class TaskServiceTest {
 
         //then
         verify(taskRepository).remove(1);
-        verify(taskRepository,times(2)).selectById(1);
+        verify(taskRepository,times(1)).selectById(1);
         verify(userRepository).removeTaskByUser(task.getId(),users.get(0).getId());
-        verify(taskRepository).selectAllUsersByTask(task);
+        verify(taskRepository).selectAllUsersByTask(task.getId());
     }
 
     @Test
@@ -259,17 +259,15 @@ public class TaskServiceTest {
         Task task = RepositoryTestUtils.createTestTasksWithId(0, 1).get(0);
         List <User> users = RepositoryTestUtils.createTestUsersWithId(0,1);
         when(taskRepository.selectById(1)).thenReturn(task);
-        when(taskRepository.selectAllUsersByTask(task)).thenReturn(users);
+        when(taskRepository.selectAllUsersByTask(task.getId())).thenReturn(users);
         doNothing().when(userRepository).removeTaskByUser(task.getId(),users.get(0).getId());
         doThrow(CRMProjectRepositoryException.class).when(taskRepository).remove(1);    //clean Data Base
 
         //then
         assertThrows(CRMProjectServiceException.class, () -> taskService.remove(1));
         verify(taskRepository).remove(1);
-        verify(taskRepository,times(2)).selectById(1);
+        verify(taskRepository,times(1)).selectById(1);
         verify(userRepository).removeTaskByUser(task.getId(),users.get(0).getId());
-        verify(taskRepository).selectAllUsersByTask(task);
-
-
+        verify(taskRepository).selectAllUsersByTask(task.getId());
     }
 }

@@ -54,9 +54,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<UserDTO> getAllUsersByTaskDTO(TaskDTO task) throws CRMProjectServiceException {
+    public List<UserDTO> getAllUsersByTaskDTO(Integer idTask) throws CRMProjectServiceException {
         try {
-            return taskRepository.selectAllUsersByTask(convertTaskToEntity(task))
+            return taskRepository.selectAllUsersByTask(idTask)
                     .stream().map(Convert::convertUserToDto)
                     .collect(Collectors.toList());
         } catch (CRMProjectRepositoryException ex) {
@@ -115,7 +115,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public void removeAllUsersByTask(Integer idTask) throws CRMProjectServiceException {
         try {
-            List<User> users = taskRepository.selectAllUsersByTask(taskRepository.selectById(idTask));
+            List<User> users = taskRepository.selectAllUsersByTask(idTask);
             for (User user : users) {
                 userRepository.removeTaskByUser(idTask, user.getId());
             }

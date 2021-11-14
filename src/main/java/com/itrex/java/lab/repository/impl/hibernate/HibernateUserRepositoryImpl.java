@@ -68,11 +68,11 @@ public class HibernateUserRepositoryImpl implements UserRepository {
 
     @Override
     @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
-    public List<Task> selectAllTasksByUser(User user) throws CRMProjectRepositoryException {
+    public List<Task> selectAllTasksByUser(Integer idUser) throws CRMProjectRepositoryException {
 
         try {
             Session session = sessionFactory.getCurrentSession();
-            return new ArrayList<>(session.get(User.class, user.getId()).getTasks());
+            return new ArrayList<>(session.get(User.class, idUser).getTasks());
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: SELECT ALL TASK FOR USER: ", ex);
         }
@@ -108,16 +108,16 @@ public class HibernateUserRepositoryImpl implements UserRepository {
 
     @Override
     @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
-    public void addTaskByUser(Task task, User user) throws CRMProjectRepositoryException {
+    public void addTaskByUser(Integer idTask, Integer idUser) throws CRMProjectRepositoryException {
 
         try {
             Session session = sessionFactory.getCurrentSession();
 
-            User userBD = session.get(User.class, user.getId());
-            userBD.getTasks().add(task);
+            User userBD = session.get(User.class, idUser);
+            userBD.getTasks().add(session.get(Task.class,idTask));
             userBD.setTasks(userBD.getTasks());
         } catch (Exception ex) {
-            throw new CRMProjectRepositoryException("ERROR: INSERT INTO USER AND TASK IN CROSS TABLE - " + user + "\n" + task + ": " + ex);
+            throw new CRMProjectRepositoryException("ERROR: INSERT INTO USER AND TASK IN CROSS TABLE - user by(" + idUser + ") and task by (" + idTask+") : " + ex);
         }
     }
 
@@ -146,11 +146,13 @@ public class HibernateUserRepositoryImpl implements UserRepository {
 
     @Override
     @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
-    public List<User> updateRoleOnDefaultByUsers(Role role, Role defaultRole) throws CRMProjectRepositoryException {
+    public List<User> updateRoleOnDefaultByUsers(Integer idRole, Integer idDefaultRole) throws CRMProjectRepositoryException {
 
         List<User> users = new ArrayList<>();
         try {
             Session session = sessionFactory.getCurrentSession();
+            Role role = session.get(Role.class,idRole);
+            Role defaultRole = session.get(Role.class,idDefaultRole);
 
             int count = session.createQuery(UPDATE_USER_ON_DEFAULT_ROLE)
                     .setParameter(ROLE_DEFAULT_USER, defaultRole)

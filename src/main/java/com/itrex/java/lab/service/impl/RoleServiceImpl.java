@@ -94,7 +94,7 @@ public class RoleServiceImpl implements RoleService {
             if (role == null) {
                 throw new CRMProjectServiceException("ERROR SERVICE: DELETE ROLE BY ID = " + idRoleDTO + " NO FOUND DATA DASE");
             }
-            userRepository.updateRoleOnDefaultByUsers(role, roleRepository.selectById(idDefaultRoleDTO));
+            userRepository.updateRoleOnDefaultByUsers(idRoleDTO, idDefaultRoleDTO);
             roleRepository.removeRole(idRoleDTO);
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: DELETE ROLE(CHANGE ON DEFAULT ROLE) - " + idRoleDTO + " : ", ex);

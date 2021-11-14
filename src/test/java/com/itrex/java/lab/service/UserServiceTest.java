@@ -112,11 +112,11 @@ public class UserServiceTest {
             throws CRMProjectRepositoryException, CRMProjectServiceException {
         //given
         List<Task> tasks = createTestTasksWithId(0, 2);
-        User user = createTestUsersWithId(0, 1).get(0);
-        when(userRepository.selectAllTasksByUser(user)).thenReturn(tasks);
+        Integer idUser = 2;
+        when(userRepository.selectAllTasksByUser( idUser)).thenReturn(tasks);
 
         //when
-        List<TaskDTO> actual = userService.getAllTasksByUser(convertUserToDto(user));
+        List<TaskDTO> actual = userService.getAllTasksByUser(idUser);
 
         //then
         assertEquals(1, actual.get(0).getId());
@@ -129,7 +129,7 @@ public class UserServiceTest {
         assertEquals(Status.NEW, actual.get(1).getStatus());
         assertEquals(LocalDate.of(2001, 1, 1), actual.get(1).getDeadline());
         assertEquals("Task test info 1", actual.get(1).getInfo());
-        verify(userRepository).selectAllTasksByUser(user);
+        verify(userRepository).selectAllTasksByUser( idUser);
     }
 
     @Test
@@ -223,6 +223,20 @@ public class UserServiceTest {
     }
 
     @Test
+    void addTaskByUser_existIdTaskAndIdUserTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
+        //given
+        Integer idUser = 2;
+        Integer idTask = 3;
+        doNothing().when(userRepository).addTaskByUser(idTask,idUser);
+
+        //when
+        userService.addTaskByUser(idTask,idUser);
+
+        //then
+        verify(userRepository).addTaskByUser(any(),any());
+    }
+
+    @Test
     void update_validData_existUserNotDB_returnNullTest() throws CRMProjectRepositoryException {
         //given && when
         User expected = createTestUsersWithId(0, 1).get(0);
@@ -231,6 +245,21 @@ public class UserServiceTest {
         //then
         assertThrows(CRMProjectServiceException.class, () -> userService.update(convertUserToDto(expected)));
         verify(userRepository).selectById(any());
+    }
+
+    @Test
+    void updateRoleOnDefaultByUsers_existIdRoleIdDefaultRole_shouldListUserDTOTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
+        //given
+        Integer idRole = 2;
+        Integer idDefault = 6;
+        when(userRepository.updateRoleOnDefaultByUsers(2,6)).thenReturn(new ArrayList<>());
+
+        //when
+        List<UserDTO> userDTOS = userService.updateRoleOnDefaultByUsers(2,6);
+
+        //then
+        assertEquals(userDTOS.size(),0);
+        verify(userRepository).updateRoleOnDefaultByUsers(2,6);
     }
 
     @Test
@@ -271,7 +300,7 @@ public class UserServiceTest {
         when(taskRepository.selectById(task.getId())).thenReturn(task);
         doNothing().when(userRepository).removeTaskByUser(task.getId(), user.getId());
 
-        userService.removeTaskByUser(task.getId(),user.getId());
+        userService.removeTaskByUser(task.getId(), user.getId());
 
         //then
         verify(userRepository).removeTaskByUser(task.getId(), user.getId());
@@ -290,7 +319,7 @@ public class UserServiceTest {
         doThrow(CRMProjectRepositoryException.class).when(userRepository).removeTaskByUser(task.getId(), user.getId());
 
         //then
-        assertThrows(CRMProjectServiceException.class,()->userService.removeTaskByUser(task.getId(),user.getId()));
+        assertThrows(CRMProjectServiceException.class, () -> userService.removeTaskByUser(task.getId(), user.getId()));
         verify(userRepository).removeTaskByUser(task.getId(), user.getId());
         verify(userRepository).selectById(user.getId());
         verify(taskRepository).selectById(task.getId());
@@ -307,6 +336,19 @@ public class UserServiceTest {
         assertThrows(CRMProjectServiceException.class, () -> userService.remove(user.getId()));
         verify(userRepository).remove(user.getId());
         verify(userRepository).selectById(user.getId());
+    }
+
+    @Test
+    void removeAllTasksByUser_existIdUserTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
+        //given
+        Integer idUser = 2;
+        doNothing().when(userRepository).removeAllTasksByUser(idUser);
+
+        //when
+        userService.removeAllTasksByUser(2);
+
+        //then
+        verify(userRepository).removeAllTasksByUser(idUser);
     }
 }
 
