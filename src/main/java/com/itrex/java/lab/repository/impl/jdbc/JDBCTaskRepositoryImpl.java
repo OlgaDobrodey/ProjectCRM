@@ -32,7 +32,6 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
     private static final String INSERT_TASK_QUERY = "INSERT INTO crm.task(title, status, deadline, info) VALUES (?, ?, ?, ?)";
     private static final String UPDATE_TASK_QUERY = "UPDATE crm.task SET title=?, status=?, deadline=?, info=?  WHERE id = ?";
     private static final String DELETE_TASK_QUERTY = "DELETE FROM crm.task WHERE id = ?";
-    private static final String DELETE_ALL_USERS_BY_TASK = "DELETE FROM crm.user_task WHERE tasks_id = ?";
 
     private DataSource dataSource;
 
