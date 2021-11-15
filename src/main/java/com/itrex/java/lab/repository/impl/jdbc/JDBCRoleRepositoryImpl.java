@@ -22,7 +22,6 @@ public class JDBCRoleRepositoryImpl implements RoleRepository {
     private static final String SELECT_ROLE_BY_ID_QUERY = "SELECT * FROM crm.role WHERE id = ";
     private static final String INSERT_ROLE_QUERY = "INSERT INTO crm.role(role_name) VALUES (?)";
     private static final String UPDATE_ROLE_QUERY = "UPDATE crm.role SET role_name = ? WHERE id = ?";
-    private static final String DELETE_ROLE_QUERTY = "DELETE FROM crm.role WHERE id = ?";
 
     private final DataSource dataSource;
 

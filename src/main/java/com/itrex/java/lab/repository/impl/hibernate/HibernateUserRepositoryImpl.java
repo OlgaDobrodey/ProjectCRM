@@ -16,16 +16,8 @@ import java.util.List;
 @Repository
 public class HibernateUserRepositoryImpl implements UserRepository {
 
-    private static final String LOGIN_USER = "login";
-    private static final String PSW_USER = "psw";
-    private static final String ROLE_USER = "role";
-    private static final String FIRST_NAME_USER = "firstName";
-    private static final String LAST_NAME_USER = "lastName";
-    private static final String ID_USER = "id";
     private static final String TASK_ID = "taskId";
     private static final String SELECT_ALL = "from User u";
-    private static final String UPDATE = "update User set login = :login, psw =:psw, " +
-            "role_id =:role, firstName=:firstName, lastName=:lastName where id = :id";
     private static final String SELECT_ALL_USERS_BY_TASK = "select u from Task t join t.users u where t.id =:taskId";
 
     private final SessionFactory sessionFactory;
@@ -108,8 +100,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
         try {
             Session session = sessionFactory.getCurrentSession();
             session.update(user);
-            return session.get(User.class,user.getId());
-
+            return session.get(User.class, user.getId());
         } catch (Exception e) {
             throw new CRMProjectRepositoryException("ERROR: UPDATE TASK " + user, e);
         }
@@ -126,5 +117,4 @@ public class HibernateUserRepositoryImpl implements UserRepository {
             throw new CRMProjectRepositoryException("ERROR: REMOVE_USER - " + idUser + ": ", ex);
         }
     }
-
 }

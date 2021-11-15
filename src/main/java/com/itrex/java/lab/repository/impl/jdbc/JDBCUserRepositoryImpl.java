@@ -24,18 +24,15 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     private static final String FIRST_NAME_USER_COLUMN = "first_name";
     private static final String LAST_NAME_USER_COLUMN = "last_name";
     private static final String CROSS_TABLE_ID_USER = "users_id";
-    private static final String CROSS_TABLE_ID_TASK = "tasks_id";
 
     private static final String SELECT_ALL_QUERY = "SELECT * FROM crm.user";
     private static final String SELECT_USER_BY_ID_QUERY = "SELECT * FROM crm.user WHERE id = ";
     private static final String SELECT_ALL_USERS_FOR_TASK = "SELECT users_id FROM crm.user_task WHERE tasks_id = ";
 
-    private static final String INSERT_TASK_FOR_USER = "INSERT INTO crm.user_task(users_id, tasks_id) VALUES (?, ?)";
     private static final String INSERT_USER_QUERY = "INSERT INTO crm.user(login, psw, role_id, first_name, last_name) VALUES (?, ?, ?, ?, ?)";
     private static final String UPDATE_USER_QUERY = "UPDATE crm.user SET login=?, psw=?, role_id=?, first_name=?, last_name=?  WHERE id = ?";
     private static final String DELETE_USER_QUERY = "DELETE FROM crm.user WHERE id = ?";
     private static final String DELETE_USER_ALL_TASKS_QUERY = "DELETE FROM crm.user_task WHERE users_id = ?";
-    private static final String DELETE_TASK_BY_USER = "DELETE FROM crm.user_task WHERE users_id= ? AND tasks_id=?";
 
     private DataSource dataSource;
     private RoleRepository roleRepository;

@@ -11,22 +11,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Primary
 @Repository
 public class HibernateTaskRepositoryImpl implements TaskRepository {
 
-    private static final String TITLE_TASK = "title";
-    private static final String STATUS_TASK = "status";
-    private static final String DEADLINE_TASK = "deadline";
-    private static final String INFO_TASK = "info";
-    private static final String ID_TASK = "id";
     private static final String ID_USER = "idUser";
 
     private static final String SELECT_ALL = "from Task t";
-    private static final String UPDATE = "update Task set title = :title, status =:status, deadline =:deadline," +
-            " info=:info where id = :id";
     private static final String SELECT_ALL_TASKS_BY_USER = "select t from User u join u.tasks t where u.id =:idUser";
 
     private final SessionFactory sessionFactory;
@@ -110,17 +102,7 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
         try {
             Session session = sessionFactory.getCurrentSession();
             session.update(task);
-
-//            Query query = session.createQuery(UPDATE);
-//            query.setParameter(TITLE_TASK, task.getTitle());
-//            query.setParameter(STATUS_TASK, task.getStatus());
-//            query.setParameter(DEADLINE_TASK, task.getDeadline());
-//            query.setParameter(INFO_TASK, task.getInfo());
-//            query.setParameter(ID_TASK, task.getId());
-//            query.executeUpdate();
-
-            return Optional.ofNullable(session.get(Task.class, task.getId()))
-                    .orElseThrow(() -> new CRMProjectRepositoryException("TASK NO FOUND DATA BASE"));
+            return session.get(Task.class, task.getId());
         } catch (Exception e) {
             throw new CRMProjectRepositoryException("ERROR: UPDATE TASK " + task, e);
         }
@@ -139,5 +121,4 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
             throw new CRMProjectRepositoryException("ERROR: REMOVE_TASK - " + idTask + ": ", ex);
         }
     }
-
- }
+}
