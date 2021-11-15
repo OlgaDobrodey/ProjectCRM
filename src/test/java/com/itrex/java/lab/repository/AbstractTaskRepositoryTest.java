@@ -2,7 +2,6 @@ package com.itrex.java.lab.repository;
 
 import com.itrex.java.lab.entity.Status;
 import com.itrex.java.lab.entity.Task;
-import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +20,7 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
 
     public void postConstruct(TaskRepository repository) {
         this.repository = repository;
-            }
+    }
 
     @Test
     public void selectAll_validData_returnTaskTest() throws CRMProjectRepositoryException {
@@ -80,26 +79,30 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
     }
 
     @Test
-    void selectAllUsersByTask_existTask_returnListOfUserTest() throws CRMProjectRepositoryException {
+    void selectAllTaskByUser_existUser_returnListOfTaskTest() throws CRMProjectRepositoryException {
         //given
-        Integer idTask = 2;
+        Integer idUser = 2;
 
         //when
-        List<User> actual = repository.selectAllUsersByTask(idTask);
+        List<Task> actual = repository.selectAllTasksByUser(idUser);
 
         //then
-        assertEquals(1, actual.get(0).getId());
-        assertEquals("Petrov", actual.get(0).getLogin());
-        assertEquals("123", actual.get(0).getPsw());
-        assertEquals("ADMIN", actual.get(0).getRole().getRoleName());
-        assertEquals("Petrov", actual.get(0).getLastName());
-        assertEquals("Petr", actual.get(0).getFirstName());
-        assertEquals(8, actual.get(1).getId());
-        assertEquals("Dropalo", actual.get(1).getLogin());
-        assertEquals("123", actual.get(1).getPsw());
-        assertEquals("USER", actual.get(1).getRole().getRoleName());
-        assertEquals("Dropalo", actual.get(1).getLastName());
-        assertEquals("Andrey", actual.get(1).getFirstName());
+        assertEquals(3, actual.size());
+        assertEquals(5, actual.get(1).getId());
+        assertEquals("task title 5", actual.get(1).getTitle(), "assert Title");
+        assertEquals(Status.PROGRESS, actual.get(1).getStatus());
+        assertEquals(LocalDate.of(2019, 10, 23), actual.get(1).getDeadline());
+        assertEquals("task info 5", actual.get(1).getInfo());
+        assertEquals(4, actual.get(0).getId());
+        assertEquals("task title 4", actual.get(0).getTitle(), "assert Title");
+        assertEquals(Status.NEW, actual.get(0).getStatus());
+        assertEquals(LocalDate.of(2022, 10, 23), actual.get(0).getDeadline());
+        assertEquals("task info 4", actual.get(0).getInfo());
+        assertEquals(11, actual.get(2).getId());
+        assertEquals("task title 11", actual.get(2).getTitle(), "assert Title");
+        assertEquals(Status.DELETED, actual.get(2).getStatus());
+        assertEquals(LocalDate.of(2012, 10, 23), actual.get(2).getDeadline());
+        assertEquals("task info 11", actual.get(2).getInfo());
     }
 
     @Test
@@ -175,15 +178,6 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
     }
 
     @Test
-    void update_validData_existTaskNotDB_shouldThrowRepositoryExceptionTest() throws CRMProjectRepositoryException {
-        //given && when
-        Task expected = RepositoryTestUtils.createTestTasksWithId(98, 1).get(0);
-
-        //then
-        assertThrows(CRMProjectRepositoryException.class, () -> repository.update(expected));
-    }
-
-    @Test
     void update_existIdTask_returnThrowRepositoryExceptionTest() {
         //given && when
         cleanDB();    //clean Data Base
@@ -207,5 +201,4 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
         //given && when && then
         assertThrows(CRMProjectRepositoryException.class, () -> repository.remove(25));
     }
-
 }

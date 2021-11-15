@@ -110,28 +110,6 @@ public class JDBCRoleRepositoryImpl implements RoleRepository {
         return role;
     }
 
-    @Override
-    public void removeRole(Integer idRole) throws CRMProjectRepositoryException {
-        try (Connection conn = dataSource.getConnection()) {
-            conn.setAutoCommit(false);
-            try {
-                try (PreparedStatement preparedStatement = conn.prepareStatement(DELETE_ROLE_QUERTY)) {
-                    preparedStatement.setInt(1, idRole);
-                    int i = preparedStatement.executeUpdate();
-                    if(i<1){throw  new CRMProjectRepositoryException("!!!");}
-                }
-                conn.commit();
-            } catch (SQLException ex) {
-                conn.rollback();
-                throw new CRMProjectRepositoryException("TRANSACTION ROLLBACK: ", ex);
-            } finally {
-                conn.setAutoCommit(true);
-            }
-        } catch (SQLException ex) {
-            throw new CRMProjectRepositoryException("ERROR: REMOVE_ROLE_BY_ID - " + idRole + ": ", ex);
-        }
-    }
-
     private void insert(List<Role> roles, PreparedStatement preparedStatement) throws SQLException {
         for (int i = 1; i <= roles.size(); i++) {
             preparedStatement.setString(i, roles.get(i - 1).getRoleName());

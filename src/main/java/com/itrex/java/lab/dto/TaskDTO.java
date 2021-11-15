@@ -1,9 +1,9 @@
 package com.itrex.java.lab.dto;
 
 import com.itrex.java.lab.entity.Status;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
 import java.time.LocalDate;
 
@@ -12,9 +12,9 @@ import java.time.LocalDate;
  * task and user are linked in a cross table crm.user_task
  */
 
-@NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
+@Data
+@Builder
 public class TaskDTO {
 
     private Integer id;

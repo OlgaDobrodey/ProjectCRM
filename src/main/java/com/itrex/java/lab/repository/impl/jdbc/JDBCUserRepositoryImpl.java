@@ -1,10 +1,8 @@
 package com.itrex.java.lab.repository.impl.jdbc;
 
-import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.repository.RoleRepository;
-import com.itrex.java.lab.repository.TaskRepository;
 import com.itrex.java.lab.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,11 +28,11 @@ public class JDBCUserRepositoryImpl implements UserRepository {
 
     private static final String SELECT_ALL_QUERY = "SELECT * FROM crm.user";
     private static final String SELECT_USER_BY_ID_QUERY = "SELECT * FROM crm.user WHERE id = ";
-    private static final String SELECT_ALL_TASKS_FOR_USER = "SELECT tasks_id FROM crm.user_task WHERE users_id = ";
+    private static final String SELECT_ALL_USERS_FOR_TASK = "SELECT users_id FROM crm.user_task WHERE tasks_id = ";
+
     private static final String INSERT_TASK_FOR_USER = "INSERT INTO crm.user_task(users_id, tasks_id) VALUES (?, ?)";
     private static final String INSERT_USER_QUERY = "INSERT INTO crm.user(login, psw, role_id, first_name, last_name) VALUES (?, ?, ?, ?, ?)";
     private static final String UPDATE_USER_QUERY = "UPDATE crm.user SET login=?, psw=?, role_id=?, first_name=?, last_name=?  WHERE id = ?";
-    private static final String UPDATE_USER_ON_DEFAULT_ROLE_QUERY = "UPDATE crm.user SET role_id = ? WHERE role_id = ?";
     private static final String DELETE_USER_QUERY = "DELETE FROM crm.user WHERE id = ?";
     private static final String DELETE_USER_ALL_TASKS_QUERY = "DELETE FROM crm.user_task WHERE users_id = ?";
     private static final String DELETE_TASK_BY_USER = "DELETE FROM crm.user_task WHERE users_id= ? AND tasks_id=?";
@@ -83,20 +81,19 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<Task> selectAllTasksByUser(Integer idUser) throws CRMProjectRepositoryException {
-        List<Task> tasks = new ArrayList<>();
+    public List<User> selectAllUsersByTask(Integer idTask) throws CRMProjectRepositoryException {
+        List<User> users = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              Statement stm = conn.createStatement();
-             ResultSet resultSet = stm.executeQuery(SELECT_ALL_TASKS_FOR_USER + idUser)) {
-            TaskRepository taskRepository = new JDBCTaskRepositoryImpl(dataSource);
+             ResultSet resultSet = stm.executeQuery(SELECT_ALL_USERS_FOR_TASK + idTask)) {
             while (resultSet.next()) {
-                Task task = taskRepository.selectById(resultSet.getInt(CROSS_TABLE_ID_TASK));
-                tasks.add(task);
+                User user = selectById(resultSet.getInt(CROSS_TABLE_ID_USER));
+                users.add(user);
             }
         } catch (SQLException ex) {
-            throw new CRMProjectRepositoryException("ERROR: SELECT ALL TASK FOR USER: ", ex);
+            throw new CRMProjectRepositoryException("ERROR: SELECT ALL USERS FOR TASK: ", ex);
         }
-        return tasks;
+        return users;
     }
 
     @Override
@@ -128,25 +125,6 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void addTaskByUser(Integer idTask, Integer idUser) throws CRMProjectRepositoryException {
-        try (Connection con = dataSource.getConnection();
-             PreparedStatement preparedStatement = con.prepareStatement(INSERT_TASK_FOR_USER, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setInt(1, idUser);
-            preparedStatement.setInt(2, idTask);
-
-            preparedStatement.executeUpdate();
-            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-            while (generatedKeys.next()) {
-                generatedKeys.getInt(CROSS_TABLE_ID_USER);
-
-                generatedKeys.getInt(CROSS_TABLE_ID_TASK);
-            }
-        } catch (SQLException ex) {
-            throw new CRMProjectRepositoryException("ERROR: INSERT INTO USER AND TASK IN CROSS TABLE - " + idUser + "\n" + idTask + ": " + ex);
-        }
-    }
-
-    @Override
     public User update(User user) throws CRMProjectRepositoryException {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_USER_QUERY)) {
@@ -161,28 +139,6 @@ public class JDBCUserRepositoryImpl implements UserRepository {
             throw new CRMProjectRepositoryException("ERROR: UPDATE_USER - " + user + ": ", ex);
         }
         return user;
-    }
-
-    @Override
-    public List<User> updateRoleOnDefaultByUsers(Integer idRole, Integer idDefaultRole) throws CRMProjectRepositoryException {
-        List<User> users = new ArrayList<>();
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_USER_ON_DEFAULT_ROLE_QUERY, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setInt(1, idDefaultRole);
-            preparedStatement.setInt(2, idRole);
-
-            int executeUpdate = preparedStatement.executeUpdate();
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys();) {
-                for (int i = 0; i < executeUpdate; i++) {
-                    if (generatedKeys.next()) {
-                        users.add(selectById(generatedKeys.getInt(ID_USER_COLUMN)));
-                    }
-                }
-            }
-        } catch (SQLException ex) {
-            throw new CRMProjectRepositoryException("ERROR: UPDATE_USERS_ON_ROLE BY ID = - " + idRole + ": ", ex);
-        }
-        return users;
     }
 
     @Override
@@ -209,23 +165,7 @@ public class JDBCUserRepositoryImpl implements UserRepository {
         }
     }
 
-    @Override
-    public void removeTaskByUser(Integer idTask, Integer idUser) throws CRMProjectRepositoryException {
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement preparedStatement = conn.prepareStatement(DELETE_TASK_BY_USER)) {
-            preparedStatement.setInt(1, idUser);
-            preparedStatement.setInt(2, idTask);
-            int executeUpdate = preparedStatement.executeUpdate();
-            if (executeUpdate != 1) {
-                throw new CRMProjectRepositoryException("ERROR: DELETE_TASK_BY_USER - " + idUser + ": ");
-            }
-        } catch (SQLException ex) {
-            throw new CRMProjectRepositoryException("ERROR: DELETE_TASK_BY_USER - " + idUser + ": ", ex);
-        }
-    }
-
-    @Override
-    public void removeAllTasksByUser(Integer idUser) throws CRMProjectRepositoryException {
+    private void removeAllTasksByUser(Integer idUser) throws CRMProjectRepositoryException {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(DELETE_USER_ALL_TASKS_QUERY)) {
             preparedStatement.setInt(1, idUser);

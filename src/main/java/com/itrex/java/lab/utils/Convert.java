@@ -10,10 +10,10 @@ import com.itrex.java.lab.entity.User;
 public class Convert {
 
     public static RoleDTO convertRoleToDto(Role role) {
-        RoleDTO roleDTO = new RoleDTO();
-        roleDTO.setId(role.getId());
-        roleDTO.setRoleName(role.getRoleName());
-        return roleDTO;
+        return RoleDTO.builder()
+                .id(role.getId())
+                .roleName(role.getRoleName())
+                .build();
     }
 
 
@@ -25,14 +25,14 @@ public class Convert {
     }
 
     public static UserDTO convertUserToDto(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setLogin(user.getLogin());
-        userDTO.setPsw(user.getPsw());
-        userDTO.setRole(convertRoleToDto(user.getRole()));
-        userDTO.setLastName(user.getLastName());
-        userDTO.setFirstName(user.getFirstName());
-        return userDTO;
+        return UserDTO.builder()
+                .id(user.getId())
+                .login(user.getLogin())
+                .psw(user.getPsw())
+                .role(convertRoleToDto(user.getRole()))
+                .lastName(user.getLastName())
+                .firstName(user.getFirstName())
+                .build();
     }
 
     public static User convertUserToEntity(UserDTO userDTO) {
@@ -47,13 +47,13 @@ public class Convert {
     }
 
     public static TaskDTO convertTaskToDto(Task task) {
-        TaskDTO taskDTO = new TaskDTO();
-        taskDTO.setId(task.getId());
-        taskDTO.setTitle(task.getTitle());
-        taskDTO.setStatus(task.getStatus());
-        taskDTO.setInfo(task.getInfo());
-        taskDTO.setDeadline(task.getDeadline());
-        return taskDTO;
+        return TaskDTO.builder()
+                .id(task.getId())
+                .title(task.getTitle())
+                .status(task.getStatus())
+                .info(task.getInfo())
+                .deadline(task.getDeadline())
+                .build();
     }
 
     public static Task convertTaskToEntity(TaskDTO taskDTO) {

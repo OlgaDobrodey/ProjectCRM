@@ -2,10 +2,8 @@ package com.itrex.java.lab.repository.impl.jdbc;
 
 import com.itrex.java.lab.entity.Status;
 import com.itrex.java.lab.entity.Task;
-import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.repository.TaskRepository;
-import com.itrex.java.lab.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -24,11 +22,11 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
     private static final String STATUS_TASK_COLUMN = "status";
     private static final String DEADLINE_TASK_COLUMN = "deadline";
     private static final String INFO_TASK_COLUMN = "info";
-    private static final String CROSS_TABLE_ID_USER = "users_id";
+    private static final String CROSS_TABLE_ID_TASK = "tasks_id";
 
     private static final String SELECT_ALL_QUERY = "SELECT * FROM crm.task";
     private static final String SELECT_TASK_BY_ID_QUERY = "SELECT * FROM crm.task WHERE id = ";
-    private static final String SELECT_ALL_USERS_FOR_TASK = "SELECT users_id FROM crm.user_task WHERE tasks_id = ";
+    private static final String SELECT_ALL_TASKS_FOR_USER = "SELECT tasks_id FROM crm.user_task WHERE users_id = ";
     private static final String INSERT_TASK_QUERY = "INSERT INTO crm.task(title, status, deadline, info) VALUES (?, ?, ?, ?)";
     private static final String UPDATE_TASK_QUERY = "UPDATE crm.task SET title=?, status=?, deadline=?, info=?  WHERE id = ?";
     private static final String DELETE_TASK_QUERTY = "DELETE FROM crm.task WHERE id = ?";
@@ -76,20 +74,19 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public List<User> selectAllUsersByTask(Integer idTask) throws CRMProjectRepositoryException {
-        List<User> users = new ArrayList<>();
+    public List<Task> selectAllTasksByUser(Integer idUser) throws CRMProjectRepositoryException {
+        List<Task> tasks = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              Statement stm = conn.createStatement();
-             ResultSet resultSet = stm.executeQuery(SELECT_ALL_USERS_FOR_TASK + idTask)) {
-            UserRepository userRepository = new JDBCUserRepositoryImpl(dataSource);
+             ResultSet resultSet = stm.executeQuery(SELECT_ALL_TASKS_FOR_USER + idUser)) {
             while (resultSet.next()) {
-                User user = userRepository.selectById(resultSet.getInt(CROSS_TABLE_ID_USER));
-                users.add(user);
+                Task task = selectById(resultSet.getInt(CROSS_TABLE_ID_TASK));
+                tasks.add(task);
             }
         } catch (SQLException ex) {
-            throw new CRMProjectRepositoryException("ERROR: SELECT ALL USERS FOR TASK: ", ex);
+            throw new CRMProjectRepositoryException("ERROR: SELECT ALL TASK FOR USER: ", ex);
         }
-        return users;
+        return tasks;
     }
 
     @Override

@@ -1,12 +1,9 @@
 package com.itrex.java.lab.repository;
 
-import com.itrex.java.lab.entity.Status;
-import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,15 +11,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
 
     private UserRepository repository;
-    private TaskRepository taskRepository;
 
     public AbstractUserRepositoryTest() {
         super();
     }
 
-    public void postConstruct(UserRepository repository, TaskRepository taskRepository) {
+    public void postConstruct(UserRepository repository) {
         this.repository = repository;
-        this.taskRepository = taskRepository;
     }
 
     @Test
@@ -83,30 +78,26 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
     }
 
     @Test
-    void selectAllTaskByUser_existUser_returnListOfTaskTest() throws CRMProjectRepositoryException {
+    void selectAllUsersByTask_existTask_returnListOfUserTest() throws CRMProjectRepositoryException {
         //given
-        Integer idUser = 2;
+        Integer idTask = 2;
 
         //when
-        List<Task> actual = repository.selectAllTasksByUser(idUser);
+        List<User> actual = repository.selectAllUsersByTask(idTask);
 
         //then
-        assertEquals(3, actual.size());
-        assertEquals(5, actual.get(1).getId());
-        assertEquals("task title 5", actual.get(1).getTitle(), "assert Title");
-        assertEquals(Status.PROGRESS, actual.get(1).getStatus());
-        assertEquals(LocalDate.of(2019, 10, 23), actual.get(1).getDeadline());
-        assertEquals("task info 5", actual.get(1).getInfo());
-        assertEquals(4, actual.get(0).getId());
-        assertEquals("task title 4", actual.get(0).getTitle(), "assert Title");
-        assertEquals(Status.NEW, actual.get(0).getStatus());
-        assertEquals(LocalDate.of(2022, 10, 23), actual.get(0).getDeadline());
-        assertEquals("task info 4", actual.get(0).getInfo());
-        assertEquals(11, actual.get(2).getId());
-        assertEquals("task title 11", actual.get(2).getTitle(), "assert Title");
-        assertEquals(Status.DELETED, actual.get(2).getStatus());
-        assertEquals(LocalDate.of(2012, 10, 23), actual.get(2).getDeadline());
-        assertEquals("task info 11", actual.get(2).getInfo());
+        assertEquals(1, actual.get(0).getId());
+        assertEquals("Petrov", actual.get(0).getLogin());
+        assertEquals("123", actual.get(0).getPsw());
+        assertEquals("ADMIN", actual.get(0).getRole().getRoleName());
+        assertEquals("Petrov", actual.get(0).getLastName());
+        assertEquals("Petr", actual.get(0).getFirstName());
+        assertEquals(8, actual.get(1).getId());
+        assertEquals("Dropalo", actual.get(1).getLogin());
+        assertEquals("123", actual.get(1).getPsw());
+        assertEquals("USER", actual.get(1).getRole().getRoleName());
+        assertEquals("Dropalo", actual.get(1).getLastName());
+        assertEquals("Andrey", actual.get(1).getFirstName());
     }
 
     @Test
@@ -169,19 +160,6 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
     }
 
     @Test
-    void addTaskByUser_validData_existUserAndTaskTest() throws CRMProjectRepositoryException {
-        //given
-        Integer idUser = 2;
-        Task task = taskRepository.selectById(6);
-
-        //when
-        repository.addTaskByUser(task.getId(), idUser);
-
-        //then
-        assertTrue(repository.selectAllTasksByUser(idUser).contains(task));
-    }
-
-    @Test
     void update_validData_existUser_returnUserTest() throws CRMProjectRepositoryException {
         //given
         User expected = RepositoryTestUtils.createTestUsers(1).get(0);
@@ -197,16 +175,6 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
         assertEquals("ADMIN", actual.getRole().getRoleName());
         assertEquals("Ivanov 0", actual.getLastName());
         assertEquals("Ivan 0", actual.getFirstName());
-    }
-
-    @Test
-    void update_validData_existUserNotDB_shouldThrowRepositoryExceptionTest() throws CRMProjectRepositoryException {
-        //given && when
-        User expected = RepositoryTestUtils.createTestUsers(1).get(0);
-        expected.setId(99);
-
-        //then
-        assertThrows(CRMProjectRepositoryException.class, () -> repository.update(expected));
     }
 
     @Test
@@ -233,28 +201,6 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
     }
 
     @Test
-    void removeTaskByUser_validData_existUserIdAndTaskIdTest() throws CRMProjectRepositoryException {
-        //given
-        User user = repository.selectById(1);
-        Task taskTrue = taskRepository.selectById(2);
-        List<Task> allTaskByUser = repository.selectAllTasksByUser(user.getId());
-
-        //when
-        repository.removeTaskByUser(taskTrue.getId(), user.getId());
-
-        //then
-        assertEquals(repository.selectAllTasksByUser(user.getId()).size() + 1, allTaskByUser.size());
-    }
-
-    @Test
-    void removeTaskByUser_validData_existUserIDAndTaskIDNonDB_shouldReturnFalseTest() throws CRMProjectRepositoryException {
-        //given && when && then
-        assertThrows(CRMProjectRepositoryException.class,
-                () -> repository.removeTaskByUser(2,repository.selectAll().size()+1));
-
-    }
-
-    @Test
     void remove_existUserId_shouldThrowRepositoryExceptionTest() {
         //given && when
         cleanDB();    //clean Data Base
@@ -270,19 +216,6 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
 
         //then
         assertThrows(CRMProjectRepositoryException.class, () -> repository.remove(idUserNoDB));
-    }
-
-    @Test
-    void removeAllTasksByUser_existUserIDTest_() throws CRMProjectRepositoryException {
-
-        //given
-        Integer idUser = 2;
-
-        //when
-        repository.removeAllTasksByUser(idUser);
-
-        //then
-        assertEquals(0, repository.selectAllTasksByUser(idUser).size());
     }
 }
 

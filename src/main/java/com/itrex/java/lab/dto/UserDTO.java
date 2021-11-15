@@ -1,17 +1,17 @@
 package com.itrex.java.lab.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
 /**
  * The User class is responsible for the user.
  * task and user are linked in a cross table crm.user_task
  */
 
-@NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
+@Data
+@Builder
 public class UserDTO {
 
     private Integer id;
@@ -20,7 +20,6 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private RoleDTO role;
-
 
     @Override
     public String toString() {

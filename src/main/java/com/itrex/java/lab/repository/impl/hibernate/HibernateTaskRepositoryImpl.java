@@ -1,7 +1,6 @@
 package com.itrex.java.lab.repository.impl.hibernate;
 
 import com.itrex.java.lab.entity.Task;
-import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.repository.TaskRepository;
 import org.hibernate.Session;
@@ -11,8 +10,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,10 +22,12 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
     private static final String DEADLINE_TASK = "deadline";
     private static final String INFO_TASK = "info";
     private static final String ID_TASK = "id";
+    private static final String ID_USER = "idUser";
 
     private static final String SELECT_ALL = "from Task t";
     private static final String UPDATE = "update Task set title = :title, status =:status, deadline =:deadline," +
             " info=:info where id = :id";
+    private static final String SELECT_ALL_TASKS_BY_USER = "select t from User u join u.tasks t where u.id =:idUser";
 
     private final SessionFactory sessionFactory;
 
@@ -49,7 +48,6 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
         }
     }
 
-
     @Override
     @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public Task selectById(Integer id) throws CRMProjectRepositoryException {
@@ -59,6 +57,21 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
             return session.get(Task.class, id);
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: SELECT TASK BY ID: " + ex);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
+    public List<Task> selectAllTasksByUser(Integer idUser) throws CRMProjectRepositoryException {
+
+        try {
+            Session session = sessionFactory.getCurrentSession();
+
+            return session.createQuery(SELECT_ALL_TASKS_BY_USER, Task.class)
+                    .setParameter(ID_USER, idUser)
+                    .getResultList();
+        } catch (Exception ex) {
+            throw new CRMProjectRepositoryException("ERROR: SELECT ALL TASK FOR USER: ", ex);
         }
     }
 
@@ -96,14 +109,15 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
 
         try {
             Session session = sessionFactory.getCurrentSession();
+            session.update(task);
 
-            Query query = session.createQuery(UPDATE);
-            query.setParameter(TITLE_TASK, task.getTitle());
-            query.setParameter(STATUS_TASK, task.getStatus());
-            query.setParameter(DEADLINE_TASK, task.getDeadline());
-            query.setParameter(INFO_TASK, task.getInfo());
-            query.setParameter(ID_TASK, task.getId());
-            query.executeUpdate();
+//            Query query = session.createQuery(UPDATE);
+//            query.setParameter(TITLE_TASK, task.getTitle());
+//            query.setParameter(STATUS_TASK, task.getStatus());
+//            query.setParameter(DEADLINE_TASK, task.getDeadline());
+//            query.setParameter(INFO_TASK, task.getInfo());
+//            query.setParameter(ID_TASK, task.getId());
+//            query.executeUpdate();
 
             return Optional.ofNullable(session.get(Task.class, task.getId()))
                     .orElseThrow(() -> new CRMProjectRepositoryException("TASK NO FOUND DATA BASE"));
@@ -111,7 +125,6 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
             throw new CRMProjectRepositoryException("ERROR: UPDATE TASK " + task, e);
         }
     }
-
 
     @Override
     @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
@@ -127,16 +140,4 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
         }
     }
 
-    @Override
-    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
-    public List<User> selectAllUsersByTask(Integer idTask) throws CRMProjectRepositoryException {
-
-        try {
-            Session session = sessionFactory.getCurrentSession();
-
-            return new ArrayList<>(session.get(Task.class, idTask).getUsers());
-        } catch (Exception ex) {
-            throw new CRMProjectRepositoryException("ERROR: SELECT ALL USERS FOR TASK: ", ex);
-        }
-    }
-}
+ }

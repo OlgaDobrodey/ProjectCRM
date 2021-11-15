@@ -1,6 +1,5 @@
 package com.itrex.java.lab.service.impl;
 
-import com.itrex.java.lab.dto.TaskDTO;
 import com.itrex.java.lab.dto.UserDTO;
 import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.entity.User;
@@ -12,13 +11,13 @@ import com.itrex.java.lab.service.UserService;
 import com.itrex.java.lab.utils.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.itrex.java.lab.utils.Convert.*;
+import static com.itrex.java.lab.utils.Convert.convertUserToDto;
+import static com.itrex.java.lab.utils.Convert.convertUserToEntity;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -54,13 +53,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<TaskDTO> getAllTasksByUser(Integer idUser) throws CRMProjectServiceException {
+    public List<UserDTO> getAllUsersByTaskDTO(Integer idTask) throws CRMProjectServiceException {
         try {
-            return userRepository.selectAllTasksByUser(idUser).stream()
-                    .map(task -> convertTaskToDto(task))
+            return userRepository.selectAllUsersByTask(idTask)
+                    .stream().map(Convert::convertUserToDto)
                     .collect(Collectors.toList());
         } catch (CRMProjectRepositoryException ex) {
-            throw new CRMProjectServiceException("ERROR SERVICE: SELECT TASK BY USER: ", ex);
+            throw new CRMProjectServiceException("ERROR SERVICE: GET ALL USER BY TASK:", ex);
         }
     }
 
@@ -84,9 +83,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void addTaskByUser(Integer idTask, Integer idUser) throws CRMProjectServiceException {
         try {
-            userRepository.addTaskByUser(idTask, idUser);
+            userRepository.selectById(idUser)
+                    .getTasks()
+                    .add(taskRepository.selectById(idTask));
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: ADD TASK BY USER:", ex);
         }
@@ -102,18 +104,6 @@ public class UserServiceImpl implements UserService {
             return convertUserToDto(userRepository.update(convertUserToEntity(userDTO)));
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: UPDATE USER:", ex);
-        }
-    }
-
-    @Override
-    @Transactional(propagation= Propagation.NESTED)
-    public List<UserDTO> updateRoleOnDefaultByUsers(Integer idRole, Integer idDefaultRole) throws CRMProjectServiceException {
-        try {
-            return userRepository.updateRoleOnDefaultByUsers(idRole,idDefaultRole)
-                    .stream().map(Convert::convertUserToDto)
-                    .collect(Collectors.toList());
-        } catch (CRMProjectRepositoryException ex) {
-            throw new CRMProjectServiceException("ERROR SERVICE: UPDATE ROLE ON DEFAULT ROLE FOR USERS:", ex);
         }
     }
 
@@ -139,18 +129,22 @@ public class UserServiceImpl implements UserService {
             if (user == null || task == null) {
                 throw new CRMProjectServiceException("ERROR SERVICE: DELETE TASK BY USER:");
             }
-            userRepository.removeTaskByUser(idTask, idUser);
+            user.getTasks().remove(task);
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: DELETE TASK BY USER:", ex);
         }
     }
 
     @Override
-    public void removeAllTasksByUser(Integer idUser) throws CRMProjectServiceException {
+    @Transactional
+    public void removeAllUsersByTask(Integer idTask) throws CRMProjectServiceException {
         try {
-            userRepository.removeAllTasksByUser(idUser);
+
+            List<User> users = userRepository.selectAllUsersByTask(idTask);
+            users.forEach(user -> user.getTasks().removeIf(task -> task.getId() == idTask));
+
         } catch (CRMProjectRepositoryException ex) {
-            throw new CRMProjectServiceException("ERROR SERVICE: DELETE ALL TASKS BY USER:", ex);
+            throw new CRMProjectServiceException("ERROR SERVICE: DELETE ALL TASK:", ex);
         }
     }
 }

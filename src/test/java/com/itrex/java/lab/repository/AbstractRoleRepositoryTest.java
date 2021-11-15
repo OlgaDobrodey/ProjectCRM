@@ -155,27 +155,4 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
         assertThrows(CRMProjectRepositoryException.class, () -> repository.update(expected));
     }
 
-    @Test
-    void removeRole_validData_existRoleIdTest() throws CRMProjectRepositoryException {
-        //given
-        List<Role> rolesGiven = repository.selectAll();
-        Role roleForDelete = repository.selectById(4);
-
-        //when
-        repository.removeRole(4);
-        List<Role> rolesWhen = repository.selectAll();
-
-        //then
-        assertFalse(rolesWhen.contains(roleForDelete));
-        assertEquals(roleForDelete.getRoleName(), rolesGiven.get(3).getRoleName());
-    }
-
-    void removeRole_validData_existRoleId_shouldCRMProjectRepositoryExceptionTest() throws CRMProjectRepositoryException {
-        //given && when
-        Integer idRoleNoFoundDB = 89;
-
-        //then
-        assertThrows(CRMProjectRepositoryException.class, () -> repository.removeRole(idRoleNoFoundDB));
-
-    }
 }

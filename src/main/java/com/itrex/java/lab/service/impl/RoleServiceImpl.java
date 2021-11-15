@@ -1,11 +1,9 @@
 package com.itrex.java.lab.service.impl;
 
 import com.itrex.java.lab.dto.RoleDTO;
-import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.exceptions.CRMProjectServiceException;
 import com.itrex.java.lab.repository.RoleRepository;
-import com.itrex.java.lab.repository.UserRepository;
 import com.itrex.java.lab.service.RoleService;
 import com.itrex.java.lab.utils.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +20,11 @@ import static com.itrex.java.lab.utils.Convert.convertRoleToEntity;
 @Service
 public class RoleServiceImpl implements RoleService {
 
-    private static final int DEFAULT_ROLE = 2;
-
     private final RoleRepository roleRepository;
-    private final UserRepository userRepository;
 
     @Autowired
-    public RoleServiceImpl(RoleRepository roleRepository, UserRepository userRepository) {
+    public RoleServiceImpl(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -74,30 +68,6 @@ public class RoleServiceImpl implements RoleService {
             return convertRoleToDto(roleRepository.update(convertRoleToEntity(roleDTO)));
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: UPDATE ROLE - " + roleDTO.getRoleName() + " : ", ex);
-        }
-    }
-
-    @Override
-    public void removeRole(Integer idRoleDTO) throws CRMProjectServiceException {
-        replaceOnDefaultRoleAndRemoveRole(idRoleDTO, DEFAULT_ROLE);
-    }
-
-    @Override
-    @Transactional
-    public void replaceOnDefaultRoleAndRemoveRole(Integer idRoleDTO, Integer idDefaultRoleDTO) throws CRMProjectServiceException {
-
-        if (idRoleDTO == idDefaultRoleDTO) {
-            throw new CRMProjectServiceException("ERROR SERVICE: DELETE ROLE BY ID = " + idRoleDTO + " equals DEFAULT_ROLE ");
-        }
-        try {
-            Role role = roleRepository.selectById(idRoleDTO);
-            if (role == null) {
-                throw new CRMProjectServiceException("ERROR SERVICE: DELETE ROLE BY ID = " + idRoleDTO + " NO FOUND DATA DASE");
-            }
-            userRepository.updateRoleOnDefaultByUsers(idRoleDTO, idDefaultRoleDTO);
-            roleRepository.removeRole(idRoleDTO);
-        } catch (CRMProjectRepositoryException ex) {
-            throw new CRMProjectServiceException("ERROR SERVICE: DELETE ROLE(CHANGE ON DEFAULT ROLE) - " + idRoleDTO + " : ", ex);
         }
     }
 }

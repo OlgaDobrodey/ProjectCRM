@@ -78,7 +78,6 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
         }
     }
 
-
     @Override
     @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public Role update(Role role) throws CRMProjectRepositoryException {
@@ -93,19 +92,6 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
             return Optional.ofNullable(session.get(Role.class, role.getId())).orElseThrow(() -> new CRMProjectRepositoryException("ROLE NO FOUND DATA BASE"));
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: UPDATE_ROLE - " + role, ex);
-        }
-    }
-
-    @Override
-    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
-    public void removeRole(Integer idRole) throws CRMProjectRepositoryException {
-        try {
-            Session session = sessionFactory.getCurrentSession();
-
-            Role role = session.get(Role.class, idRole);
-            session.delete(role);
-        } catch (Exception ex) {
-            throw new CRMProjectRepositoryException("ERROR: REMOVE_ROLE_BY_ID - " + idRole, ex);
         }
     }
 }
