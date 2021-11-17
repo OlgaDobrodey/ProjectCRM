@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Aspect
 @Component
+
 public class AdviceRepositoryMethodException {
 
     private static final String MESSAGE_LOG_FATAL_REPOSITORY_METHOD = "\n\nERROR: %s\n\n";

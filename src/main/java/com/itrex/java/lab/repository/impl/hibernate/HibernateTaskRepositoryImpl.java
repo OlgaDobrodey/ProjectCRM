@@ -31,7 +31,6 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
     @Override
     @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public List<Task> selectAll() throws CRMProjectRepositoryException {
-
         try {
             Session session = sessionFactory.getCurrentSession();
             return session.createQuery(SELECT_ALL, Task.class).list();
@@ -43,7 +42,6 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
     @Override
     @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public Task selectById(Integer id) throws CRMProjectRepositoryException {
-
         try {
             Session session = sessionFactory.getCurrentSession();
             return session.get(Task.class, id);
@@ -54,13 +52,12 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
 
     @Override
     @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
-    public List<Task> selectAllTasksByUser(Integer idUser) throws CRMProjectRepositoryException {
-
+    public List<Task> selectAllTasksByUserId(Integer id) throws CRMProjectRepositoryException {
         try {
             Session session = sessionFactory.getCurrentSession();
 
             return session.createQuery(SELECT_ALL_TASKS_BY_USER, Task.class)
-                    .setParameter(ID_USER, idUser)
+                    .setParameter(ID_USER, id)
                     .getResultList();
         } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: SELECT ALL TASK FOR USER: ", ex);
@@ -70,7 +67,6 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
     @Override
     @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public Task add(Task task) throws CRMProjectRepositoryException {
-
         try {
             Session session = sessionFactory.getCurrentSession();
             session.save(task);
@@ -83,7 +79,6 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
     @Override
     @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public List<Task> addAll(List<Task> tasks) throws CRMProjectRepositoryException {
-
         try {
             Session session = sessionFactory.getCurrentSession();
             for (Task task : tasks) {
@@ -98,7 +93,6 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
     @Override
     @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public Task update(Task task) throws CRMProjectRepositoryException {
-
         try {
             Session session = sessionFactory.getCurrentSession();
             session.update(task);
@@ -111,7 +105,6 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
     @Override
     @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public void remove(Integer idTask) throws CRMProjectRepositoryException {
-
         try {
             Session session = sessionFactory.getCurrentSession();
 
@@ -121,4 +114,5 @@ public class HibernateTaskRepositoryImpl implements TaskRepository {
             throw new CRMProjectRepositoryException("ERROR: REMOVE_TASK - " + idTask + ": ", ex);
         }
     }
+
 }

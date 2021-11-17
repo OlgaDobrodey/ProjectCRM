@@ -79,12 +79,12 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
     }
 
     @Test
-    void selectAllTaskByUser_existUser_returnListOfTaskTest() throws CRMProjectRepositoryException {
+    void selectAllTaskByUserId_existUser_returnListOfTaskTest() throws CRMProjectRepositoryException {
         //given
-        Integer idUser = 2;
+        Integer id = 2;
 
         //when
-        List<Task> actual = repository.selectAllTasksByUser(idUser);
+        List<Task> actual = repository.selectAllTasksByUserId(id);
 
         //then
         assertEquals(3, actual.size());

@@ -94,4 +94,5 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
             throw new CRMProjectRepositoryException("ERROR: UPDATE_ROLE - " + role, ex);
         }
     }
+
 }

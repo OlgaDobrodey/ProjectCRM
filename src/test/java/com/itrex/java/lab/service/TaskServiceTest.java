@@ -112,11 +112,11 @@ public class TaskServiceTest {
             throws CRMProjectRepositoryException, CRMProjectServiceException {
         //given
         List<Task> tasks = createTestTasksWithId(0, 2);
-        Integer idUser = 2;
-        when(taskRepository.selectAllTasksByUser(idUser)).thenReturn(tasks);
+        Integer id = 2;
+        when(taskRepository.selectAllTasksByUserId(id)).thenReturn(tasks);
 
         //when
-        List<TaskDTO> actual = taskService.getAllTasksByUser(idUser);
+        List<TaskDTO> actual = taskService.getAllTasksByUser(id);
 
         //then
         assertEquals(1, actual.get(0).getId());
@@ -129,7 +129,7 @@ public class TaskServiceTest {
         assertEquals(Status.NEW, actual.get(1).getStatus());
         assertEquals(LocalDate.of(2001, 1, 1), actual.get(1).getDeadline());
         assertEquals("Task test info 1", actual.get(1).getInfo());
-        verify(taskRepository).selectAllTasksByUser(idUser);
+        verify(taskRepository).selectAllTasksByUserId(id);
     }
 
     @Test

@@ -57,9 +57,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDTO> getAllTasksByUser(Integer idUser) throws CRMProjectServiceException {
+    public List<TaskDTO> getAllTasksByUser(Integer id) throws CRMProjectServiceException {
         try {
-            return taskRepository.selectAllTasksByUser(idUser).stream()
+            return taskRepository.selectAllTasksByUserId(id).stream()
                     .map(task -> convertTaskToDto(task))
                     .collect(Collectors.toList());
         } catch (CRMProjectRepositoryException ex) {

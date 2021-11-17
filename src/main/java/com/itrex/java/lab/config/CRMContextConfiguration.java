@@ -1,6 +1,8 @@
 package com.itrex.java.lab.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.log4j.PropertyConfigurator;
 import org.flywaydb.core.Flyway;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.hibernate.SessionFactory;
@@ -20,6 +22,7 @@ import java.util.Properties;
 @PropertySource("classpath:/application.properties")
 @EnableTransactionManagement
 @EnableAspectJAutoProxy
+@Slf4j
 public class CRMContextConfiguration {
 
     @Value("${database.url}")
@@ -35,14 +38,17 @@ public class CRMContextConfiguration {
     @Value("${entity.package.to.scan}")
     private String entityPackageScan;
     @Value("${database.driver}")
-    String driver;
+    private String driver;
     @Value("${hibernate.dialect.property}")
-    String dialect;
+    private String dialect;
     @Value("${hibernate.show_sql.property}")
-    String showSql;
+    private String showSql;
     @Value("${hibernate.format_sql.property}")
-    String formatSql;
-
+    private String formatSql;
+    @Value("${logging.config.profile.debug}")
+    private String loggingProfileDebug;
+    @Value("${logging.config.profile.info}")
+    private String loggingProfileInfo;
 
     @Bean(initMethod = "migrate")
     public Flyway flyway() {
@@ -84,6 +90,7 @@ public class CRMContextConfiguration {
         properties.setProperty(Environment.FORMAT_SQL, formatSql);
 
         sessionFactory.setHibernateProperties(properties);
+
         return sessionFactory;
     }
 
@@ -93,5 +100,17 @@ public class CRMContextConfiguration {
         HibernateTransactionManager txManager = new HibernateTransactionManager();
         txManager.setSessionFactory(sessionFactory);
         return txManager;
+    }
+
+    @Bean
+    @Profile("info_log")
+    public void LoggerConfigDevProfile() {
+        PropertyConfigurator.configure(loggingProfileInfo);
+    }
+
+    @Bean
+    @Profile("debug_log")
+    public void LoggerConfigProdProfile() {
+        PropertyConfigurator.configure(loggingProfileDebug);
     }
 }

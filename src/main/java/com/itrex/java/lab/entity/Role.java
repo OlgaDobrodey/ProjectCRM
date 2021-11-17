@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-
 /**
  * The role class is responsible for the user's role.
  * role's name is only roleName.toUpperCase();
@@ -52,5 +51,6 @@ public class Role implements Serializable {
                 ", roleName='" + roleName + '\'' +
                 '}';
     }
+
 }
 
