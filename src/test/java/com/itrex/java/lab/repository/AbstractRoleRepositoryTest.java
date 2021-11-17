@@ -96,31 +96,6 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
     }
 
     @Test
-    void addAll_validData_existRoles_returnRoleTest() throws CRMProjectRepositoryException {
-        //given
-        List<Role> roles = RepositoryTestUtils.createTestRole(2);
-
-        //when
-        List<Role> actual = repository.addAll(roles);
-
-        //then
-        assertEquals(5, actual.get(0).getId());
-        assertEquals("TEST 0", actual.get(0).getRoleName());
-        assertEquals(6, actual.get(1).getId());
-        assertEquals("TEST 1", actual.get(1).getRoleName());
-    }
-
-    @Test
-    void addAll_existCopyRoleNameUSER_shouldThrowRepositoryExceptionTest() throws CRMProjectRepositoryException {
-        //given && when
-        Role test1 = RepositoryTestUtils.createTestRole(1).get(0);
-        Role test2 = repository.selectById(2);  //There is Role "User" in Data Base
-
-        //then
-        assertThrows(CRMProjectRepositoryException.class, () -> repository.addAll(List.of(test1, test2)));
-    }
-
-    @Test
     void update_validData_existRoleAndIdRole_returnRoleTest() throws CRMProjectRepositoryException {
         //given
         Role expected = RepositoryTestUtils.createTestRole(1).get(0);

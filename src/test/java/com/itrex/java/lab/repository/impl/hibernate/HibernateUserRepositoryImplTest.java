@@ -11,4 +11,5 @@ class HibernateUserRepositoryImplTest extends AbstractUserRepositoryTest {
         super();
         postConstruct(userRepository);
     }
+
 }

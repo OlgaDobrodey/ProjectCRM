@@ -12,4 +12,5 @@ public class JDBCUserRepositoryImplTest extends AbstractUserRepositoryTest {
         super();
         postConstruct(userRepository);
     }
+
 }

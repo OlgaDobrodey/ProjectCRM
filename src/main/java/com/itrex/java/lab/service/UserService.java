@@ -12,12 +12,11 @@ public interface UserService {
     List<UserDTO> getAllUsersByTaskDTO(Integer idTask) throws CRMProjectServiceException;
 
     UserDTO add(UserDTO user) throws CRMProjectServiceException;
-    List<UserDTO> addAll(List<UserDTO> users) throws CRMProjectServiceException;
     void addTaskByUser(Integer idTask, Integer idUser) throws CRMProjectServiceException; //add task for user
-
     UserDTO update(UserDTO user) throws CRMProjectServiceException;  //update user by id
 
     void remove(Integer idUserDTO) throws CRMProjectServiceException;
     void removeTaskByUser(Integer idTask, Integer idUser) throws CRMProjectServiceException;
     void removeAllUsersByTask(Integer idTask) throws CRMProjectServiceException;
+
 }

@@ -9,4 +9,5 @@ public class CRMProjectServiceException extends Exception{
     public CRMProjectServiceException(String message, Throwable cause) {
         super(message, cause);
     }
+
 }

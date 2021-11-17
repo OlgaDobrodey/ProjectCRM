@@ -79,21 +79,6 @@ public class JDBCRoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public List<Role> addAll(List<Role> roles) throws CRMProjectRepositoryException {
-        StringBuilder insertBuild = new StringBuilder(INSERT_ROLE_QUERY);
-        for (int i = 1; i < roles.size(); i++) {
-            insertBuild.append(", ").append("(?)");
-        }
-        try (Connection con = dataSource.getConnection();
-             PreparedStatement preparedStatement = con.prepareStatement(insertBuild.toString(), Statement.RETURN_GENERATED_KEYS)) {
-            insert(roles, preparedStatement);
-        } catch (SQLException ex) {
-            throw new CRMProjectRepositoryException("ERROR: INSERT INTO THESE ROLES - " + roles + ": ", ex);
-        }
-        return roles;
-    }
-
-    @Override
     public Role update(Role role) throws CRMProjectRepositoryException {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_ROLE_QUERY)) {
@@ -131,4 +116,5 @@ public class JDBCRoleRepositoryImpl implements RoleRepository {
         role.setRoleName(resultSet.getString(NAME_ROLE_COLUMN));
         return role;
     }
+
 }

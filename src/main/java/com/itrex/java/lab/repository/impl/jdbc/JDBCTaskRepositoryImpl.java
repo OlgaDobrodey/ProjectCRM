@@ -103,21 +103,6 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public List<Task> addAll(List<Task> tasks) throws CRMProjectRepositoryException {
-        StringBuilder insertBuild = new StringBuilder(INSERT_TASK_QUERY);
-        for (int i = 1; i < tasks.size(); i++) {
-            insertBuild.append(", ").append("(?, ?, ?, ?)");
-        }
-        try (Connection con = dataSource.getConnection();
-             PreparedStatement preparedStatement = con.prepareStatement(insertBuild.toString(), Statement.RETURN_GENERATED_KEYS)) {
-            insert(tasks, preparedStatement);
-        } catch (SQLException ex) {
-            throw new CRMProjectRepositoryException("ERROR: INSERT INTO THESE USERS - " + tasks + ": ", ex);
-        }
-        return tasks;
-    }
-
-    @Override
     public Task update(Task task) throws CRMProjectRepositoryException {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_TASK_QUERY)) {
@@ -134,14 +119,14 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public void remove(Integer idTask) throws CRMProjectRepositoryException {
+    public void remove(Integer taskId) throws CRMProjectRepositoryException {
         try (Connection conn = dataSource.getConnection()) {
             conn.setAutoCommit(false);
             try {
                 try (PreparedStatement preparedStatement = conn.prepareStatement(DELETE_TASK_QUERTY)) {
-                    preparedStatement.setInt(1, idTask);
+                    preparedStatement.setInt(1, taskId);
                     if (preparedStatement.executeUpdate() != 1) {
-                        throw new CRMProjectRepositoryException("ERROR: REMOVE_TASK - " + idTask);
+                        throw new CRMProjectRepositoryException("ERROR: REMOVE_TASK - " + taskId);
                     }
                 }
                 conn.commit();
@@ -152,7 +137,7 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
                 conn.setAutoCommit(true);
             }
         } catch (SQLException ex) {
-            throw new CRMProjectRepositoryException("ERROR: REMOVE_TASK - " + idTask + ": ", ex);
+            throw new CRMProjectRepositoryException("ERROR: REMOVE_TASK - " + taskId + ": ", ex);
         }
     }
 
@@ -196,4 +181,5 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
         preparedStatement.setDate(3 + 4 * counter, task.getDeadline() != null ? Date.valueOf(task.getDeadline()) : null);
         preparedStatement.setString(4 + 4 * counter, task.getInfo());
     }
+
 }

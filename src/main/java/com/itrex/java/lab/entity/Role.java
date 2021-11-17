@@ -29,6 +29,7 @@ public class Role implements Serializable {
     @Column(name = "role_name")
     private String roleName;
 
+    @Setter
     @OneToMany(mappedBy = "role")
     private List<User> users;
 
@@ -38,10 +39,6 @@ public class Role implements Serializable {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName.toUpperCase();
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
     }
 
     @Override

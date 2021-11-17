@@ -66,20 +66,6 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
 
     @Override
     @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
-    public List<Role> addAll(List<Role> roles) throws CRMProjectRepositoryException {
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            for (Role role : roles) {
-                session.save(role);
-            }
-            return roles;
-        } catch (Exception e) {
-            throw new CRMProjectRepositoryException("ERROR: INSERT INTO THESE ROLES - " + roles + ": ", e);
-        }
-    }
-
-    @Override
-    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public Role update(Role role) throws CRMProjectRepositoryException {
         try {
             Session session = sessionFactory.getCurrentSession();

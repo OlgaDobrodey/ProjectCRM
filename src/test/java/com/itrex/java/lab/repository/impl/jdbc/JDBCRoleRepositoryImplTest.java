@@ -12,4 +12,5 @@ public class JDBCRoleRepositoryImplTest extends AbstractRoleRepositoryTest {
         super();
         postConstruct(roleRepository);
     }
+
 }

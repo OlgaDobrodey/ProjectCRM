@@ -12,4 +12,5 @@ public class JDBCTaskRepositoryImplTest extends AbstractTaskRepositoryTest {
         super();
         postConstruct(taskRepository);
     }
+
 }

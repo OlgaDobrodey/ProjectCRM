@@ -10,6 +10,6 @@ public interface RoleRepository {
     List<Role> selectAll() throws CRMProjectRepositoryException;
     Role selectById(Integer id) throws CRMProjectRepositoryException;
     Role add(Role role) throws CRMProjectRepositoryException;
-    List<Role> addAll(List<Role> roles) throws CRMProjectRepositoryException;
     Role update(Role role) throws CRMProjectRepositoryException;
+
 }

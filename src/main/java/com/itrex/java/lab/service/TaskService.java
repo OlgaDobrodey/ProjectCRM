@@ -10,10 +10,10 @@ public interface TaskService {
 
     List<TaskDTO> getAll() throws CRMProjectServiceException;
     TaskDTO getById(Integer id) throws CRMProjectServiceException;
-    List<TaskDTO> getAllTasksByUser(Integer idUser) throws CRMProjectServiceException;
+    List<TaskDTO> getAllTasksByUserId(Integer userId) throws CRMProjectServiceException;
     TaskDTO add(TaskDTO task) throws CRMProjectServiceException;
-    List<TaskDTO> addAll(List<TaskDTO> tasks) throws CRMProjectServiceException;
     TaskDTO update(TaskDTO task) throws CRMProjectServiceException;
-    void removeAllTasksByUser(Integer IdUser) throws CRMProjectServiceException;
-    void remove(Integer idTask) throws CRMProjectServiceException;
+    void removeAllTasksByUser(Integer userId) throws CRMProjectServiceException;
+    void remove(Integer taskId) throws CRMProjectServiceException;
+
 }

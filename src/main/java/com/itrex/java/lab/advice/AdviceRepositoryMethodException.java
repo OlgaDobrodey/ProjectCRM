@@ -9,14 +9,14 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Aspect
 @Component
-
 public class AdviceRepositoryMethodException {
 
-    private static final String MESSAGE_LOG_FATAL_REPOSITORY_METHOD = "\n\nERROR: %s\n\n";
+    private static final String MESSAGE_LOG_FATAL_REPOSITORY_METHOD = "\nERROR: %s\n";
 
     @AfterThrowing(value = "execution(* com.itrex.java.lab.repository.*.*(..))", throwing = "ex")
     public void methodLoggingException(JoinPoint jp, Exception ex) {
         log.error(String.format(MESSAGE_LOG_FATAL_REPOSITORY_METHOD,
                 jp.getSignature().toLongString()), ex);
     }
+
 }

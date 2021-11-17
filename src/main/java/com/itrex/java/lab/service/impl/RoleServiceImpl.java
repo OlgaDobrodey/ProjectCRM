@@ -5,7 +5,7 @@ import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.exceptions.CRMProjectServiceException;
 import com.itrex.java.lab.repository.RoleRepository;
 import com.itrex.java.lab.service.RoleService;
-import com.itrex.java.lab.utils.Convert;
+import com.itrex.java.lab.utils.ConverterUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.itrex.java.lab.utils.Convert.convertRoleToDto;
-import static com.itrex.java.lab.utils.Convert.convertRoleToEntity;
+import static com.itrex.java.lab.utils.ConverterUtils.convertRoleToDto;
+import static com.itrex.java.lab.utils.ConverterUtils.convertRoleToEntity;
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -31,7 +31,7 @@ public class RoleServiceImpl implements RoleService {
     public List<RoleDTO> getAllRole() throws CRMProjectServiceException {
         try {
             return roleRepository.selectAll().stream()
-                    .map(Convert::convertRoleToDto)
+                    .map(ConverterUtils::convertRoleToDto)
                     .collect(Collectors.toList());
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: GET ALL ROLE:", ex);
@@ -42,7 +42,7 @@ public class RoleServiceImpl implements RoleService {
     public RoleDTO getById(Integer id) throws CRMProjectServiceException {
         try {
             return Optional.ofNullable(roleRepository.selectById(id))
-                    .map(Convert::convertRoleToDto)
+                    .map(ConverterUtils::convertRoleToDto)
                     .orElse(null);
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: SELECT ROLE BY ID: ", ex);
@@ -70,4 +70,5 @@ public class RoleServiceImpl implements RoleService {
             throw new CRMProjectServiceException("ERROR SERVICE: UPDATE ROLE - " + roleDTO.getRoleName() + " : ", ex);
         }
     }
+
 }

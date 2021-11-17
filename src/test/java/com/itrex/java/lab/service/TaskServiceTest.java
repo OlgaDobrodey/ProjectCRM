@@ -19,11 +19,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.itrex.java.lab.repository.RepositoryTestUtils.createTestTasksWithId;
 import static com.itrex.java.lab.repository.RepositoryTestUtils.createTestUsersWithId;
-import static com.itrex.java.lab.utils.Convert.convertTaskToDto;
+import static com.itrex.java.lab.utils.ConverterUtils.convertTaskToDto;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -116,7 +115,7 @@ public class TaskServiceTest {
         when(taskRepository.selectAllTasksByUserId(id)).thenReturn(tasks);
 
         //when
-        List<TaskDTO> actual = taskService.getAllTasksByUser(id);
+        List<TaskDTO> actual = taskService.getAllTasksByUserId(id);
 
         //then
         assertEquals(1, actual.get(0).getId());
@@ -160,45 +159,6 @@ public class TaskServiceTest {
         //then
         assertThrows(CRMProjectServiceException.class, () -> taskService.add(convertTaskToDto(task)));
         verify(taskRepository).add(task);
-    }
-
-    @Test
-    void addAll_validData_existTaskDTO_returnTaskDTOTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
-        //given
-
-        List<Task> tasks = RepositoryTestUtils.createTestTasks(2);
-        tasks.get(0).setId(1);
-        tasks.get(1).setId(2);
-        when(taskRepository.addAll(tasks)).thenReturn(tasks);
-        List<TaskDTO> taskDTO = tasks.stream().map(task -> convertTaskToDto(task)).collect(Collectors.toList());
-
-        //when
-        List<TaskDTO> actual = taskService.addAll(taskDTO);
-
-        //then
-        assertEquals(1, actual.get(0).getId());
-        assertEquals("Task test 0", actual.get(0).getTitle(), "assert Title");
-        assertEquals(Status.NEW, actual.get(0).getStatus());
-        assertEquals(LocalDate.of(2001, 1, 1), actual.get(0).getDeadline());
-        assertEquals("Task test info 0", actual.get(0).getInfo());
-        assertEquals(2, actual.get(1).getId());
-        assertEquals("Task test 1", actual.get(1).getTitle(), "assert Title");
-        assertEquals(Status.NEW, actual.get(1).getStatus());
-        assertEquals(LocalDate.of(2001, 1, 1), actual.get(1).getDeadline());
-        assertEquals("Task test info 1", actual.get(1).getInfo());
-        verify(taskRepository).addAll(tasks);
-    }
-
-    @Test
-    void addAll_existCopyTaskDTOById2_returnThrowServiceExceptionTypeTest() throws CRMProjectRepositoryException {
-        //given && when
-        List<Task> tasks = RepositoryTestUtils.createTestTasks(2);
-        when(taskRepository.addAll(tasks)).thenThrow(CRMProjectRepositoryException.class);
-        List<TaskDTO> taskDTOS = tasks.stream().map(task -> convertTaskToDto(task)).collect(Collectors.toList());
-
-        //then
-        assertThrows(CRMProjectServiceException.class, () -> taskService.addAll(taskDTOS));
-        verify(taskRepository).addAll(tasks);
     }
 
     @Test
@@ -273,4 +233,5 @@ public class TaskServiceTest {
         verify(userService).removeAllUsersByTask(task.getId());
         verify(taskRepository).remove(task.getId());
     }
+
 }

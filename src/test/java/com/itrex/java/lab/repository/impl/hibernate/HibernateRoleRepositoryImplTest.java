@@ -11,5 +11,6 @@ class HibernateRoleRepositoryImplTest extends AbstractRoleRepositoryTest {
         super();
         postConstruct(roleRepository);
     }
+
 }
 

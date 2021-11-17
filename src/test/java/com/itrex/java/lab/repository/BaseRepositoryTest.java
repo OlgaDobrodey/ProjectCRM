@@ -22,5 +22,6 @@ public abstract class BaseRepositoryTest {
     public void cleanDB() {
         flyway.clean();
     }
+
 }
 

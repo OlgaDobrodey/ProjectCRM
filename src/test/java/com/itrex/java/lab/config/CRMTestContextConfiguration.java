@@ -41,7 +41,6 @@ public class CRMTestContextConfiguration {
     @Value("${hibernate.format_sql.property}")
     String formatSql;
 
-
     @Bean(initMethod = "migrate")
     public Flyway flyway() {
         return Flyway.configure()
@@ -92,4 +91,5 @@ public class CRMTestContextConfiguration {
         txManager.setSessionFactory(sessionFactory().getObject());
         return txManager;
     }
+
 }

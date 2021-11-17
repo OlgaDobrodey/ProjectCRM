@@ -9,7 +9,7 @@ import com.itrex.java.lab.repository.TaskRepository;
 import com.itrex.java.lab.repository.UserRepository;
 import com.itrex.java.lab.service.TaskService;
 import com.itrex.java.lab.service.UserService;
-import com.itrex.java.lab.utils.Convert;
+import com.itrex.java.lab.utils.ConverterUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.itrex.java.lab.utils.Convert.convertTaskToDto;
-import static com.itrex.java.lab.utils.Convert.convertTaskToEntity;
+import static com.itrex.java.lab.utils.ConverterUtils.convertTaskToDto;
+import static com.itrex.java.lab.utils.ConverterUtils.convertTaskToEntity;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -39,7 +39,7 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskDTO> getAll() throws CRMProjectServiceException {
         try {
             return taskRepository.selectAll().stream()
-                    .map(Convert::convertTaskToDto)
+                    .map(ConverterUtils::convertTaskToDto)
                     .collect(Collectors.toList());
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: GET ALL TASK:", ex);
@@ -57,9 +57,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDTO> getAllTasksByUser(Integer id) throws CRMProjectServiceException {
+    public List<TaskDTO> getAllTasksByUserId(Integer userId) throws CRMProjectServiceException {
         try {
-            return taskRepository.selectAllTasksByUserId(id).stream()
+            return taskRepository.selectAllTasksByUserId(userId).stream()
                     .map(task -> convertTaskToDto(task))
                     .collect(Collectors.toList());
         } catch (CRMProjectRepositoryException ex) {
@@ -73,18 +73,6 @@ public class TaskServiceImpl implements TaskService {
             return convertTaskToDto(taskRepository.add(convertTaskToEntity(task)));
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: ADD TASK:", ex);
-        }
-    }
-
-    @Override
-    public List<TaskDTO> addAll(List<TaskDTO> tasksDTO) throws CRMProjectServiceException {
-        try {
-            List<Task> tasks = tasksDTO.stream().map(Convert::convertTaskToEntity).collect(Collectors.toList());
-            return taskRepository.addAll(tasks)
-                    .stream().map(Convert::convertTaskToDto)
-                    .collect(Collectors.toList());
-        } catch (CRMProjectRepositoryException ex) {
-            throw new CRMProjectServiceException("ERROR SERVICE: ADD ALL TASKs:", ex);
         }
     }
 
@@ -103,9 +91,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public void removeAllTasksByUser(Integer idUser) throws CRMProjectServiceException {
+    public void removeAllTasksByUser(Integer userId) throws CRMProjectServiceException {
         try {
-            User user = userRepository.selectById(idUser);
+            User user = userRepository.selectById(userId);
             user.setTasks(new ArrayList<>());
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: DELETE ALL TASKS BY USER:", ex);
@@ -114,12 +102,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public void remove(Integer idTask) throws CRMProjectServiceException {
+    public void remove(Integer taskId) throws CRMProjectServiceException {
         try {
-            userService.removeAllUsersByTask(idTask);
-            taskRepository.remove(idTask);
+            userService.removeAllUsersByTask(taskId);
+            taskRepository.remove(taskId);
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: DELETE TASK:", ex);
         }
     }
+
 }

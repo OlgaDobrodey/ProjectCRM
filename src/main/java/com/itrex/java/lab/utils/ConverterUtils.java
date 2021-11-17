@@ -7,7 +7,7 @@ import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.entity.User;
 
-public class Convert {
+public class ConverterUtils {
 
     public static RoleDTO convertRoleToDto(Role role) {
         return RoleDTO.builder()
@@ -16,11 +16,11 @@ public class Convert {
                 .build();
     }
 
-
     public static Role convertRoleToEntity(RoleDTO roleDTO) {
         Role role = new Role();
         role.setRoleName(roleDTO.getRoleName());
         role.setId(roleDTO.getId());
+
         return role;
     }
 
@@ -43,6 +43,7 @@ public class Convert {
         user.setRole(convertRoleToEntity(userDTO.getRole()));
         user.setLastName(userDTO.getLastName());
         user.setFirstName(userDTO.getFirstName());
+
         return user;
     }
 
@@ -63,6 +64,8 @@ public class Convert {
         task.setStatus(taskDTO.getStatus());
         task.setInfo(taskDTO.getInfo());
         task.setDeadline(taskDTO.getDeadline());
+
         return task;
     }
+
 }

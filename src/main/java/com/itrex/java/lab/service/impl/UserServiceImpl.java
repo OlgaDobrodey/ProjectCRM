@@ -8,7 +8,7 @@ import com.itrex.java.lab.exceptions.CRMProjectServiceException;
 import com.itrex.java.lab.repository.TaskRepository;
 import com.itrex.java.lab.repository.UserRepository;
 import com.itrex.java.lab.service.UserService;
-import com.itrex.java.lab.utils.Convert;
+import com.itrex.java.lab.utils.ConverterUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.itrex.java.lab.utils.Convert.convertUserToDto;
-import static com.itrex.java.lab.utils.Convert.convertUserToEntity;
+import static com.itrex.java.lab.utils.ConverterUtils.convertUserToDto;
+import static com.itrex.java.lab.utils.ConverterUtils.convertUserToEntity;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -55,8 +55,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDTO> getAllUsersByTaskDTO(Integer idTask) throws CRMProjectServiceException {
         try {
-            return userRepository.selectAllUsersByTask(idTask)
-                    .stream().map(Convert::convertUserToDto)
+            return userRepository.selectAllUsersByTaskId(idTask)
+                    .stream().map(ConverterUtils::convertUserToDto)
                     .collect(Collectors.toList());
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: GET ALL USER BY TASK:", ex);
@@ -69,16 +69,6 @@ public class UserServiceImpl implements UserService {
             return convertUserToDto(userRepository.add(convertUserToEntity(user)));
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: ADD USER:", ex);
-        }
-    }
-
-    @Override
-    public List<UserDTO> addAll(List<UserDTO> usersDTO) throws CRMProjectServiceException {
-        try {
-            List<User> users = usersDTO.stream().map(userDTO -> convertUserToEntity(userDTO)).collect(Collectors.toList());
-            return userRepository.addAll(users).stream().map(user -> convertUserToDto(user)).collect(Collectors.toList());
-        } catch (CRMProjectRepositoryException ex) {
-            throw new CRMProjectServiceException("ERROR SERVICE: ADD ALL USER:", ex);
         }
     }
 
@@ -140,11 +130,12 @@ public class UserServiceImpl implements UserService {
     public void removeAllUsersByTask(Integer idTask) throws CRMProjectServiceException {
         try {
 
-            List<User> users = userRepository.selectAllUsersByTask(idTask);
+            List<User> users = userRepository.selectAllUsersByTaskId(idTask);
             users.forEach(user -> user.getTasks().removeIf(task -> task.getId() == idTask));
 
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: DELETE ALL TASK:", ex);
         }
     }
+
 }

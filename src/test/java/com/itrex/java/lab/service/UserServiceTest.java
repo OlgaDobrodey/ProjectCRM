@@ -16,12 +16,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.itrex.java.lab.repository.RepositoryTestUtils.*;
-import static com.itrex.java.lab.utils.Convert.convertUserToDto;
+import static com.itrex.java.lab.utils.ConverterUtils.convertUserToDto;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -113,7 +111,7 @@ public class UserServiceTest {
         List<User> users = RepositoryTestUtils.createTestUsers(2);
         users.get(0).setId(1);
         users.get(1).setId(2);
-        when(userRepository.selectAllUsersByTask(task.getId())).thenReturn(users);
+        when(userRepository.selectAllUsersByTaskId(task.getId())).thenReturn(users);
 
         //when
         List<UserDTO> actual = userService.getAllUsersByTaskDTO(task.getId());
@@ -131,7 +129,7 @@ public class UserServiceTest {
         assertEquals("ADMIN", actual.get(1).getRole().getRoleName());
         assertEquals("Ivanov 1", actual.get(1).getLastName());
         assertEquals("Ivan 1", actual.get(1).getFirstName());
-        verify(userRepository).selectAllUsersByTask(task.getId());
+        verify(userRepository).selectAllUsersByTaskId(task.getId());
     }
 
     @Test
@@ -164,44 +162,6 @@ public class UserServiceTest {
         assertThrows(CRMProjectServiceException.class, () -> userService.add(convertUserToDto(user)));
         verify(userRepository).add(user);
     }
-
-    @Test
-    void addAll_existUserDTO_returnUserDTOTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
-        //given
-        List<User> testUsers = createTestUsersWithId(10, 2);
-        when(userRepository.addAll(testUsers)).thenReturn(testUsers);
-
-        //when
-        List<UserDTO> actual = userService.addAll(testUsers.stream().
-                map(user -> convertUserToDto(user))
-                .collect(Collectors.toList()));
-
-        //then
-        assertEquals(11, actual.get(0).getId());
-        assertEquals("Test 10", actual.get(0).getLogin());
-        assertEquals("12310", actual.get(0).getPsw());
-        assertEquals("ADMIN", actual.get(0).getRole().getRoleName());
-        assertEquals("Ivanov 10", actual.get(0).getLastName());
-        assertEquals("Ivan 10", actual.get(0).getFirstName());
-        assertEquals(12, actual.get(1).getId());
-        assertEquals("Test 11", actual.get(1).getLogin());
-        assertEquals("12311", actual.get(1).getPsw());
-        assertEquals("ADMIN", actual.get(1).getRole().getRoleName());
-        assertEquals("Ivanov 11", actual.get(1).getLastName());
-        assertEquals("Ivan 11", actual.get(1).getFirstName());
-        verify(userRepository).addAll(testUsers);
-    }
-
-    @Test
-    void addAll_existCopyUserById2_shouldThrowServiceExceptionTest() throws CRMProjectRepositoryException {
-        //given && when
-        when(userRepository.addAll(new ArrayList<>())).thenThrow(CRMProjectRepositoryException.class);
-
-        //then
-        assertThrows(CRMProjectServiceException.class, () -> userService.addAll(new ArrayList<>()));
-        verify(userRepository).addAll(new ArrayList<>());
-    }
-
 
     @Test
     void update_validData_existUser_returnUserTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
@@ -332,13 +292,14 @@ public class UserServiceTest {
         //given
         User user = createTestUsersWithId(1, 1).get(0);
         Task task = createTestTasksWithId(1, 1).get(0);
-        when(userRepository.selectAllUsersByTask(task.getId())).thenReturn(List.of(user));
+        when(userRepository.selectAllUsersByTaskId(task.getId())).thenReturn(List.of(user));
 
         //when
         userService.removeAllUsersByTask(task.getId());
 
         //then
-        verify(userRepository).selectAllUsersByTask(any());
+        verify(userRepository).selectAllUsersByTaskId(any());
     }
+
 }
 

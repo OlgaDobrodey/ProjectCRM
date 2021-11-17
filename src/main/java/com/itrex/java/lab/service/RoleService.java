@@ -12,5 +12,4 @@ public interface RoleService {
     RoleDTO addRole(RoleDTO role) throws CRMProjectServiceException;
     RoleDTO updateRole(RoleDTO role) throws CRMProjectServiceException;
 
-
 }

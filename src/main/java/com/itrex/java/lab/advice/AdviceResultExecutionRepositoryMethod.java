@@ -12,10 +12,11 @@ import org.springframework.stereotype.Component;
 public class AdviceResultExecutionRepositoryMethod {
 
     private static final String RESULT_REPOSITORY_METHOD_NAME_START_SELECT =
-            "\n\n\nREPOSITORY'S METHOD:\n %s\n result: %s\n";
+            "\nREPOSITORY'S METHOD:\n %s\n result: %s\n";
 
     @AfterReturning(value = "execution(* com.itrex.java.lab.repository.*.select*(..))", returning = "entity")
     public void repMethodStartNameSelect(JoinPoint jp, Object entity) {
         log.info(String.format(RESULT_REPOSITORY_METHOD_NAME_START_SELECT, jp.getSignature().toLongString(), entity));
     }
+
 }

@@ -83,7 +83,7 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
         Integer idTask = 2;
 
         //when
-        List<User> actual = repository.selectAllUsersByTask(idTask);
+        List<User> actual = repository.selectAllUsersByTaskId(idTask);
 
         //then
         assertEquals(1, actual.get(0).getId());
@@ -124,39 +124,6 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
 
         //then
         assertThrows(CRMProjectRepositoryException.class, () -> repository.add(user));
-    }
-
-    @Test
-    void addAll_validData_existUser_returnUserTest() throws CRMProjectRepositoryException {
-        //given
-        List<User> testUsers = RepositoryTestUtils.createTestUsers(2);
-
-        //when
-        List<User> actual = repository.addAll(testUsers);
-
-        //then
-        assertEquals(11, actual.get(0).getId());
-        assertEquals("Test 0", actual.get(0).getLogin());
-        assertEquals("1230", actual.get(0).getPsw());
-        assertEquals("ADMIN", actual.get(0).getRole().getRoleName());
-        assertEquals("Ivanov 0", actual.get(0).getLastName());
-        assertEquals("Ivan 0", actual.get(0).getFirstName());
-        assertEquals(12, actual.get(1).getId());
-        assertEquals("Test 1", actual.get(1).getLogin());
-        assertEquals("1231", actual.get(1).getPsw());
-        assertEquals("ADMIN", actual.get(1).getRole().getRoleName());
-        assertEquals("Ivanov 1", actual.get(1).getLastName());
-        assertEquals("Ivan 1", actual.get(1).getFirstName());
-    }
-
-    @Test
-    void addAll_existCopyUserById2_shouldThrowRepositoryExceptionTest() throws CRMProjectRepositoryException {
-        //given && when
-        User test1 = RepositoryTestUtils.createTestUsers(1).get(0);
-        User test2 = repository.selectById(2);  //There is Role "User" in Data Base
-
-        //then
-        assertThrows(CRMProjectRepositoryException.class, () -> repository.addAll(List.of(test1, test2)));
     }
 
     @Test
@@ -217,5 +184,6 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
         //then
         assertThrows(CRMProjectRepositoryException.class, () -> repository.remove(idUserNoDB));
     }
+
 }
 

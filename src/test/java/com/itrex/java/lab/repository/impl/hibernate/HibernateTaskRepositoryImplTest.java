@@ -11,4 +11,5 @@ class HibernateTaskRepositoryImplTest extends AbstractTaskRepositoryTest {
         super();
         postConstruct(taskRepository);
     }
+
 }

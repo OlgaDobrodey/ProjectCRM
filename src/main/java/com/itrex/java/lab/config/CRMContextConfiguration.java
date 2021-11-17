@@ -113,4 +113,5 @@ public class CRMContextConfiguration {
     public void LoggerConfigProdProfile() {
         PropertyConfigurator.configure(loggingProfileDebug);
     }
+
 }

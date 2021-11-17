@@ -100,7 +100,7 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
         assertEquals("task info 4", actual.get(0).getInfo());
         assertEquals(11, actual.get(2).getId());
         assertEquals("task title 11", actual.get(2).getTitle(), "assert Title");
-        assertEquals(Status.DELETED, actual.get(2).getStatus());
+        assertEquals(Status.DONE, actual.get(2).getStatus());
         assertEquals(LocalDate.of(2012, 10, 23), actual.get(2).getDeadline());
         assertEquals("task info 11", actual.get(2).getInfo());
     }
@@ -128,37 +128,6 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
 
         //then
         assertThrows(CRMProjectRepositoryException.class, () -> repository.add(task));
-    }
-
-    @Test
-    void addAll_validData_existTask_returnTaskTest() throws CRMProjectRepositoryException {
-        //given
-        List<Task> testTasks = RepositoryTestUtils.createTestTasks(2);
-
-        //when
-        List<Task> actual = repository.addAll(testTasks);
-
-        //then
-        assertEquals(21, actual.get(0).getId());
-        assertEquals("Task test 0", actual.get(0).getTitle(), "assert Title");
-        assertEquals(Status.NEW, actual.get(0).getStatus());
-        assertEquals(LocalDate.of(2001, 1, 1), actual.get(0).getDeadline());
-        assertEquals("Task test info 0", actual.get(0).getInfo());
-        assertEquals(22, actual.get(1).getId());
-        assertEquals("Task test 1", actual.get(1).getTitle(), "assert Title");
-        assertEquals(Status.NEW, actual.get(1).getStatus());
-        assertEquals(LocalDate.of(2001, 1, 1), actual.get(1).getDeadline());
-        assertEquals("Task test info 1", actual.get(1).getInfo());
-    }
-
-    @Test
-    void addAll_existCopyTaskById2_returnThrowRepositoryExceptionTypeTest() throws CRMProjectRepositoryException {
-        //given && when
-        Task test1 = RepositoryTestUtils.createTestTasks(1).get(0);
-        Task test2 = repository.selectById(2);  //There is Role "User" in Data Base
-
-        //then
-        assertThrows(CRMProjectRepositoryException.class, () -> repository.addAll(List.of(test1, test2)));
     }
 
     @Test
@@ -201,4 +170,5 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
         //given && when && then
         assertThrows(CRMProjectRepositoryException.class, () -> repository.remove(25));
     }
+
 }

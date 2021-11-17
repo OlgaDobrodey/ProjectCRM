@@ -11,9 +11,7 @@ public interface TaskRepository {
     Task selectById(Integer id) throws CRMProjectRepositoryException;
     List<Task> selectAllTasksByUserId(Integer idUser) throws CRMProjectRepositoryException;
     Task add(Task task) throws CRMProjectRepositoryException;
-    List<Task> addAll(List<Task> tasks) throws CRMProjectRepositoryException;
     Task update(Task task) throws CRMProjectRepositoryException;
-    void remove(Integer idTsk) throws CRMProjectRepositoryException;
-
+    void remove(Integer taskId) throws CRMProjectRepositoryException;
 
 }
