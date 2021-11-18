@@ -16,35 +16,15 @@ public class ConverterUtils {
                 .build();
     }
 
-    public static Role convertRoleToEntity(RoleDTO roleDTO) {
-        Role role = new Role();
-        role.setRoleName(roleDTO.getRoleName());
-        role.setId(roleDTO.getId());
-
-        return role;
-    }
-
     public static UserDTO convertUserToDto(User user) {
         return UserDTO.builder()
                 .id(user.getId())
                 .login(user.getLogin())
                 .psw(user.getPsw())
-                .role(convertRoleToDto(user.getRole()))
+                .roleId(user.getRole().getId())
                 .lastName(user.getLastName())
                 .firstName(user.getFirstName())
                 .build();
-    }
-
-    public static User convertUserToEntity(UserDTO userDTO) {
-        User user = new User();
-        user.setId(userDTO.getId());
-        user.setLogin(userDTO.getLogin());
-        user.setPsw(userDTO.getPsw());
-        user.setRole(convertRoleToEntity(userDTO.getRole()));
-        user.setLastName(userDTO.getLastName());
-        user.setFirstName(userDTO.getFirstName());
-
-        return user;
     }
 
     public static TaskDTO convertTaskToDto(Task task) {
@@ -55,17 +35,6 @@ public class ConverterUtils {
                 .info(task.getInfo())
                 .deadline(task.getDeadline())
                 .build();
-    }
-
-    public static Task convertTaskToEntity(TaskDTO taskDTO) {
-        Task task = new Task();
-        task.setId(taskDTO.getId());
-        task.setTitle(taskDTO.getTitle());
-        task.setStatus(taskDTO.getStatus());
-        task.setInfo(taskDTO.getInfo());
-        task.setDeadline(taskDTO.getDeadline());
-
-        return task;
     }
 
 }

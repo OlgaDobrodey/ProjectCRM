@@ -1,13 +1,10 @@
 package com.itrex.java.lab.entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +16,9 @@ import java.util.List;
 @Table(name = "task", schema = "CRM")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @EqualsAndHashCode(exclude = {"users"})
 public class Task implements Serializable {
 
@@ -37,7 +37,7 @@ public class Task implements Serializable {
     private String info;
 
     @ManyToMany(mappedBy = "tasks")
-    private List<User> users = new ArrayList<>();
+    private List<User> users;
 
     @Override
     public String toString() {

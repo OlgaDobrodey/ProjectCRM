@@ -13,11 +13,12 @@ public class Runner {
     public static void main(String[] args) {
         try {
             System.out.println("===================START APP======================");
+
             System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "info_log");
             ApplicationContext context = new AnnotationConfigApplicationContext(CRMContextConfiguration.class);
 
             UserService service = context.getBean(UserService.class);
-            System.out.println(service.getAllUsersByTaskDTO(2));
+            System.out.println(service.getAllUsersFromTaskId(2));
 
             log.info("info log");
             log.error("error log");

@@ -13,7 +13,7 @@ public interface TaskService {
     List<TaskDTO> getAllTasksByUserId(Integer userId) throws CRMProjectServiceException;
     TaskDTO add(TaskDTO task) throws CRMProjectServiceException;
     TaskDTO update(TaskDTO task) throws CRMProjectServiceException;
-    void removeAllTasksByUser(Integer userId) throws CRMProjectServiceException;
+    void revokeAllTasksFromUserId(Integer userId) throws CRMProjectServiceException;
     void remove(Integer taskId) throws CRMProjectServiceException;
 
 }

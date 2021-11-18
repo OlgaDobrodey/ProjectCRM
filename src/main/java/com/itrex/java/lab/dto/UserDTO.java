@@ -19,7 +19,7 @@ public class UserDTO {
     private String psw;
     private String firstName;
     private String lastName;
-    private RoleDTO role;
+    private Integer roleId;
 
     @Override
     public String toString() {
@@ -29,7 +29,7 @@ public class UserDTO {
                 ", psw='" + psw + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", role=" + role +
+                ", role=" + roleId +
                 '}';
     }
 

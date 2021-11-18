@@ -1,6 +1,7 @@
 package com.itrex.java.lab.service.impl;
 
 import com.itrex.java.lab.dto.TaskDTO;
+import com.itrex.java.lab.entity.Status;
 import com.itrex.java.lab.entity.Task;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
@@ -19,7 +20,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.itrex.java.lab.utils.ConverterUtils.convertTaskToDto;
-import static com.itrex.java.lab.utils.ConverterUtils.convertTaskToEntity;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -33,7 +33,7 @@ public class TaskServiceImpl implements TaskService {
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
         this.userService = userService;
-    }
+          }
 
     @Override
     public List<TaskDTO> getAll() throws CRMProjectServiceException {
@@ -60,7 +60,7 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskDTO> getAllTasksByUserId(Integer userId) throws CRMProjectServiceException {
         try {
             return taskRepository.selectAllTasksByUserId(userId).stream()
-                    .map(task -> convertTaskToDto(task))
+                    .map(ConverterUtils::convertTaskToDto)
                     .collect(Collectors.toList());
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: SELECT TASK BY USER: ", ex);
@@ -70,7 +70,13 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskDTO add(TaskDTO task) throws CRMProjectServiceException {
         try {
-            return convertTaskToDto(taskRepository.add(convertTaskToEntity(task)));
+            Task addTask = Task.builder()
+                    .title(task.getTitle())
+                    .status(Status.NEW)
+                    .deadline(task.getDeadline())
+                    .info(task.getInfo())
+                    .build();
+            return convertTaskToDto(taskRepository.add(addTask));
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: ADD TASK:", ex);
         }
@@ -79,10 +85,15 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskDTO update(TaskDTO task) throws CRMProjectServiceException {
         try {
-            if (getById(task.getId()) == null) {
+            Task update = taskRepository.selectById(task.getId());
+            if (update == null) {
                 throw new CRMProjectServiceException("TASK NO FOUND DATA BASE");
             }
-            return convertTaskToDto(taskRepository.update(convertTaskToEntity(task)));
+            update.setTitle(task.getTitle());
+            update.setStatus(task.getStatus());
+            update.setDeadline(task.getDeadline());
+            update.setInfo(task.getInfo());
+            return convertTaskToDto(taskRepository.update(update));
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: UPDATE TASK:", ex);
         }
@@ -91,7 +102,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public void removeAllTasksByUser(Integer userId) throws CRMProjectServiceException {
+    public void revokeAllTasksFromUserId(Integer userId) throws CRMProjectServiceException {
         try {
             User user = userRepository.selectById(userId);
             user.setTasks(new ArrayList<>());
@@ -104,7 +115,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public void remove(Integer taskId) throws CRMProjectServiceException {
         try {
-            userService.removeAllUsersByTask(taskId);
+            userService.revokeAllUsersFromTaskId(taskId);
             taskRepository.remove(taskId);
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: DELETE TASK:", ex);

@@ -1,12 +1,9 @@
 package com.itrex.java.lab.entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +15,9 @@ import java.util.List;
 @Table(name = "user", schema = "CRM")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @EqualsAndHashCode
 public class User implements Serializable {
 
@@ -32,7 +32,7 @@ public class User implements Serializable {
     @Column(name = "last_name")
     private String lastName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private Role role;
 
@@ -42,7 +42,7 @@ public class User implements Serializable {
             joinColumns = {@JoinColumn(name = "users_id")},
             inverseJoinColumns = {@JoinColumn(name = "tasks_id")}
     )
-    private List<Task> tasks = new ArrayList<>();
+    private List<Task> tasks;
 
     @Override
     public String toString() {

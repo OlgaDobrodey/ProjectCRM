@@ -1,6 +1,7 @@
 package com.itrex.java.lab.service.impl;
 
 import com.itrex.java.lab.dto.RoleDTO;
+import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.exceptions.CRMProjectServiceException;
 import com.itrex.java.lab.repository.RoleRepository;
@@ -15,7 +16,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.itrex.java.lab.utils.ConverterUtils.convertRoleToDto;
-import static com.itrex.java.lab.utils.ConverterUtils.convertRoleToEntity;
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -52,7 +52,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public RoleDTO addRole(RoleDTO role) throws CRMProjectServiceException {
         try {
-            return convertRoleToDto(roleRepository.add(convertRoleToEntity(role)));
+            Role newRole = Role.builder().roleName(role.getRoleName()).build();
+            return convertRoleToDto(roleRepository.add(newRole));
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: ADD ROLE:", ex);
         }
@@ -62,10 +63,12 @@ public class RoleServiceImpl implements RoleService {
     @Transactional
     public RoleDTO updateRole(RoleDTO roleDTO) throws CRMProjectServiceException {
         try {
-            if (roleRepository.selectById(roleDTO.getId()) == null) {
+            Role role = roleRepository.selectById(roleDTO.getId());
+            if (role == null) {
                 throw new CRMProjectServiceException("ERROR " + roleDTO + "NOT FOUND IN DATA BASE");
             }
-            return convertRoleToDto(roleRepository.update(convertRoleToEntity(roleDTO)));
+            role.setRoleName(roleDTO.getRoleName());
+            return convertRoleToDto(roleRepository.update(role));
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: UPDATE ROLE - " + roleDTO.getRoleName() + " : ", ex);
         }

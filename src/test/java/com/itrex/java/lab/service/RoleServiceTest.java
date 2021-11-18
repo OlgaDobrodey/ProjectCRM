@@ -6,7 +6,6 @@ import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.exceptions.CRMProjectServiceException;
 import com.itrex.java.lab.repository.RepositoryTestUtils;
 import com.itrex.java.lab.repository.RoleRepository;
-import com.itrex.java.lab.repository.UserRepository;
 import com.itrex.java.lab.service.impl.RoleServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +15,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.itrex.java.lab.utils.ConverterUtils.convertRoleToDto;
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,13 +28,10 @@ class RoleServiceTest {
     private RoleServiceImpl roleService;
     @Mock
     private RoleRepository roleRepository;
-    @Mock
-    private UserRepository userRepository;
 
     @Test
     void getAllRole_returnRoleDTOTest() throws CRMProjectServiceException, CRMProjectRepositoryException {
         //given && when
-        List<RoleDTO> data = new ArrayList<>();
         Mockito.when(roleRepository.selectAll()).thenReturn(new ArrayList<>());
 
         //then
@@ -75,10 +70,10 @@ class RoleServiceTest {
     @Test
     void getById_existIDRoleDTONotDataBase_returnNullTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
         //given
-        Integer idRole = 28;
-        Mockito.when(roleRepository.selectById(idRole)).thenReturn(null);
+        Integer roleId = 28;
+        Mockito.when(roleRepository.selectById(roleId)).thenReturn(null);
         //when
-        RoleDTO actual = roleService.getById(idRole);
+        RoleDTO actual = roleService.getById(roleId);
 
         //then
         Mockito.verify(roleRepository, Mockito.times(1)).selectById(any());
