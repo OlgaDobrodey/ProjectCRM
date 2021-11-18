@@ -221,7 +221,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void addTaskByUser_existIdTaskAndIdUserTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void assignTaskFromUser_existIdTaskAndIdUserTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
         //given
         User user = createTestUsersWithId(1, 1).get(0);
         Task task = createTestTasksWithId(1, 1).get(0);
@@ -233,6 +233,7 @@ public class UserServiceTest {
         userService.assignTaskFromUser(task.getId(), user.getId());
 
         //then
+        assertEquals(Status.PROGRESS,task.getStatus());
         verify(userRepository).selectById(any());
         verify(taskRepository).selectById(any());
     }

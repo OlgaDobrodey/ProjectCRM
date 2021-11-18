@@ -2,6 +2,7 @@ package com.itrex.java.lab.service;
 
 
 import com.itrex.java.lab.dto.TaskDTO;
+import com.itrex.java.lab.entity.Status;
 import com.itrex.java.lab.exceptions.CRMProjectServiceException;
 
 import java.util.List;
@@ -15,5 +16,6 @@ public interface TaskService {
     TaskDTO update(TaskDTO task) throws CRMProjectServiceException;
     void revokeAllTasksFromUserId(Integer userId) throws CRMProjectServiceException;
     void remove(Integer taskId) throws CRMProjectServiceException;
+    TaskDTO changeStatusForTaskId(Status status, Integer taskId) throws CRMProjectServiceException;
 
 }

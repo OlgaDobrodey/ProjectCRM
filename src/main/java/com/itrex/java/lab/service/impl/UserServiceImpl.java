@@ -104,9 +104,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void assignTaskFromUser(Integer taskId, Integer userId) throws CRMProjectServiceException {
         try {
+            Task task = taskRepository.selectById(taskId);
             userRepository.selectById(userId)
                     .getTasks()
-                    .add(taskRepository.selectById(taskId));
+                    .add(task);
+            if(task.getStatus().equals(Status.NEW)||task.getStatus().equals(Status.DONE)){
+                task.setStatus(Status.PROGRESS);
+            }
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: ADD TASK BY USER:", ex);
         }
@@ -120,6 +124,9 @@ public class UserServiceImpl implements UserService {
             if (user == null || role == null) {
                 throw new CRMProjectServiceException("ERROR SERVICE: UPDATE USER: USER BY ID "
                         + userDTO.getId() + " NO FOUND DATA BASE");
+            }
+            if( !checkIfValidPassword(user,userDTO.getPsw())){
+                throw new CRMProjectServiceException("ERROR SERVICE: Wrong password");
             }
             user.setLogin(userDTO.getLogin());
             user.setLastName(userDTO.getLastName());

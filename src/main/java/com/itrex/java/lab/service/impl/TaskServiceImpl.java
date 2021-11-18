@@ -33,7 +33,7 @@ public class TaskServiceImpl implements TaskService {
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
         this.userService = userService;
-          }
+    }
 
     @Override
     public List<TaskDTO> getAll() throws CRMProjectServiceException {
@@ -119,6 +119,32 @@ public class TaskServiceImpl implements TaskService {
             taskRepository.remove(taskId);
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: DELETE TASK:", ex);
+        }
+    }
+
+    @Override
+    @Transactional
+    public TaskDTO changeStatusForTaskId(Status status, Integer taskId) throws CRMProjectServiceException {
+        try {
+            Task task = taskRepository.selectById(taskId);
+            if (task == null) {
+                throw new CRMProjectServiceException("TASK SERVICE: changeStatusForTaskId: no found task by Id" + taskId);
+            }
+            List<User> users = task.getUsers();
+            if((users==null)||(users.size()==0)){
+                if(status.equals(Status.PROGRESS)){
+                    throw new CRMProjectServiceException("Wrong status: " + status);
+                }
+            } else {
+                if (status.equals(Status.NEW) || status.equals(Status.DONE)) {
+                    userService.revokeAllUsersFromTaskId(taskId);
+                }
+            }
+            task.setStatus(status);
+            return convertTaskToDto(task);
+        } catch (
+                CRMProjectRepositoryException e) {
+            throw new CRMProjectServiceException("TASK SERVICE: changeStatusForTaskId:", e);
         }
     }
 

@@ -222,7 +222,6 @@ public class TaskServiceTest {
     @Test
     void remove_existTaskDTO_shouldReturnThrowServiceExceptionTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
         //given && when
-        //given
         Task task = RepositoryTestUtils.createTestTasksWithId(0, 1).get(0);
         doNothing().when(userService).revokeAllUsersFromTaskId(task.getId());
         doThrow(CRMProjectRepositoryException.class).when(taskRepository).remove(task.getId());
@@ -231,6 +230,42 @@ public class TaskServiceTest {
         assertThrows(CRMProjectServiceException.class, () -> taskService.remove(1));
         verify(userService).revokeAllUsersFromTaskId(task.getId());
         verify(taskRepository).remove(task.getId());
+    }
+
+    @Test
+    void changeStatusForTaskId_existStatusAndTaskIdWithoutUsers_returnTaskDTO() throws CRMProjectRepositoryException, CRMProjectServiceException {
+        //given
+        Task task = createTestTasksWithId(0, 1).get(0);
+        when(taskRepository.selectById(task.getId())).thenReturn(task);
+
+        //when
+        TaskDTO taskDTO = taskService.changeStatusForTaskId(Status.NEW, task.getId());
+
+        //then
+        assertEquals(Status.NEW, taskDTO.getStatus());
+        verify(taskRepository).selectById(task.getId());
+    }
+
+    @Test
+    void changeStatusForTaskId_existStatusAndTaskId_returnTaskDTO() throws CRMProjectRepositoryException, CRMProjectServiceException {
+        //given
+        Task task = createTestTasksWithId(0, 1).get(0);
+        List<User> users = createTestUsersWithId(0, 2);
+        task.setUsers(users);
+        when(taskRepository.selectById(task.getId())).thenReturn(task);
+
+        //when
+        TaskDTO taskDTOProgress = taskService.changeStatusForTaskId(Status.PROGRESS, task.getId());
+        TaskDTO taskDTONew = taskService.changeStatusForTaskId(Status.NEW, task.getId());
+        TaskDTO taskDTODone = taskService.changeStatusForTaskId(Status.DONE, task.getId());
+
+
+        //then
+        assertEquals(Status.PROGRESS, taskDTOProgress.getStatus());
+        assertEquals(Status.NEW, taskDTONew.getStatus());
+        assertEquals(Status.DONE, taskDTODone.getStatus());
+
+        verify(taskRepository,times(3)).selectById(task.getId());
     }
 
 }
