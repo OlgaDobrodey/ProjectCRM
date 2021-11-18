@@ -99,7 +99,6 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
-
     @Override
     @Transactional
     public void revokeAllTasksFromUserId(Integer userId) throws CRMProjectServiceException {
@@ -131,8 +130,8 @@ public class TaskServiceImpl implements TaskService {
                 throw new CRMProjectServiceException("TASK SERVICE: changeStatusForTaskId: no found task by Id" + taskId);
             }
             List<User> users = task.getUsers();
-            if((users==null)||(users.size()==0)){
-                if(status.equals(Status.PROGRESS)){
+            if ((users == null) || (users.size() == 0)) {
+                if (status.equals(Status.PROGRESS)) {
                     throw new CRMProjectServiceException("Wrong status: " + status);
                 }
             } else {
