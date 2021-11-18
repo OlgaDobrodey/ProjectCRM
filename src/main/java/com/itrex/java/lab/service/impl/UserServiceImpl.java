@@ -1,5 +1,6 @@
 package com.itrex.java.lab.service.impl;
 
+import com.itrex.java.lab.dto.PasswordDTOForChanges;
 import com.itrex.java.lab.dto.UserDTO;
 import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.entity.Status;
@@ -101,7 +102,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void assignTaskFromUserId(Integer taskId, Integer userId) throws CRMProjectServiceException {
+    public void assignTaskFromUser(Integer taskId, Integer userId) throws CRMProjectServiceException {
         try {
             userRepository.selectById(userId)
                     .getTasks()
@@ -116,7 +117,7 @@ public class UserServiceImpl implements UserService {
         try {
             User user = userRepository.selectById(userDTO.getId());
             Role role = roleRepository.selectById(userDTO.getRoleId());
-            if (user == null || role==null) {
+            if (user == null || role == null) {
                 throw new CRMProjectServiceException("ERROR SERVICE: UPDATE USER: USER BY ID "
                         + userDTO.getId() + " NO FOUND DATA BASE");
             }
@@ -127,6 +128,26 @@ public class UserServiceImpl implements UserService {
             return convertUserToDto(userRepository.update(user));
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: UPDATE USER:", ex);
+        }
+    }
+
+    @Override
+    @Transactional
+    public UserDTO updateUserPassword(PasswordDTOForChanges passwordDTO, Integer userId) throws CRMProjectRepositoryException, CRMProjectServiceException {
+        try {
+            if (passwordDTO.getNewPassword().isBlank()) {
+                throw new CRMProjectServiceException("ERROR SERVICE updateUserPassword: newPassword is empty ");
+            }
+
+            User user = userRepository.selectById(userId);
+
+            if (!checkIfValidPassword(user, passwordDTO.getOldPassword())) {
+                throw new CRMProjectServiceException("ERROR SERVICE updateUserPassword: no found on DB user by oldPassword");
+            }
+            user.setPsw(passwordDTO.getNewPassword());
+            return convertUserToDto(user);
+        } catch (CRMProjectRepositoryException e) {
+            throw new CRMProjectServiceException("ERROR SERVICE: updateUserPassword:", e);
         }
     }
 
@@ -145,12 +166,22 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void revokeTaskFromUserId(Integer taskId, Integer userId) throws CRMProjectServiceException {
+    public void revokeTaskFromUser(Integer taskId, Integer userId) throws CRMProjectServiceException {
         try {
             Task task = taskRepository.selectById(taskId);
+            if(task==null){
+                throw new CRMProjectServiceException("ERROR SERVICE: DELETE TASK BY USER: task == null");
+            }
+
+            List<User> users = task.getUsers();
+            if (users.size() == 1) {
+                if (users.get(0).getTasks().get(0).getId().equals(taskId))
+                    task.setStatus(Status.DONE);
+            }
+
             User user = userRepository.selectById(userId);
-            if (user == null || task == null) {
-                throw new CRMProjectServiceException("ERROR SERVICE: DELETE TASK BY USER:");
+            if (user == null) {
+                throw new CRMProjectServiceException("ERROR SERVICE: DELETE TASK BY USER: user == null");
             }
             user.getTasks().remove(task);
         } catch (CRMProjectRepositoryException ex) {
@@ -163,17 +194,19 @@ public class UserServiceImpl implements UserService {
     public void revokeAllUsersFromTaskId(Integer taskId) throws CRMProjectServiceException {
         try {
             Task task = taskRepository.selectById(taskId);
-            List<User> users = task.getUsers();
+            task.setStatus(Status.DONE);
 
-            if (users.size() == 1) {
-                if (users.get(0).getTasks().get(0).getId().equals(taskId))
-                    task.setStatus(Status.DONE);
-            }
-
-            users.forEach(user -> user.getTasks().removeIf(t -> t.getId() == taskId));
+            task.getUsers().forEach(user -> user.getTasks().removeIf(t -> t.getId() == taskId));
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: DELETE ALL TASK:", ex);
         }
+    }
+
+    private boolean checkIfValidPassword(User user, String password) {
+        if (user == null || password == null) {
+            return false;
+        }
+        return user.getPsw().equals(password);
     }
 
 }
