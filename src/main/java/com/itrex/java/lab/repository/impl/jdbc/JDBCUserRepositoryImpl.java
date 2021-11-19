@@ -13,9 +13,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Deprecated
 @Repository
 @Qualifier("JDBCUserRepository")
+@Deprecated
 public class JDBCUserRepositoryImpl implements UserRepository {
 
     private static final String ID_USER_COLUMN = "id";
@@ -29,6 +29,7 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     private static final String SELECT_ALL_QUERY = "SELECT * FROM crm.user";
     private static final String SELECT_USER_BY_ID_QUERY = "SELECT * FROM crm.user WHERE id = ";
     private static final String SELECT_ALL_USERS_FOR_TASK = "SELECT users_id FROM crm.user_task WHERE tasks_id = ";
+    private static final String SELECT_ALL_USERS_BY_ROLE = "SELECT * FROM crm.user WHERE role_id = ";
 
     private static final String INSERT_USER_QUERY = "INSERT INTO crm.user(login, psw, role_id, first_name, last_name) VALUES (?, ?, ?, ?, ?)";
     private static final String UPDATE_USER_QUERY = "UPDATE crm.user SET login=?, psw=?, role_id=?, first_name=?, last_name=?  WHERE id = ?";
@@ -90,6 +91,22 @@ public class JDBCUserRepositoryImpl implements UserRepository {
             }
         } catch (SQLException ex) {
             throw new CRMProjectRepositoryException("ERROR: SELECT ALL USERS FOR TASK: ", ex);
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> selectAllUsersByRoleId(Integer roleId) throws CRMProjectRepositoryException {
+        List<User> users = new ArrayList<>();
+        try (Connection conn = dataSource.getConnection();
+             Statement stm = conn.createStatement();
+             ResultSet resultSet = stm.executeQuery(SELECT_ALL_USERS_BY_ROLE + roleId)) {
+            while (resultSet.next()) {
+                User user = getUser(resultSet);
+                users.add(user);
+            }
+        } catch (SQLException ex) {
+            throw new CRMProjectRepositoryException("ERROR: SELECT ALL USERS FOR USER: ", ex);
         }
         return users;
     }

@@ -8,7 +8,6 @@ import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.exceptions.CRMProjectServiceException;
 import com.itrex.java.lab.repository.RepositoryTestUtils;
 import com.itrex.java.lab.repository.TaskRepository;
-import com.itrex.java.lab.repository.UserRepository;
 import com.itrex.java.lab.service.impl.TaskServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +17,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.itrex.java.lab.repository.RepositoryTestUtils.createTestTasksWithId;
@@ -34,10 +34,6 @@ public class TaskServiceTest {
     private TaskServiceImpl taskService;
     @Mock
     private TaskRepository taskRepository;
-    @Mock
-    private UserRepository userRepository;
-    @Mock
-    private UserService userService;
 
     @Test
     public void getAll_returnTaskDTOTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
@@ -192,80 +188,94 @@ public class TaskServiceTest {
     }
 
     @Test
-    void removeAllTasksByUser_existIdUserTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void finishTaskByTaskId_existIdTaskTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
         //given
-        User user = createTestUsersWithId(1, 2).get(0);
-        when(userRepository.selectById(user.getId())).thenReturn(user);
+        User user = createTestUsersWithId(1, 1).get(0);
+        Task task = createTestTasksWithId(1, 1).get(0);
+        task.setUsers(List.of(user));
+        user.setTasks(new ArrayList<>(List.of(task)));
+        when(taskRepository.selectById(task.getId())).thenReturn(task);
 
         //when
-        taskService.revokeAllTasksFromUserId(2);
+        taskService.finishTaskByTaskId(task.getId());
+        assertEquals(Status.DONE, task.getStatus());
 
         //then
-        verify(userRepository).selectById(any());
+        verify(taskRepository).selectById(task.getId());
     }
 
     @Test
     void remove_existTaskDTO_Test() throws CRMProjectRepositoryException, CRMProjectServiceException {
         //given
-        Task task = RepositoryTestUtils.createTestTasksWithId(0, 1).get(0);
-        doNothing().when(userService).revokeAllUsersFromTaskId(task.getId());
+        User user = createTestUsersWithId(1, 1).get(0);
+        Task task = createTestTasksWithId(1, 1).get(0);
+        task.setUsers(List.of(user));
+        user.setTasks(new ArrayList<>(List.of(task)));
+        when(taskRepository.selectById(task.getId())).thenReturn(task);
         doNothing().when(taskRepository).remove(task.getId());
 
         //when
-        taskService.remove(1);
+        taskService.remove(task.getId());
 
         //then
-        verify(userService).revokeAllUsersFromTaskId(task.getId());
+        verify(taskRepository).selectById(task.getId());
         verify(taskRepository).remove(task.getId());
     }
 
     @Test
     void remove_existTaskDTO_shouldReturnThrowServiceExceptionTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
         //given && when
-        Task task = RepositoryTestUtils.createTestTasksWithId(0, 1).get(0);
-        doNothing().when(userService).revokeAllUsersFromTaskId(task.getId());
+        User user = createTestUsersWithId(1, 1).get(0);
+        Task task = createTestTasksWithId(1, 1).get(0);
+        task.setUsers(List.of(user));
+        user.setTasks(new ArrayList<>(List.of(task)));
+        when(taskRepository.selectById(task.getId())).thenReturn(task);
         doThrow(CRMProjectRepositoryException.class).when(taskRepository).remove(task.getId());
 
         //then
-        assertThrows(CRMProjectServiceException.class, () -> taskService.remove(1));
-        verify(userService).revokeAllUsersFromTaskId(task.getId());
+        assertThrows(CRMProjectServiceException.class, () -> taskService.remove(task.getId()));
+        verify(taskRepository).selectById(task.getId());
         verify(taskRepository).remove(task.getId());
     }
 
     @Test
-    void changeStatusForTaskId_existStatusAndTaskIdWithoutUsers_returnTaskDTO() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void changePasswordDTO_existStatusAndTaskIdWithoutUsers_returnTaskDTO() throws CRMProjectRepositoryException, CRMProjectServiceException {
         //given
         Task task = createTestTasksWithId(0, 1).get(0);
         when(taskRepository.selectById(task.getId())).thenReturn(task);
+        when(taskRepository.update(task)).thenReturn(task);
 
         //when
-        TaskDTO taskDTO = taskService.changeStatusForTaskId(Status.NEW, task.getId());
+        TaskDTO taskDTO = taskService.changePasswordDTO(Status.NEW, task.getId());
 
         //then
         assertEquals(Status.NEW, taskDTO.getStatus());
         verify(taskRepository).selectById(task.getId());
+        verify(taskRepository).update(task);
     }
 
     @Test
-    void changeStatusForTaskId_existStatusAndTaskId_returnTaskDTO() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void changePasswordDTO_existStatusAndTaskId_returnTaskDTO() throws CRMProjectRepositoryException, CRMProjectServiceException {
         //given
         Task task = createTestTasksWithId(0, 1).get(0);
         List<User> users = createTestUsersWithId(0, 2);
         task.setUsers(users);
+        users.forEach(user -> user.setTasks(new ArrayList<>(List.of(task))));
         when(taskRepository.selectById(task.getId())).thenReturn(task);
+        when(taskRepository.update(task)).thenReturn(task);
 
         //when
-        TaskDTO taskDTOProgress = taskService.changeStatusForTaskId(Status.PROGRESS, task.getId());
-        TaskDTO taskDTONew = taskService.changeStatusForTaskId(Status.NEW, task.getId());
-        TaskDTO taskDTODone = taskService.changeStatusForTaskId(Status.DONE, task.getId());
-
+        TaskDTO taskDTOProgress = taskService.changePasswordDTO(Status.PROGRESS, task.getId());
+        TaskDTO taskDTONew = taskService.changePasswordDTO(Status.NEW, task.getId());
+        TaskDTO taskDTODone = taskService.changePasswordDTO(Status.DONE, task.getId());
 
         //then
         assertEquals(Status.PROGRESS, taskDTOProgress.getStatus());
         assertEquals(Status.NEW, taskDTONew.getStatus());
         assertEquals(Status.DONE, taskDTODone.getStatus());
 
-        verify(taskRepository,times(3)).selectById(task.getId());
+        verify(taskRepository, times(3)).selectById(task.getId());
+        verify(taskRepository, times(3)).update(task);
     }
 
 }

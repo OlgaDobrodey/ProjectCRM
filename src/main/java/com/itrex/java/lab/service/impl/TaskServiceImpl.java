@@ -3,19 +3,16 @@ package com.itrex.java.lab.service.impl;
 import com.itrex.java.lab.dto.TaskDTO;
 import com.itrex.java.lab.entity.Status;
 import com.itrex.java.lab.entity.Task;
-import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.exceptions.CRMProjectServiceException;
 import com.itrex.java.lab.repository.TaskRepository;
-import com.itrex.java.lab.repository.UserRepository;
 import com.itrex.java.lab.service.TaskService;
-import com.itrex.java.lab.service.UserService;
 import com.itrex.java.lab.utils.ConverterUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,14 +22,10 @@ import static com.itrex.java.lab.utils.ConverterUtils.convertTaskToDto;
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
-    private final UserRepository userRepository;
-    private final UserService userService;
 
     @Autowired
-    public TaskServiceImpl(TaskRepository taskRepository, UserRepository userRepository, UserService userService) {
+    public TaskServiceImpl(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
-        this.userRepository = userRepository;
-        this.userService = userService;
     }
 
     @Override
@@ -68,6 +61,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public TaskDTO add(TaskDTO task) throws CRMProjectServiceException {
         try {
             Task addTask = Task.builder()
@@ -83,6 +77,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public TaskDTO update(TaskDTO task) throws CRMProjectServiceException {
         try {
             Task update = taskRepository.selectById(task.getId());
@@ -101,12 +96,15 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public void revokeAllTasksFromUserId(Integer userId) throws CRMProjectServiceException {
+    public void finishTaskByTaskId(Integer taskId) throws CRMProjectServiceException {
         try {
-            User user = userRepository.selectById(userId);
-            user.setTasks(new ArrayList<>());
+            Task task = taskRepository.selectById(taskId);
+            task.setStatus(Status.DONE);
+
+            task.getUsers().forEach(user -> user.getTasks().removeIf(t -> t.getId() == taskId));
+            taskRepository.update(task);
         } catch (CRMProjectRepositoryException ex) {
-            throw new CRMProjectServiceException("ERROR SERVICE: DELETE ALL TASKS BY USER:", ex);
+            throw new CRMProjectServiceException("ERROR SERVICE: DELETE ALL TASK:", ex);
         }
     }
 
@@ -114,8 +112,12 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public void remove(Integer taskId) throws CRMProjectServiceException {
         try {
-            userService.revokeAllUsersFromTaskId(taskId);
+            Task task = taskRepository.selectById(taskId);
+            task.setStatus(Status.DONE);
+
+            task.getUsers().forEach(user -> user.getTasks().removeIf(t -> t.getId() == taskId));
             taskRepository.remove(taskId);
+            taskRepository.update(task);
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: DELETE TASK:", ex);
         }
@@ -123,24 +125,19 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public TaskDTO changeStatusForTaskId(Status status, Integer taskId) throws CRMProjectServiceException {
+    public TaskDTO changePasswordDTO(Status status, Integer taskId) throws CRMProjectServiceException {
         try {
             Task task = taskRepository.selectById(taskId);
             if (task == null) {
                 throw new CRMProjectServiceException("TASK SERVICE: changeStatusForTaskId: no found task by Id" + taskId);
             }
-            List<User> users = task.getUsers();
-            if ((users == null) || (users.size() == 0)) {
-                if (status.equals(Status.PROGRESS)) {
-                    throw new CRMProjectServiceException("Wrong status: " + status);
-                }
-            } else {
-                if (status.equals(Status.NEW) || status.equals(Status.DONE)) {
-                    userService.revokeAllUsersFromTaskId(taskId);
-                }
+            if (status == Status.PROGRESS && CollectionUtils.isEmpty(task.getUsers())) {
+                throw new CRMProjectServiceException("Wrong status: " + status);
+            } else if (status != Status.PROGRESS && !CollectionUtils.isEmpty(task.getUsers())) {
+                task.getUsers().forEach(user -> user.getTasks().removeIf(t -> t.getId() == taskId));
             }
             task.setStatus(status);
-            return convertTaskToDto(task);
+            return convertTaskToDto(taskRepository.update(task));
         } catch (
                 CRMProjectRepositoryException e) {
             throw new CRMProjectServiceException("TASK SERVICE: changeStatusForTaskId:", e);

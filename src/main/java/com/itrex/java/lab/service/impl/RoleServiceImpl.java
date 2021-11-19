@@ -28,7 +28,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<RoleDTO> getAllRole() throws CRMProjectServiceException {
+    public List<RoleDTO> getAllRoles() throws CRMProjectServiceException {
         try {
             return roleRepository.selectAll().stream()
                     .map(ConverterUtils::convertRoleToDto)

@@ -14,8 +14,8 @@ public interface TaskService {
     List<TaskDTO> getAllTasksByUserId(Integer userId) throws CRMProjectServiceException;
     TaskDTO add(TaskDTO task) throws CRMProjectServiceException;
     TaskDTO update(TaskDTO task) throws CRMProjectServiceException;
-    void revokeAllTasksFromUserId(Integer userId) throws CRMProjectServiceException;
+    void finishTaskByTaskId(Integer taskId) throws CRMProjectServiceException; //delete all users for task
     void remove(Integer taskId) throws CRMProjectServiceException;
-    TaskDTO changeStatusForTaskId(Status status, Integer taskId) throws CRMProjectServiceException;
+    TaskDTO changePasswordDTO(Status status, Integer taskId) throws CRMProjectServiceException;
 
 }

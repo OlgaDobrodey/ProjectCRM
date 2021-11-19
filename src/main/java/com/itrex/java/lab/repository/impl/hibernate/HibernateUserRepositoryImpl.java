@@ -17,8 +17,10 @@ import java.util.List;
 public class HibernateUserRepositoryImpl implements UserRepository {
 
     private static final String TASK_ID = "taskId";
+    private static final String ROLE_ID = "roleId";
     private static final String SELECT_ALL = "from User u";
     private static final String SELECT_ALL_USERS_BY_TASK = "select u from Task t join t.users u where t.id =:taskId";
+    private static final String SELECT_ALL_USERS_BY_ROLE = "select u from Role r join r.users u where r.id =:roleId";
 
     private final SessionFactory sessionFactory;
 
@@ -62,6 +64,20 @@ public class HibernateUserRepositoryImpl implements UserRepository {
                     .getResultList();
         } catch (Exception e) {
             throw new CRMProjectRepositoryException("ERROR: SELECT ALL USERS FOR TASK BY ID" + taskId + ": ", e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
+    public List<User> selectAllUsersByRoleId(Integer roleId) throws CRMProjectRepositoryException {
+        try {
+            Session session = sessionFactory.getCurrentSession();
+
+            return session.createQuery(SELECT_ALL_USERS_BY_ROLE, User.class)
+                    .setParameter(ROLE_ID, roleId)
+                    .getResultList();
+        } catch (Exception e) {
+            throw new CRMProjectRepositoryException("ERROR: SELECT ALL USERS FOR ROLE BY ID" + roleId + ": ", e);
         }
     }
 

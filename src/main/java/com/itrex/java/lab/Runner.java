@@ -18,7 +18,7 @@ public class Runner {
             ApplicationContext context = new AnnotationConfigApplicationContext(CRMContextConfiguration.class);
 
             UserService service = context.getBean(UserService.class);
-            System.out.println(service.getAllUsersFromTaskId(2));
+            System.out.println(service.getAllUsersByTaskId(2));
 
             log.info("info log");
             log.error("error log");

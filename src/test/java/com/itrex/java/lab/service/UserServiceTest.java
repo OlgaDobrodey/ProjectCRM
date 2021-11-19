@@ -21,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.itrex.java.lab.repository.RepositoryTestUtils.*;
 import static com.itrex.java.lab.utils.ConverterUtils.convertUserToDto;
@@ -117,10 +118,11 @@ public class UserServiceTest {
         List<User> users = createTestUsers(2);
         users.get(0).setId(1);
         users.get(1).setId(2);
+        when(taskRepository.selectById(task.getId())).thenReturn(task);
         when(userRepository.selectAllUsersByTaskId(task.getId())).thenReturn(users);
 
         //when
-        List<UserDTO> actual = userService.getAllUsersFromTaskId(task.getId());
+        List<UserDTO> actual = userService.getAllUsersByTaskId(task.getId());
 
         //then
         assertEquals(1, actual.get(0).getId());
@@ -136,17 +138,22 @@ public class UserServiceTest {
         assertEquals("Ivanov 1", actual.get(1).getLastName());
         assertEquals("Ivan 1", actual.get(1).getFirstName());
         verify(userRepository).selectAllUsersByTaskId(task.getId());
+        verify(taskRepository).selectById(task.getId());
     }
 
     @Test
     void getAllUsersFromRoleId_existRoleId_returnListUsersTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
         //given && when
         Role role = Role.builder().users(new ArrayList<>()).build();
+        List<User> users = createTestUsersWithId(0,2);
+        List<UserDTO> userDTOS = users.stream().map(user -> convertUserToDto(user)).collect(Collectors.toList());
         when(roleRepository.selectById(any())).thenReturn(role);
+        when(userRepository.selectAllUsersByRoleId(role.getId())).thenReturn(users);
 
         //then
-        assertEquals(new ArrayList<>(), userService.getAllUsersFromRoleId(any()));
+        assertEquals(userDTOS, userService.getAllUsersByRoleId(role.getId()));
         verify(roleRepository).selectById(any());
+        verify(userRepository).selectAllUsersByRoleId(role.getId());
     }
 
     @Test
@@ -156,7 +163,7 @@ public class UserServiceTest {
         when(roleRepository.selectById(any())).thenReturn(null);
 
         //then
-        assertThrows(CRMProjectServiceException.class, () -> userService.getAllUsersFromRoleId(any()));
+        assertThrows(CRMProjectServiceException.class, () -> userService.getAllUsersByRoleId(any()));
         verify(roleRepository).selectById(any());
     }
 
@@ -230,10 +237,9 @@ public class UserServiceTest {
         when(taskRepository.selectById(task.getId())).thenReturn(task);
 
         //when
-        userService.assignTaskFromUser(task.getId(), user.getId());
+        userService.assignTaskToUser(task.getId(), user.getId());
 
         //then
-        assertEquals(Status.PROGRESS,task.getStatus());
         verify(userRepository).selectById(any());
         verify(taskRepository).selectById(any());
     }
@@ -346,20 +352,16 @@ public class UserServiceTest {
     }
 
     @Test
-    void removeAllUsersByTask_existIdTaskTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void revokeAllUserTasksByUserId_existIdUserTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
         //given
-        User user = createTestUsersWithId(1, 1).get(0);
-        Task task = createTestTasksWithId(1, 1).get(0);
-        task.setUsers(List.of(user));
-        user.setTasks(new ArrayList<>(List.of(task)));
-        when(taskRepository.selectById(task.getId())).thenReturn(task);
+        User user = createTestUsersWithId(1, 2).get(0);
+        when(userRepository.selectById(user.getId())).thenReturn(user);
 
         //when
-        userService.revokeAllUsersFromTaskId(task.getId());
-        assertEquals(Status.DONE, task.getStatus());
+        userService.revokeAllUserTasksByUserId(2);
 
         //then
-        verify(taskRepository).selectById(task.getId());
+        verify(userRepository).selectById(any());
     }
 
     @Test
@@ -371,6 +373,7 @@ public class UserServiceTest {
                 .newPassword("12345")
                 .oldPassword("1230")
                 .build();
+        when(userRepository.update(user)).thenReturn(user);
 
         //when
         UserDTO expected = userService.updateUserPassword(pdtc, user.getId());
@@ -383,6 +386,7 @@ public class UserServiceTest {
         assertEquals("Ivanov 0", expected.getLastName());
         assertEquals("Ivan 0", expected.getFirstName());
         verify(userRepository).selectById(user.getId());
+        verify(userRepository).update(user);
     }
 
     @Test

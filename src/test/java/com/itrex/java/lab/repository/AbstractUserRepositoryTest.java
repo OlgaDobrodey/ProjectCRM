@@ -185,5 +185,32 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
         assertThrows(CRMProjectRepositoryException.class, () -> repository.remove(idUserNoDB));
     }
 
+    @Test
+    void selectAllUsersByRoleId_existRoleId_returnListOfUsersTest() throws CRMProjectRepositoryException {
+        //given
+        Integer roleId = 1;
+
+        //when
+        List<User> users = repository.selectAllUsersByRoleId(roleId);
+
+        //then
+        assertEquals(3,users.size());
+        assertEquals(1,users.get(0).getId());
+        assertEquals(2,users.get(1).getId());
+        assertEquals(3,users.get(2).getId());
+    }
+
+    @Test
+    void selectAllUsersByRoleId_existRoleIdNoDB_returnEmptyListTest() throws CRMProjectRepositoryException {
+        //given
+        Integer roleId = 5;
+
+        //when
+        List<User> users = repository.selectAllUsersByRoleId(roleId);
+
+        //then
+        assertEquals(0,users.size());
+    }
+
 }
 

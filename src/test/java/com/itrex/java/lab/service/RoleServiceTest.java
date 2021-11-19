@@ -35,7 +35,7 @@ class RoleServiceTest {
         Mockito.when(roleRepository.selectAll()).thenReturn(new ArrayList<>());
 
         //then
-        assertEquals(roleService.getAllRole().size(), 0);
+        assertEquals(roleService.getAllRoles().size(), 0);
         Mockito.verify(roleRepository).selectAll();
     }
 
@@ -45,7 +45,7 @@ class RoleServiceTest {
         Mockito.when(roleRepository.selectAll()).thenThrow(CRMProjectRepositoryException.class);
 
         //then
-        assertThrows(CRMProjectServiceException.class, () -> roleService.getAllRole());
+        assertThrows(CRMProjectServiceException.class, () -> roleService.getAllRoles());
         Mockito.verify(roleRepository, Mockito.times(1)).selectAll();
     }
 

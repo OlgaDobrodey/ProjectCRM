@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface RoleService {
 
-    List<RoleDTO> getAllRole() throws CRMProjectServiceException;
+    List<RoleDTO> getAllRoles() throws CRMProjectServiceException;
     RoleDTO getById(Integer id) throws CRMProjectServiceException;
     RoleDTO addRole(RoleDTO role) throws CRMProjectServiceException;
     RoleDTO updateRole(RoleDTO role) throws CRMProjectServiceException;
