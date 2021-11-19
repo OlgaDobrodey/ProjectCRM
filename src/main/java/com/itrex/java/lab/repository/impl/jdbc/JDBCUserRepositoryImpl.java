@@ -13,6 +13,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 @Repository
 @Qualifier("JDBCUserRepository")
 public class JDBCUserRepositoryImpl implements UserRepository {

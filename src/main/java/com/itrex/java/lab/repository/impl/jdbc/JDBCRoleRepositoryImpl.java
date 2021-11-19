@@ -12,6 +12,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 @Repository
 @Qualifier("JDBCRoleRepository")
 public class JDBCRoleRepositoryImpl implements RoleRepository {
