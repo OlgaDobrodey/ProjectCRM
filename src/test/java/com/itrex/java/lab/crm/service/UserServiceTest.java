@@ -111,6 +111,52 @@ public class UserServiceTest {
     }
 
     @Test
+    void getByLogin_existUserDTOLogin_returnUserDTOTest()
+            throws CRMProjectRepositoryException, CRMProjectServiceException {
+        //given
+        User user = createTestUsersWithId(1, 1).get(0);
+        when(userRepository.selectByLogin(user.getLogin())).thenReturn(user);
+
+        //when
+        UserDTO actual = userService.getByLogin(user.getLogin());
+
+        //then
+        assertEquals(2, actual.getId());
+        assertEquals("Test 1", actual.getLogin());
+        assertEquals("1231", actual.getPsw());
+        assertEquals(1, actual.getRoleId());
+        assertEquals("Ivanov 1", actual.getLastName());
+        assertEquals("Ivan 1", actual.getFirstName());
+        verify(userRepository).selectByLogin(user.getLogin());
+    }
+
+    @Test
+    void getByLogin_existLoginUsereDTONotDataBase_returnNULLTest()
+            throws CRMProjectRepositoryException, CRMProjectServiceException {
+        //given
+        String userLogin = "Test";
+        when(userRepository.selectByLogin(userLogin)).thenReturn(null);
+
+        //when
+        UserDTO actual = userService.getByLogin(userLogin);
+
+        //then
+        assertNull(actual);
+        verify(userRepository).selectByLogin(userLogin);
+    }
+
+    @Test
+    void getByLogin_shouldThrowServiceExceptionTest() throws CRMProjectRepositoryException {
+        //given && when
+        String userLogin = "Test";
+        when(userRepository.selectByLogin(userLogin)).thenThrow(CRMProjectRepositoryException.class);
+
+        //then
+        assertThrows(CRMProjectServiceException.class, () -> userService.getByLogin(userLogin));
+        verify(userRepository).selectByLogin(userLogin);
+    }
+
+    @Test
     void getAllUsersByTaskDTO_existTaskDTO_returnListOfUserDTOTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
         //given
         Task task = createTestTasks(1).get(0);

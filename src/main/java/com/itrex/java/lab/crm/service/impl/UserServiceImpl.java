@@ -57,6 +57,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO getByLogin(String login) throws CRMProjectServiceException {
+        try {
+            User user = userRepository.selectByLogin(login);
+            return user != null ? convertUserToDto(user) : null;
+        } catch (CRMProjectRepositoryException ex) {
+            throw new CRMProjectServiceException("ERROR SERVICE: SELECT USER BY ID: ", ex);
+        }
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<UserDTO> getAllTaskUsersByTaskId(Integer taskId) throws CRMProjectServiceException {
         try {

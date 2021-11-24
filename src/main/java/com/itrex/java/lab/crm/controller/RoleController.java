@@ -31,7 +31,7 @@ public class RoleController extends BaseController {
         try {
             tasks = roleService.getAllRoles();
         } catch (CRMProjectServiceException e) {
-            e.getMessage();
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return tasks != null && !tasks.isEmpty()
                 ? new ResponseEntity<>(tasks, HttpStatus.OK)
@@ -47,7 +47,7 @@ public class RoleController extends BaseController {
         try {
             readRole = roleService.getById(id);
         } catch (CRMProjectServiceException e) {
-            e.getMessage();
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return readRole != null
                 ? new ResponseEntity<>(readRole, HttpStatus.OK)
@@ -63,7 +63,7 @@ public class RoleController extends BaseController {
         try {
             users = userService.getAllRoleUsersByRoleId(id);
         } catch (CRMProjectServiceException e) {
-            e.getMessage();
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return users != null && !users.isEmpty()
                 ? new ResponseEntity<>(users, HttpStatus.OK)
@@ -81,7 +81,7 @@ public class RoleController extends BaseController {
         try {
             created = roleService.addRole(roleDTO);
         } catch (CRMProjectServiceException e) {
-            e.getMessage();
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
@@ -96,7 +96,7 @@ public class RoleController extends BaseController {
         try {
             updated = roleService.updateRole(roleDTO);
         } catch (CRMProjectServiceException e) {
-            e.getStackTrace();
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return updated != null
                 ? new ResponseEntity<>(HttpStatus.OK)

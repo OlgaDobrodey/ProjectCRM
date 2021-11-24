@@ -11,6 +11,7 @@ public interface UserRepository {
     List<User> selectAll() throws CRMProjectRepositoryException;
 
     User selectById(Integer id) throws CRMProjectRepositoryException;
+    User selectByLogin(String login) throws CRMProjectRepositoryException;
 
     List<User> selectAllUsersByTaskId(Integer taskId) throws CRMProjectRepositoryException;
 

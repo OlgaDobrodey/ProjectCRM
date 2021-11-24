@@ -3,7 +3,6 @@ package com.itrex.java.lab.crm.repository.impl.jdbc;
 import com.itrex.java.lab.crm.entity.Role;
 import com.itrex.java.lab.crm.entity.User;
 import com.itrex.java.lab.crm.exceptions.CRMProjectRepositoryException;
-import com.itrex.java.lab.crm.repository.TaskRepository;
 import com.itrex.java.lab.crm.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,6 +30,7 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     private static final String SELECT_ALL_QUERY =
             "SELECT user.id, user.login, user.psw, user.role_id, user.first_name, user.last_name, role.role_name " +
                     "FROM user join role on role.id = user.role_id";
+    private static final String SELECT_USER_BY_LOGIN = SELECT_ALL_QUERY + " WHERE user.login = ";
     private static final String SELECT_USER_BY_ID_QUERY = SELECT_ALL_QUERY + " WHERE user.id = ";
     private static final String SELECT_ALL_USERS_FOR_TASK = "SELECT users_id FROM user_task WHERE tasks_id = ";
     private static final String SELECT_ALL_USERS_BY_ROLE = SELECT_ALL_QUERY + " WHERE user.role_id = ";
@@ -45,8 +45,6 @@ public class JDBCUserRepositoryImpl implements UserRepository {
 
     @Autowired
     private DataSource dataSource;
-    @Autowired
-    private TaskRepository taskRepository;
 
     @Override
     public List<User> selectAll() throws CRMProjectRepositoryException {
@@ -79,6 +77,24 @@ public class JDBCUserRepositoryImpl implements UserRepository {
             }
         } catch (SQLException ex) {
             throw new CRMProjectRepositoryException("ERROR: SELECT USER BY ID: ", ex);
+        }
+        return user;
+    }
+
+    @Override
+    public User selectByLogin(String login) throws CRMProjectRepositoryException {
+        User user = null;
+        try (Connection conn = dataSource.getConnection();
+             Statement stm = conn.createStatement();
+             ResultSet resultSet = stm.executeQuery(SELECT_USER_BY_LOGIN + "'" + login + "'")) {
+            if (resultSet.next()) {
+                user = getUser(resultSet);
+                if (resultSet.next()) {
+                    throw new SQLIntegrityConstraintViolationException("Count users more one");
+                }
+            }
+        } catch (SQLException ex) {
+            throw new CRMProjectRepositoryException("ERROR: SELECT USER BY LOGIN: ", ex);
         }
         return user;
     }

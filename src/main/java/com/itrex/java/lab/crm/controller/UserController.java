@@ -1,5 +1,6 @@
 package com.itrex.java.lab.crm.controller;
 
+import com.itrex.java.lab.crm.dto.LoginUserDTO;
 import com.itrex.java.lab.crm.dto.PasswordDTOForChanges;
 import com.itrex.java.lab.crm.dto.TaskDTO;
 import com.itrex.java.lab.crm.dto.UserDTO;
@@ -9,6 +10,7 @@ import com.itrex.java.lab.crm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ public class UserController extends BaseController {
         try {
             users = userService.getAll();
         } catch (CRMProjectServiceException e) {
-            e.getMessage();
+            new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
         return users != null && !users.isEmpty()
                 ? new ResponseEntity<>(users, HttpStatus.OK)
@@ -49,7 +51,7 @@ public class UserController extends BaseController {
         try {
             readed = userService.getById(id);
         } catch (CRMProjectServiceException e) {
-            e.getMessage();
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return readed != null
                 ? new ResponseEntity<>(readed, HttpStatus.OK)
@@ -66,7 +68,7 @@ public class UserController extends BaseController {
         try {
             tasks = taskService.getAllUserTasksByUserId(id);
         } catch (CRMProjectServiceException e) {
-            e.getMessage();
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return tasks != null && !tasks.isEmpty()
                 ? new ResponseEntity<>(tasks, HttpStatus.OK)
@@ -82,9 +84,26 @@ public class UserController extends BaseController {
         try {
             createUser = userService.add(userDTO);
         } catch (CRMProjectServiceException e) {
-            e.getMessage();
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(createUser, HttpStatus.CREATED);
+    }
+
+    /*
+    Вход в систему с помощью пароля и логина
+     */
+    @PostMapping("/profile")
+    public ResponseEntity<?> signIn(Model model, @RequestBody LoginUserDTO user) {
+        try {
+            UserDTO verificationUser = userService.getByLogin(user.getLogin());
+            if (verificationUser == null || (!verificationUser.getPsw().equals(user.getPsw()))) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            model.addAttribute("userActiv", verificationUser);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (CRMProjectServiceException e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
     /*
@@ -92,13 +111,13 @@ public class UserController extends BaseController {
    возможное смещение сроков
     */
     @PutMapping(value = "/users/{id}")
-    public ResponseEntity<?> update(@PathVariable(name = "id") int id,@RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody UserDTO userDTO) {
         userDTO.setId(id);
         UserDTO updated = null;
         try {
             updated = userService.update(userDTO);
         } catch (CRMProjectServiceException e) {
-            e.getStackTrace();
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return updated != null
                 ? new ResponseEntity<>(HttpStatus.OK)
@@ -113,9 +132,9 @@ public class UserController extends BaseController {
             @PathVariable(name = "id") int id, @RequestBody PasswordDTOForChanges psw) {
         UserDTO updated = null;
         try {
-            updated = userService.updateUserPassword(psw,id);
+            updated = userService.updateUserPassword(psw, id);
         } catch (CRMProjectServiceException e) {
-            e.getStackTrace();
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return updated != null
                 ? new ResponseEntity<>(HttpStatus.OK)
@@ -126,7 +145,8 @@ public class UserController extends BaseController {
     Добавление задачи для пользователя
     */
     @PutMapping(value = "/users/{userId}/tasks/{taskId}")
-    public ResponseEntity<?> assignTaskToUser(@PathVariable(name = "userId") int userId, @PathVariable(name = "taskId") int taskId) {
+    public ResponseEntity<?> assignTaskToUser(@PathVariable(name = "userId") int userId,
+                                              @PathVariable(name = "taskId") int taskId) {
         try {
             userService.assignTaskToUser(taskId, userId);
         } catch (CRMProjectServiceException e) {
@@ -144,7 +164,7 @@ public class UserController extends BaseController {
         try {
             userService.remove(id);
         } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -153,7 +173,8 @@ public class UserController extends BaseController {
     Открепление задачи от пользователя (задача выполнена или переопределиться на другого пользователя)
   */
     @DeleteMapping(value = "/users/{userId}/tasks/{taskId}")
-    public ResponseEntity<?> revoke(@PathVariable(name = "userId") int userId, @PathVariable(name = "taskId") int taskId) {
+    public ResponseEntity<?> revoke(@PathVariable(name = "userId") int userId,
+                                    @PathVariable(name = "taskId") int taskId) {
         try {
             userService.revokeTaskFromUser(taskId, userId);
         } catch (CRMProjectServiceException e) {

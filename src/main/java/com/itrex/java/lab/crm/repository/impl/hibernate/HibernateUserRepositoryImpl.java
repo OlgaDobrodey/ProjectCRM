@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.List;
 
 @Primary
@@ -17,7 +18,10 @@ public class HibernateUserRepositoryImpl implements UserRepository {
 
     private static final String TASK_ID = "taskId";
     private static final String ROLE_ID = "roleId";
+    private static final String LOGIN = "login";
+
     private static final String SELECT_ALL = "select u from User u";
+    private static final String SELECT_USER_LOGIN = "select u from User u where u.login =:login";
     private static final String SELECT_ALL_USERS_BY_TASK = "select u from Task t join t.users u where t.id =:taskId";
     private static final String SELECT_ALL_USERS_BY_ROLE = "select u from Role r join r.users u where r.id =:roleId";
 
@@ -42,8 +46,23 @@ public class HibernateUserRepositoryImpl implements UserRepository {
         try {
             return entityManager.find(User.class, id);
         } catch (Exception ex) {
-            throw new CRMProjectRepositoryException("ERROR: SELECT TASK BY ID: " + ex);
+            throw new CRMProjectRepositoryException("ERROR: SELECT User BY ID: " + ex);
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
+    public User selectByLogin(String login) throws CRMProjectRepositoryException {
+        User user = null;
+        try {
+            user = entityManager.createQuery(SELECT_USER_LOGIN, User.class)
+                    .setParameter(LOGIN, login).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } catch (Exception ex) {
+            throw new CRMProjectRepositoryException("ERROR: SELECT User BY Login: " + ex);
+        }
+        return user;
     }
 
     @Override

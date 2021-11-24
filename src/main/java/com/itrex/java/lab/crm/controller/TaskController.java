@@ -32,7 +32,7 @@ public class TaskController extends BaseController{
         try {
             tasks = taskService.getAll();
         } catch (CRMProjectServiceException e) {
-            e.getMessage();
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return tasks != null && !tasks.isEmpty()
                 ? new ResponseEntity<>(tasks, HttpStatus.OK)
@@ -48,7 +48,7 @@ public class TaskController extends BaseController{
         try {
             readTask = taskService.getById(id);
         } catch (CRMProjectServiceException e) {
-            e.getMessage();
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return readTask != null
                 ? new ResponseEntity<>(readTask, HttpStatus.OK)
@@ -65,7 +65,7 @@ public class TaskController extends BaseController{
         try {
             users = userService.getAllTaskUsersByTaskId(id);
         } catch (CRMProjectServiceException e) {
-            e.getMessage();
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return users != null && !users.isEmpty()
                 ? new ResponseEntity<>(users, HttpStatus.OK)
@@ -84,7 +84,7 @@ public class TaskController extends BaseController{
         try {
             createTask = taskService.add(taskDTO);
         } catch (CRMProjectServiceException e) {
-            e.getMessage();
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(createTask, HttpStatus.CREATED);
     }
@@ -100,7 +100,7 @@ public class TaskController extends BaseController{
         try {
             updated = taskService.update(taskDTO);
         } catch (CRMProjectServiceException e) {
-            e.getStackTrace();
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return updated != null
                 ? new ResponseEntity<>(HttpStatus.OK)
@@ -148,7 +148,7 @@ public class TaskController extends BaseController{
         try {
             taskStatus = taskService.changeStatusDTO(status, id);
         } catch (CRMProjectServiceException e) {
-            e.getStackTrace();
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return taskStatus != null
                 ? new ResponseEntity<>(HttpStatus.OK)

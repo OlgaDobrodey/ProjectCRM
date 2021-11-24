@@ -78,6 +78,45 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
     }
 
     @Test
+    void selectByLogin_validData_existUserLogin_returnUserTest() throws CRMProjectRepositoryException {
+        //given
+        String login = "Ivanov";
+
+        //when
+        User actual = repository.selectByLogin(login);
+
+        //then
+        assertEquals(2, actual.getId());
+        assertEquals("Ivanov", actual.getLogin());
+        assertEquals("123", actual.getPsw());
+        assertEquals("ADMIN", actual.getRole().getRoleName());
+        assertEquals("Ivanov", actual.getLastName());
+        assertEquals("Ivan", actual.getFirstName());
+    }
+
+    @Test
+    void selectByLogin_validData_existLoginUsereNotDataBase_returnNULLTest() throws CRMProjectRepositoryException {
+        //given
+        String login = "IvanovTest";
+
+        //when
+        User actual = repository.selectByLogin(login);
+
+        //then
+        assertNull(actual);
+    }
+
+    @Test
+    void selectByLogin_shouldThrowRepositoryExceptionTest() {
+        //given && when
+        cleanDB();    //clean Data Base
+        String login = "Ivanov";
+
+        //then
+        assertThrows(CRMProjectRepositoryException.class, () -> repository.selectByLogin(login));
+    }
+
+    @Test
     void selectAllUsersByTask_existTask_returnListOfUserTest() throws CRMProjectRepositoryException {
         //given
         Integer idTask = 2;
