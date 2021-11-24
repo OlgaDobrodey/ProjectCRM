@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> getAllTaskUsersByTaskId(Integer taskId) throws CRMProjectServiceException {
         try {
             Task task = taskRepository.selectById(taskId);
-            if(task == null){
+            if (task == null) {
                 throw new CRMProjectServiceException("ERROR SERVICE: NO FOUND TASK WITH ID");
             }
             return userRepository.selectAllUsersByTaskId(taskId)
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
                     .stream()
                     .map(ConverterUtils::convertUserToDto)
                     .collect(Collectors.toList());
-        } catch (Exception e) {
+        } catch (CRMProjectRepositoryException e) {
             throw new CRMProjectServiceException("ERROR SERVICE: GET ALL USERS FROM ROLE:", e);
         }
     }
@@ -144,12 +144,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDTO updateUserPassword(PasswordDTOForChanges passwordDTO, Integer userId) throws CRMProjectRepositoryException, CRMProjectServiceException {
+    public UserDTO updateUserPassword(PasswordDTOForChanges passwordDTO, Integer userId) throws CRMProjectServiceException {
         try {
             if (passwordDTO.getNewPassword().isBlank()) {
                 throw new CRMProjectServiceException("ERROR SERVICE updateUserPassword: newPassword is empty ");
             }
-
+            if (!passwordDTO.getNewPassword().equals(passwordDTO.getRepeatNewPassword())) {
+                throw new CRMProjectServiceException("ERROR SERVICE updateUserPassword: newPassword not equals repeatNewPassword ");
+            }
             User user = userRepository.selectById(userId);
 
             if (!checkIfValidPassword(user, passwordDTO.getOldPassword())) {
@@ -171,7 +173,6 @@ public class UserServiceImpl implements UserService {
                 throw new CRMProjectServiceException("ERROR SERVICE: DELETE USER: no found Data BASE");
             }
             userRepository.remove(userId);
-            userRepository.update(user);
         } catch (CRMProjectRepositoryException ex) {
             throw new CRMProjectServiceException("ERROR SERVICE: DELETE USER:", ex);
         }

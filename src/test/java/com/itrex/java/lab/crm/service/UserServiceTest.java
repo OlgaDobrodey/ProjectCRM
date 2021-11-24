@@ -372,6 +372,7 @@ public class UserServiceTest {
         PasswordDTOForChanges pdtc = PasswordDTOForChanges.builder()
                 .newPassword("12345")
                 .oldPassword("1230")
+                .repeatNewPassword("12345")
                 .build();
         when(userRepository.update(user)).thenReturn(user);
 
@@ -394,11 +395,11 @@ public class UserServiceTest {
         //given && when
         User user = createTestUsersWithId(0, 1).get(0);
         Integer userIdNoDB = 5;
-        when(userRepository.selectById(user.getId())).thenReturn(user);
         when(userRepository.selectById(userIdNoDB)).thenReturn(null);
         PasswordDTOForChanges pdtcNewPswEmpty = PasswordDTOForChanges.builder()
                 .newPassword("")
                 .oldPassword("1230")
+                .repeatNewPassword("")
                 .build();
 
         PasswordDTOForChanges pdtcOldPswEmpty = PasswordDTOForChanges.builder()
@@ -409,6 +410,13 @@ public class UserServiceTest {
         PasswordDTOForChanges pdtc = PasswordDTOForChanges.builder()
                 .newPassword("12345")
                 .oldPassword("1230")
+                .repeatNewPassword("12345")
+                .build();
+
+        PasswordDTOForChanges pdtcRepeatPasEmpty = PasswordDTOForChanges.builder()
+                .newPassword("12345")
+                .repeatNewPassword("1234")
+                .oldPassword("1230")
                 .build();
 
         //then
@@ -418,7 +426,8 @@ public class UserServiceTest {
                 () -> userService.updateUserPassword(pdtcOldPswEmpty, user.getId()));
         assertThrows(CRMProjectServiceException.class,
                 () -> userService.updateUserPassword(pdtc, userIdNoDB));
-        verify(userRepository).selectById(user.getId());
+        assertThrows(CRMProjectServiceException.class,
+                () -> userService.updateUserPassword(pdtcRepeatPasEmpty, user.getId()));
         verify(userRepository).selectById(userIdNoDB);
     }
 

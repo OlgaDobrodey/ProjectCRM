@@ -15,8 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tasks")
-public class TaskController {
+public class TaskController extends BaseController{
 
     @Autowired
     private TaskService taskService;
@@ -27,7 +26,7 @@ public class TaskController {
      Посмотреть все существующие задачи/таски.
      Необходимо для Admin и Controlera(для анализа, общего состояния бизнес-процессов)
      */
-    @GetMapping
+    @GetMapping("/tasks")
     public ResponseEntity<List<TaskDTO>> read() {
         List<TaskDTO> tasks = new ArrayList<>();
         try {
@@ -43,7 +42,7 @@ public class TaskController {
     /*
     Посмотреть задачу, необходимо для ознакомления содержимым задачи/task
      */
-    @GetMapping("/{id}")
+    @GetMapping("/tasks/{id}")
     public ResponseEntity<?> readTaskByIdTask(@PathVariable Integer id) {
         TaskDTO readTask = null;
         try {
@@ -60,7 +59,7 @@ public class TaskController {
     Дополнительная функция, которая дает возможность просмотреть
     всех исполнителей задачи с заданным id
      */
-    @GetMapping("/{id}/users")
+    @GetMapping("/tasks/{id}/users")
     public ResponseEntity<List<UserDTO>> readAllTaskUsersByTaskId(@PathVariable Integer id) {
         List<UserDTO> users = new ArrayList<>();
         try {
@@ -79,7 +78,7 @@ public class TaskController {
     Task создается всегда со STATUS.NEW
     taskId - формируется автоматически
      */
-    @PostMapping
+    @PostMapping("/tasks")
     public ResponseEntity<?> create(@RequestBody TaskDTO taskDTO) {
         TaskDTO createTask = null;
         try {
@@ -94,7 +93,7 @@ public class TaskController {
     Корректировка задачи, Изменение статуса, внесение пояснений в инфо, корректировка названия
     возможное смещение сроков
      */
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/tasks/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody TaskDTO taskDTO) {
         taskDTO.setId(id);
         TaskDTO updated = null;
@@ -115,7 +114,7 @@ public class TaskController {
     -смена команды.
     Но не удаление таски
      */
-    @DeleteMapping("/{id}/users")
+    @DeleteMapping("/tasks/{id}/users")
     public ResponseEntity<?> finishTaskByTaskId(@PathVariable(name = "id") int id) {
         try {
             taskService.finishTaskByTaskId(id);
@@ -130,7 +129,7 @@ public class TaskController {
      является некорректной и не подлежит изменению.
      Статус переводится в STATUS.DONE также открепляются все пользователи.
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/tasks/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
         try {
             taskService.remove(id);
@@ -143,17 +142,17 @@ public class TaskController {
     /*
     Изменение значения статуса. Перевод его в одно из состояний: NEW, DONE и PROGRESS
      */
-    @PutMapping("/{id}/status")
-    public ResponseEntity<?> update(@PathVariable Integer id, @RequestParam String status) {
+    @PutMapping("/tasks/{id}/{status}")
+    public ResponseEntity<?> update(@PathVariable Integer id, @PathVariable(name = "status") Status status) {
         TaskDTO taskStatus = null;
         try {
-            taskStatus = taskService.changeStatusDTO(Status.valueOf(status), id);
+            taskStatus = taskService.changeStatusDTO(status, id);
         } catch (CRMProjectServiceException e) {
             e.getStackTrace();
         }
         return taskStatus != null
                 ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);//TODO
     }
 
 }

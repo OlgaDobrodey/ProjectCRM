@@ -11,5 +11,6 @@ public class PasswordDTOForChanges {
 
     private String oldPassword;
     private String newPassword;
+    private String repeatNewPassword;
 
 }
