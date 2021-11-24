@@ -1,0 +1,524 @@
+{
+	"id": "2014cd90-46cc-48ab-9685-5cba16e56cb3",
+	"name": "sistemSRM",
+	"timestamp": "2021-11-24T12:22:15.386Z",
+	"collection_id": "14798363-4564d100-1c5e-4b62-bf68-220dd98542b6",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 0,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "0f4e13c3-45f5-41a1-9aa5-184106299afd",
+			"name": "http://localhost:8080/crm/tasks",
+			"url": "http://localhost:8080/crm/tasks",
+			"time": 20,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				20
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "43d57fe1-450a-4141-8ff2-46fbd3349a57",
+			"name": "http://localhost:8080/crm/tasks/2",
+			"url": "http://localhost:8080/crm/tasks/2",
+			"time": 7,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				7
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "7db4edf7-a503-4257-b1e2-a9f295c1a95f",
+			"name": "http://localhost:8080/crm/tasks/2/users",
+			"url": "http://localhost:8080/crm/tasks/2/users",
+			"time": 26,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				26
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "b63f975e-dbcd-4f9d-bdf7-b3d93eca2293",
+			"name": "http://localhost:8080/crm/tasks/2",
+			"url": "http://localhost:8080/crm/tasks/2",
+			"time": 14,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				14
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "c9e229da-f67d-4f2e-801b-5b791d0128a9",
+			"name": "http://localhost:8080/crm/tasks/5",
+			"url": "http://localhost:8080/crm/tasks/5",
+			"time": 63,
+			"responseCode": {
+				"code": 500,
+				"name": "Internal Server Error"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				63
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "b98d8eb7-6edd-40c7-bb0f-6f4d93d9ac68",
+			"name": "http://localhost:8080/crm/tasks/6/users",
+			"url": "http://localhost:8080/crm/tasks/6/users",
+			"time": 11,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				11
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "600669e0-d5f4-4856-95d2-af9eac608017",
+			"name": "http://localhost:8080/crm/tasks/7/NEW",
+			"url": "http://localhost:8080/crm/tasks/7/NEW",
+			"time": 8,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				8
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "77313ba2-b8be-4f88-8e41-0bcb3984073b",
+			"name": "http://localhost:8080/crm/roles",
+			"url": "http://localhost:8080/crm/roles",
+			"time": 6,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				6
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "e8d3aa1b-f24f-411d-89d1-576d52fe243f",
+			"name": "http://localhost:8080/crm/roles/2",
+			"url": "http://localhost:8080/crm/roles/2",
+			"time": 7,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				7
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "3a9d1fa9-bbc9-4f66-bed7-1cec160ad8c4",
+			"name": "http://localhost:8080/crm/roles",
+			"url": "http://localhost:8080/crm/roles/2/users",
+			"time": 10,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				10
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "da36b1a0-81c9-4932-bd25-9568c5c033bc",
+			"name": "http://localhost:8080/crm/roles",
+			"url": "http://localhost:8080/crm/roles",
+			"time": 34,
+			"responseCode": {
+				"code": 500,
+				"name": "Internal Server Error"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				34
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "81487671-9434-482a-833f-e2a4a07ca2fa",
+			"name": "http://localhost:8080/crm/roles/4",
+			"url": "http://localhost:8080/crm/roles/4",
+			"time": 9,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				9
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "354808d0-9a37-42ef-b517-87453ed475af",
+			"name": "http://localhost:8080/crm/tasks",
+			"url": "http://localhost:8080/crm/tasks",
+			"time": 22,
+			"responseCode": {
+				"code": 500,
+				"name": "Internal Server Error"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				22
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "0efbf542-9433-4a3f-a456-1cfa3897348a",
+			"name": "http://localhost:8080/crm/users",
+			"url": "http://localhost:8080/crm/users",
+			"time": 10,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				10
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "a77bc70f-04ae-4897-b0e6-cd44a2886576",
+			"name": "http://localhost:8080/crm/users/6",
+			"url": "http://localhost:8080/crm/users/6",
+			"time": 8,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				8
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "69277e2d-75cc-4472-bd42-99a351a32637",
+			"name": "http://localhost:8080/crm/users",
+			"url": "http://localhost:8080/crm/users",
+			"time": 26,
+			"responseCode": {
+				"code": 500,
+				"name": "Internal Server Error"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				26
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "16197f06-7a30-45b9-9e7a-014822107ebe",
+			"name": "http://localhost:8080/crm/users/6/tasks",
+			"url": "http://localhost:8080/crm/users/6/tasks",
+			"time": 9,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				9
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "ab52206d-f317-49ea-a5f6-27914f435265",
+			"name": "http://localhost:8080/crm/users/3",
+			"url": "http://localhost:8080/crm/users/3",
+			"time": 9,
+			"responseCode": {
+				"code": 304,
+				"name": "Not Modified"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				9
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "655edf4e-8628-440c-b6ae-9f4e864976b3",
+			"name": "http://localhost:8080/crm/users/3/updatePassword",
+			"url": "http://localhost:8080/crm/users/3/updatePassword",
+			"time": 8,
+			"responseCode": {
+				"code": 304,
+				"name": "Not Modified"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				8
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "3af8f218-12ee-4305-9855-e2b5d847e3f3",
+			"name": "http://localhost:8080/crm/users/2/tasks/10",
+			"url": "http://localhost:8080/crm/users/2/tasks/10",
+			"time": 22,
+			"responseCode": {
+				"code": 500,
+				"name": "Internal Server Error"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				22
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "9081fb6e-6745-45d7-8074-4ad747829a2d",
+			"name": "http://localhost:8080/crm/users/3/tasks",
+			"url": "http://localhost:8080/crm/users/2/tasks/4",
+			"time": 16,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				16
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "c0124c8e-942f-434e-b674-3bdba30782ba",
+			"name": "http://localhost:8080/crm/users/4",
+			"url": "http://localhost:8080/crm/users/3/tasks",
+			"time": 9,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				9
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "addafdf7-ed63-496b-8141-ad0a273f299a",
+			"name": "http://localhost:8080/crm/users/4",
+			"url": "http://localhost:8080/crm/users/4",
+			"time": 7,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				7
+			],
+			"allTests": [
+				{}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 361,
+	"collection": {
+		"requests": [
+			{
+				"id": "0f4e13c3-45f5-41a1-9aa5-184106299afd",
+				"method": "GET"
+			},
+			{
+				"id": "43d57fe1-450a-4141-8ff2-46fbd3349a57",
+				"method": "GET"
+			},
+			{
+				"id": "7db4edf7-a503-4257-b1e2-a9f295c1a95f",
+				"method": "GET"
+			},
+			{
+				"id": "b63f975e-dbcd-4f9d-bdf7-b3d93eca2293",
+				"method": "PUT"
+			},
+			{
+				"id": "c9e229da-f67d-4f2e-801b-5b791d0128a9",
+				"method": "DELETE"
+			},
+			{
+				"id": "b98d8eb7-6edd-40c7-bb0f-6f4d93d9ac68",
+				"method": "DELETE"
+			},
+			{
+				"id": "600669e0-d5f4-4856-95d2-af9eac608017",
+				"method": "PUT"
+			},
+			{
+				"id": "77313ba2-b8be-4f88-8e41-0bcb3984073b",
+				"method": "GET"
+			},
+			{
+				"id": "e8d3aa1b-f24f-411d-89d1-576d52fe243f",
+				"method": "GET"
+			},
+			{
+				"id": "3a9d1fa9-bbc9-4f66-bed7-1cec160ad8c4",
+				"method": "GET"
+			},
+			{
+				"id": "da36b1a0-81c9-4932-bd25-9568c5c033bc",
+				"method": "POST"
+			},
+			{
+				"id": "81487671-9434-482a-833f-e2a4a07ca2fa",
+				"method": "PUT"
+			},
+			{
+				"id": "354808d0-9a37-42ef-b517-87453ed475af",
+				"method": "POST"
+			},
+			{
+				"id": "0efbf542-9433-4a3f-a456-1cfa3897348a",
+				"method": "GET"
+			},
+			{
+				"id": "a77bc70f-04ae-4897-b0e6-cd44a2886576",
+				"method": "GET"
+			},
+			{
+				"id": "69277e2d-75cc-4472-bd42-99a351a32637",
+				"method": "POST"
+			},
+			{
+				"id": "16197f06-7a30-45b9-9e7a-014822107ebe",
+				"method": "GET"
+			},
+			{
+				"id": "ab52206d-f317-49ea-a5f6-27914f435265",
+				"method": "PUT"
+			},
+			{
+				"id": "655edf4e-8628-440c-b6ae-9f4e864976b3",
+				"method": "PUT"
+			},
+			{
+				"id": "3af8f218-12ee-4305-9855-e2b5d847e3f3",
+				"method": "PUT"
+			},
+			{
+				"id": "9081fb6e-6745-45d7-8074-4ad747829a2d",
+				"method": "DELETE"
+			},
+			{
+				"id": "c0124c8e-942f-434e-b674-3bdba30782ba",
+				"method": "DELETE"
+			},
+			{
+				"id": "addafdf7-ed63-496b-8141-ad0a273f299a",
+				"method": "DELETE"
+			}
+		]
+	}
+}
