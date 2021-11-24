@@ -164,7 +164,7 @@ public class UserController extends BaseController {
         try {
             userService.remove(id);
         } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+            new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
