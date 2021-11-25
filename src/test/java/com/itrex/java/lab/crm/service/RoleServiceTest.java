@@ -2,10 +2,9 @@ package com.itrex.java.lab.crm.service;
 
 import com.itrex.java.lab.crm.dto.RoleDTO;
 import com.itrex.java.lab.crm.entity.Role;
-import com.itrex.java.lab.crm.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
 import com.itrex.java.lab.crm.repository.RepositoryTestUtils;
-import com.itrex.java.lab.crm.repository.RoleRepository;
+import com.itrex.java.lab.crm.repository.impl.data.RoleRepository;
 import com.itrex.java.lab.crm.service.impl.RoleServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static com.itrex.java.lab.crm.utils.ConverterUtils.convertRoleToDto;
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,123 +30,89 @@ class RoleServiceTest {
     private RoleRepository roleRepository;
 
     @Test
-    void getAllRole_returnRoleDTOTest() throws CRMProjectServiceException, CRMProjectRepositoryException {
+    void getAllRole_returnRoleDTOTest() {
         //given && when
-        Mockito.when(roleRepository.selectAll()).thenReturn(new ArrayList<>());
+        Mockito.when(roleRepository.findAll()).thenReturn(new ArrayList<>());
 
         //then
         assertEquals(roleService.getAllRoles().size(), 0);
-        Mockito.verify(roleRepository).selectAll();
+        Mockito.verify(roleRepository).findAll();
     }
 
     @Test
-    void selectAll_shouldThrowServiceExceptionTest() throws CRMProjectRepositoryException {
-        //given && when
-        Mockito.when(roleRepository.selectAll()).thenThrow(CRMProjectRepositoryException.class);
-
-        //then
-        assertThrows(CRMProjectServiceException.class, () -> roleService.getAllRoles());
-        Mockito.verify(roleRepository, Mockito.times(1)).selectAll();
-    }
-
-    @Test
-    void getById_existIDRoleDTO_returnUSERRoleTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void getById_existIDRoleDTO_returnUSERRoleTest() {
         //given
         Integer idRole = 2;
         Role role = new Role();
         role.setId(2);
         role.setRoleName("USER");
-        Mockito.when(roleRepository.selectById(2)).thenReturn(role);
+        Mockito.when(roleRepository.findById(2)).thenReturn(Optional.of(role));
 
         //when
         RoleDTO actual = roleService.getById(idRole);
 
         //then
-        Mockito.verify(roleRepository, Mockito.times(1)).selectById(any());
+        Mockito.verify(roleRepository, Mockito.times(1)).findById(any());
         assertEquals(2, actual.getId());
         assertEquals("USER", actual.getRoleName());
     }
 
     @Test
-    void getById_existIDRoleDTONotDataBase_returnNullTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void getById_existIDRoleDTONotDataBase_returnNullTest() {
         //given
         Integer roleId = 28;
-        Mockito.when(roleRepository.selectById(roleId)).thenReturn(null);
+        Optional<Role> role = Optional.ofNullable(null);
+        Mockito.when(roleRepository.findById(roleId)).thenReturn(role);
         //when
         RoleDTO actual = roleService.getById(roleId);
 
         //then
-        Mockito.verify(roleRepository, Mockito.times(1)).selectById(any());
+        Mockito.verify(roleRepository, Mockito.times(1)).findById(any());
         assertNull(actual);
     }
 
     @Test
-    void getById_existRoleDTOId_shouldThrowServiceExceptionTest() throws CRMProjectRepositoryException {
-        //given && when
-        Mockito.when(roleRepository.selectById(any())).thenThrow(CRMProjectRepositoryException.class);
-
-        //then
-        assertThrows(CRMProjectServiceException.class, () -> roleService.getById(any()));
-        Mockito.verify(roleRepository, Mockito.times(1)).selectById(any());
-    }
-
-    @Test
-    void addRole_existRoleDTO_returnRoleDTOTest() throws CRMProjectServiceException, CRMProjectRepositoryException {
+    void addRole_existRoleDTO_returnRoleDTOTest(){
         //given && when
         Role testRole = RepositoryTestUtils.createTestRole(1).get(0);
-        Mockito.when(roleRepository.add(testRole)).thenReturn(testRole);
+        Mockito.when(roleRepository.save(testRole)).thenReturn(testRole);
 
         //then
         assertEquals("TEST " + 0, roleService.addRole(convertRoleToDto(testRole)).getRoleName());
-        Mockito.verify(roleRepository, Mockito.times(1)).add(any());
+        Mockito.verify(roleRepository, Mockito.times(1)).save(any());
     }
 
     @Test
-    void updateRole_existRoleDTO_returnRoleTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void updateRole_existRoleDTO_returnRoleTest() throws CRMProjectServiceException {
         //given
         Role expected = RepositoryTestUtils.createTestRole(1).get(0);
         Integer testId = 1;
         expected.setId(testId);
-        Mockito.when(roleRepository.selectById(1)).thenReturn(expected);
-        Mockito.when(roleRepository.update(expected)).thenReturn(expected);
+        Mockito.when(roleRepository.findById(1)).thenReturn(Optional.of(expected));
+        Mockito.when(roleRepository.save(expected)).thenReturn(expected);
 
         //when
         RoleDTO actual = roleService.updateRole(convertRoleToDto(expected));
 
         //then
-        Mockito.verify(roleRepository, Mockito.times(1)).update(any());
-        Mockito.verify(roleRepository).selectById(any());
+        Mockito.verify(roleRepository, Mockito.times(1)).save(any());
+        Mockito.verify(roleRepository).findById(any());
         assertEquals(1, actual.getId());
         assertEquals("TEST 0", actual.getRoleName());
     }
 
     @Test
-    void updateRole_existRoleDTONonDB_returnNullTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void updateRole_existRoleDTONonDB_returnCRMProjectServiceExceptionTest(){
         //given && when
         Role expected = RepositoryTestUtils.createTestRole(1).get(0);
         expected.setId(99);
-        Mockito.when(roleRepository.selectById(expected.getId())).thenReturn(null);
+        Mockito.when(roleRepository.findById(expected.getId())).thenReturn(Optional.ofNullable(null));
 
         //when
         assertThrows(CRMProjectServiceException.class, () -> roleService.updateRole(convertRoleToDto(expected)));
 
         //then
-        Mockito.verify(roleRepository, Mockito.times(1)).selectById(any());
-    }
-
-    @Test
-    void update_existRoleDTO_shouldThrowServiceExceptionTest() throws CRMProjectRepositoryException {
-        //given && when
-        Role role = new Role();
-        role.setId(1);
-        role.setRoleName("Test Role");
-        Mockito.when(roleRepository.selectById(1)).thenReturn(role);
-        Mockito.when(roleRepository.update(role)).thenThrow(CRMProjectRepositoryException.class);
-
-        //then
-        assertThrows(CRMProjectServiceException.class, () -> roleService.updateRole(convertRoleToDto(role)));
-        Mockito.verify(roleRepository, Mockito.times(1)).update(any());
-        Mockito.verify(roleRepository).selectById(any());
+        Mockito.verify(roleRepository, Mockito.times(1)).findById(any());
     }
 
 }

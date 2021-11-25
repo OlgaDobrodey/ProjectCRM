@@ -8,9 +8,9 @@ import com.itrex.java.lab.crm.entity.Task;
 import com.itrex.java.lab.crm.entity.User;
 import com.itrex.java.lab.crm.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
-import com.itrex.java.lab.crm.repository.RoleRepository;
 import com.itrex.java.lab.crm.repository.TaskRepository;
 import com.itrex.java.lab.crm.repository.UserRepository;
+import com.itrex.java.lab.crm.repository.impl.data.RoleRepository;
 import com.itrex.java.lab.crm.service.UserService;
 import com.itrex.java.lab.crm.utils.ConverterUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,10 +86,8 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public List<UserDTO> getAllRoleUsersByRoleId(Integer roleId) throws CRMProjectServiceException {
         try {
-            Role role = roleRepository.selectById(roleId);
-            if (role == null) {
-                throw new CRMProjectServiceException("ERROR SERVICE: NO ROLE FOUND WITH ID");
-            }
+            Role role = roleRepository.findById(roleId).orElseThrow(() -> new CRMProjectServiceException("ERROR SERVICE: NO ROLE FOUND WITH ID"));
+
             return userRepository.selectAllUsersByRoleId(roleId)
                     .stream()
                     .map(ConverterUtils::convertUserToDto)
@@ -108,7 +106,7 @@ public class UserServiceImpl implements UserService {
                     .psw(userDTO.getPsw())
                     .firstName(userDTO.getFirstName())
                     .lastName(userDTO.getLastName())
-                    .role(roleRepository.selectById(userDTO.getRoleId()))
+                    .role(roleRepository.findById(userDTO.getRoleId()).get())
                     .build();
             return convertUserToDto(userRepository.add(user));
         } catch (CRMProjectRepositoryException ex) {
@@ -134,7 +132,9 @@ public class UserServiceImpl implements UserService {
     public UserDTO update(UserDTO userDTO) throws CRMProjectServiceException {
         try {
             User user = userRepository.selectById(userDTO.getId());
-            Role role = roleRepository.selectById(userDTO.getRoleId());
+            Role role = roleRepository.findById(userDTO.getRoleId())
+                    .orElseThrow(() -> new CRMProjectServiceException("ERROR SERVICE: UPDATE USER: USER BY ID "
+                            + userDTO.getId() + " NO FOUND DATA BASE"));
             if (user == null || role == null) {
                 throw new CRMProjectServiceException("ERROR SERVICE: UPDATE USER: USER BY ID "
                         + userDTO.getId() + " NO FOUND DATA BASE");

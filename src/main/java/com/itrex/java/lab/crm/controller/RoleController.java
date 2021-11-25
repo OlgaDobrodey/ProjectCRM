@@ -27,12 +27,9 @@ public class RoleController extends BaseController {
     */
     @GetMapping("/roles")
     public ResponseEntity<List<RoleDTO>> read() {
-        List<RoleDTO> tasks = new ArrayList<>();
-        try {
-            tasks = roleService.getAllRoles();
-        } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+
+        List<RoleDTO> tasks = roleService.getAllRoles();
+
         return tasks != null && !tasks.isEmpty()
                 ? new ResponseEntity<>(tasks, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -43,12 +40,9 @@ public class RoleController extends BaseController {
     */
     @GetMapping("/roles/{id}")
     public ResponseEntity<?> readTaskByIdTask(@PathVariable Integer id) {
-        RoleDTO readRole = null;
-        try {
-            readRole = roleService.getById(id);
-        } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+
+        RoleDTO readRole = roleService.getById(id);
+
         return readRole != null
                 ? new ResponseEntity<>(readRole, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -77,12 +71,8 @@ public class RoleController extends BaseController {
     */
     @PostMapping("/roles")
     public ResponseEntity<?> create(@RequestBody RoleDTO roleDTO) {
-        RoleDTO created = null;
-        try {
-            created = roleService.addRole(roleDTO);
-        } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+
+        RoleDTO created = roleService.addRole(roleDTO);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 

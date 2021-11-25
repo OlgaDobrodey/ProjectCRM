@@ -4,7 +4,7 @@ import com.itrex.java.lab.crm.entity.Role;
 import com.itrex.java.lab.crm.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.crm.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,8 +12,9 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-@Primary
+@Deprecated
 @Repository
+@Qualifier("HibernateRoleRepository")
 public class HibernateRoleRepositoryImpl implements RoleRepository {
 
     private static final String SELECT_ALL = "select r from Role r";

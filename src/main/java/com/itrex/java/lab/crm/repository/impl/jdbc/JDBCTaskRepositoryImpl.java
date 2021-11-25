@@ -4,7 +4,6 @@ import com.itrex.java.lab.crm.entity.Status;
 import com.itrex.java.lab.crm.entity.Task;
 import com.itrex.java.lab.crm.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.crm.repository.TaskRepository;
-import com.itrex.java.lab.crm.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -35,8 +34,6 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
 
     @Autowired
     private DataSource dataSource;
-    @Autowired
-    private UserRepository userRepository;
 
     @Override
     public List<Task> selectAll() throws CRMProjectRepositoryException {
