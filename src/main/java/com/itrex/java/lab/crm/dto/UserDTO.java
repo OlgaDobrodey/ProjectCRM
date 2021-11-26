@@ -26,6 +26,7 @@ public class UserDTO {
     private String firstName;
     @NotNull
     private String lastName;
+    @NotNull
     private Integer roleId;
 
     @Override

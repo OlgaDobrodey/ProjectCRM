@@ -87,6 +87,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDTO add(UserDTO userDTO) throws CRMProjectServiceException {
+        verification(userDTO);
 
         User user = User.builder()
                 .login(userDTO.getLogin())
@@ -111,15 +112,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDTO update(UserDTO userDTO) throws CRMProjectServiceException {
+        verification(userDTO);
 
         User user = userRepository.findById(userDTO.getId()).orElseThrow(() -> new CRMProjectServiceException("USER NO FOUND DATA BASE"));
         Role role = roleRepository.findById(userDTO.getRoleId())
                 .orElseThrow(() -> new CRMProjectServiceException("ERROR SERVICE: UPDATE USER: USER BY ID "
                         + userDTO.getId() + " NO FOUND DATA BASE"));
 
-        if (!checkIfValidPassword(user, userDTO.getPsw())) {
-            throw new CRMProjectServiceException("ERROR SERVICE: Wrong password");
-        }
         user.setLogin(userDTO.getLogin());
         user.setLastName(userDTO.getLastName());
         user.setFirstName(userDTO.getFirstName());
@@ -131,16 +130,22 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDTO updateUserPassword(PasswordDTOForChanges passwordDTO, Integer userId) throws CRMProjectServiceException {
 
-        if (passwordDTO.getNewPassword().isBlank()) {
-            throw new CRMProjectServiceException("ERROR SERVICE updateUserPassword: newPassword is empty ");
-        }
         if (!passwordDTO.getNewPassword().equals(passwordDTO.getRepeatNewPassword())) {
             throw new CRMProjectServiceException("ERROR SERVICE updateUserPassword: newPassword not equals repeatNewPassword ");
         }
+
+        if (!verificationPassword(passwordDTO.getNewPassword())) {
+            throw new CRMProjectServiceException("ERROR SERVICE updateUserPassword: newPassword is not valid");
+        }
+
+        if (!verificationPassword(passwordDTO.getOldPassword())) {
+            throw new CRMProjectServiceException("ERROR SERVICE updateUserPassword: oldPassword is valid");
+        }
+
         User user = userRepository.findById(userId).orElseThrow(() -> new CRMProjectServiceException("USER NO FOUND DATA BASE"));
 
-        if (!checkIfValidPassword(user, passwordDTO.getOldPassword())) {
-            throw new CRMProjectServiceException("ERROR SERVICE updateUserPassword: no found on DB user by oldPassword");
+        if (!user.getPsw().equals(passwordDTO.getOldPassword())) {
+            throw new CRMProjectServiceException("ERROR SERVICE updateUserPassword: oldPassword is not equals password user by Id" + userId);
         }
         user.setPsw(passwordDTO.getNewPassword());
         return convertUserToDto(userRepository.save(user));
@@ -181,11 +186,32 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    private Boolean checkIfValidPassword(User user, String password) {
-        if (user == null || password == null) {
-            return false;
+    private Boolean verificationPassword(String password) {
+        return !(password.isBlank() || !password.matches("[a-zA-z0-9]{2,255}$"));
+    }
+
+    /*
+    Проверка пользователя:
+     -логин не пустой, длина от 5 до 50 символов(латинские буквы, цифры, нижнее подчеркивание),
+     -пароль не пустой, длина от 2 до 255 символов(латинские буквы и цифры),
+     -имя не пустое, длина от 2 до 50 символов(латинские буквы),
+     -фамилия не пустая, длина от 2 до 50 символов(латинские буквы),
+     -роль проверяется на уровне JSON parse.
+     */
+    private void verification(UserDTO user) throws CRMProjectServiceException {
+
+        if (user.getLogin().isBlank() || !user.getLogin().matches("[a-zA-z0-9_]{5,50}$")) {
+            throw new CRMProjectServiceException("No valid login");
         }
-        return user.getPsw().equals(password);
+        if (!verificationPassword(user.getPsw())) {
+            throw new CRMProjectServiceException("No valid password");
+        }
+        if (user.getFirstName().isBlank() || !user.getFirstName().matches("[a-zA-z]{2,50}$")) {
+            throw new CRMProjectServiceException("No valid First Name");
+        }
+        if (user.getLastName().isBlank() || !user.getLastName().matches("[a-zA-z]{2,50}$")) {
+            throw new CRMProjectServiceException("No valid Last Name");
+        }
     }
 
 }

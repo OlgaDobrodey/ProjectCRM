@@ -66,11 +66,11 @@ public class UserServiceTest {
 
         //then
         assertEquals(2, actual.getId());
-        assertEquals("Test 1", actual.getLogin());
+        assertEquals("Test1", actual.getLogin());
         assertEquals("1231", actual.getPsw());
         assertEquals(1, actual.getRoleId());
-        assertEquals("Ivanov 1", actual.getLastName());
-        assertEquals("Ivan 1", actual.getFirstName());
+        assertEquals("IvanovB", actual.getLastName());
+        assertEquals("IvanB", actual.getFirstName());
         verify(userRepository).findById(idUser);
     }
 
@@ -99,11 +99,11 @@ public class UserServiceTest {
 
         //then
         assertEquals(2, actual.getId());
-        assertEquals("Test 1", actual.getLogin());
+        assertEquals("Test1", actual.getLogin());
         assertEquals("1231", actual.getPsw());
         assertEquals(1, actual.getRoleId());
-        assertEquals("Ivanov 1", actual.getLastName());
-        assertEquals("Ivan 1", actual.getFirstName());
+        assertEquals("IvanovB", actual.getLastName());
+        assertEquals("IvanB", actual.getFirstName());
         verify(userRepository).findUserByLogin(user.getLogin());
     }
 
@@ -136,17 +136,17 @@ public class UserServiceTest {
 
         //then
         assertEquals(1, actual.get(0).getId());
-        assertEquals("Test 0", actual.get(0).getLogin());
+        assertEquals("Test0", actual.get(0).getLogin());
         assertEquals("1230", actual.get(0).getPsw());
         assertEquals(1, actual.get(0).getRoleId());
-        assertEquals("Ivanov 0", actual.get(0).getLastName());
-        assertEquals("Ivan 0", actual.get(0).getFirstName());
+        assertEquals("IvanovA", actual.get(0).getLastName());
+        assertEquals("IvanA", actual.get(0).getFirstName());
         assertEquals(2, actual.get(1).getId());
-        assertEquals("Test 1", actual.get(1).getLogin());
+        assertEquals("Test1", actual.get(1).getLogin());
         assertEquals("1231", actual.get(1).getPsw());
         assertEquals(1, actual.get(1).getRoleId());
-        assertEquals("Ivanov 1", actual.get(1).getLastName());
-        assertEquals("Ivan 1", actual.get(1).getFirstName());
+        assertEquals("IvanovB", actual.get(1).getLastName());
+        assertEquals("IvanB", actual.get(1).getFirstName());
         verify(userRepository).findUsersByTasks_id(task.getId());
         verify(taskRepository).findById(task.getId());
     }
@@ -190,11 +190,11 @@ public class UserServiceTest {
 
         //then
         assertEquals(1, actual.getId());
-        assertEquals("Test 0", actual.getLogin());
+        assertEquals("Test0", actual.getLogin());
         assertEquals("1230", actual.getPsw());
         assertEquals(1, actual.getRoleId());
-        assertEquals("Ivanov 0", actual.getLastName());
-        assertEquals("Ivan 0", actual.getFirstName());
+        assertEquals("IvanovA", actual.getLastName());
+        assertEquals("IvanA", actual.getFirstName());
         verify(userRepository).save(user);
         verify(roleRepository).findById(1);
     }
@@ -212,11 +212,11 @@ public class UserServiceTest {
 
         //then
         assertEquals(1, actual.getId());
-        assertEquals("Test 0", actual.getLogin());
+        assertEquals("Test0", actual.getLogin());
         assertEquals("1230", actual.getPsw());
         assertEquals(1, actual.getRoleId());
-        assertEquals("Ivanov 0", actual.getLastName());
-        assertEquals("Ivan 0", actual.getFirstName());
+        assertEquals("IvanovA", actual.getLastName());
+        assertEquals("IvanA", actual.getFirstName());
         verify(userRepository).save(expected);
         verify(userRepository).findById(any());
         verify(roleRepository).findById(any());
@@ -359,11 +359,11 @@ public class UserServiceTest {
 
         //then
         assertEquals(1, expected.getId());
-        assertEquals("Test 0", expected.getLogin());
+        assertEquals("Test0", expected.getLogin());
         assertEquals("12345", expected.getPsw());
         assertEquals(1, expected.getRoleId());
-        assertEquals("Ivanov 0", expected.getLastName());
-        assertEquals("Ivan 0", expected.getFirstName());
+        assertEquals("IvanovA", expected.getLastName());
+        assertEquals("IvanA", expected.getFirstName());
         verify(userRepository).findById(user.getId());
         verify(userRepository).save(user);
     }

@@ -28,9 +28,9 @@ public class RepositoryTestUtils {
         List<User> users = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             users.add(User.builder()
-                    .lastName("Ivanov " + i)
-                    .firstName("Ivan " + i)
-                    .login("Test " + i)
+                    .lastName("Ivanov" + (char)('@' + (i+1)))
+                    .firstName("Ivan" + (char)('@' + (i+1)))
+                    .login("Test" + i)
                     .psw("123" + i)
                     .role(role)
                     .build());
@@ -43,9 +43,9 @@ public class RepositoryTestUtils {
         for (int i = start; i < start + count; i++) {
             users.add(User.builder()
                     .id(i + 1)
-                    .lastName("Ivanov " + i)
-                    .firstName("Ivan " + i)
-                    .login("Test " + i)
+                    .lastName("Ivanov" + (char)('@' + (i+1)))
+                    .firstName("Ivan" + (char)('@' + (i+1)))
+                    .login("Test" + i)
                     .psw("123" + i)
                     .role(role)
                     .build());

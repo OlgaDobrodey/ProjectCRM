@@ -132,6 +132,9 @@ public class TaskServiceImpl implements TaskService {
         if (task.getTitle().isBlank() || !task.getTitle().matches(".{2,250}$")) {
             throw new CRMProjectServiceException("No valid task title");
         }
+        if (!task.getTitle().matches(".{1,250}$")){
+            throw new CRMProjectServiceException("No valid task info");
+        }
     }
 
 }

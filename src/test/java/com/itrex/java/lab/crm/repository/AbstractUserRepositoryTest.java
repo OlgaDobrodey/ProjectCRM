@@ -149,11 +149,11 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
 
         //then
         assertEquals(11, actual.getId());
-        assertEquals("Test 0", actual.getLogin());
+        assertEquals("Test0", actual.getLogin());
         assertEquals("1230", actual.getPsw());
         assertEquals("ADMIN", actual.getRole().getRoleName());
-        assertEquals("Ivanov 0", actual.getLastName());
-        assertEquals("Ivan 0", actual.getFirstName());
+        assertEquals("IvanovA", actual.getLastName());
+        assertEquals("IvanA", actual.getFirstName());
     }
 
     @Test
@@ -176,11 +176,11 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
 
         //then
         assertEquals(1, actual.getId());
-        assertEquals("Test 0", actual.getLogin());
+        assertEquals("Test0", actual.getLogin());
         assertEquals("1230", actual.getPsw());
         assertEquals("ADMIN", actual.getRole().getRoleName());
-        assertEquals("Ivanov 0", actual.getLastName());
-        assertEquals("Ivan 0", actual.getFirstName());
+        assertEquals("IvanovA", actual.getLastName());
+        assertEquals("IvanA", actual.getFirstName());
     }
 
     @Test
