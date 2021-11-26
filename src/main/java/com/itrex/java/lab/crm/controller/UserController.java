@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -30,12 +29,9 @@ public class UserController extends BaseController {
      */
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> read() {
-        List<UserDTO> users = new ArrayList<>();
-        try {
-            users = userService.getAll();
-        } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        }
+
+        List<UserDTO> users  = userService.getAll();
+
         return users != null && !users.isEmpty()
                 ? new ResponseEntity<>(users, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -47,15 +43,11 @@ public class UserController extends BaseController {
     */
     @GetMapping("/users/{id}")
     public ResponseEntity<?> readTaskByIdTask(@PathVariable Integer id) {
-        UserDTO readed = null;
-        try {
-            readed = userService.getById(id);
-        } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        UserDTO readed = userService.getById(id);
+
         return readed != null
                 ? new ResponseEntity<>(readed, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                : new ResponseEntity<>("no found user in DB",HttpStatus.NOT_FOUND);
     }
 
     /*
@@ -64,12 +56,9 @@ public class UserController extends BaseController {
    */
     @GetMapping("/users/{id}/tasks")
     public ResponseEntity<List<TaskDTO>> readAllUserTasksByUserId(@PathVariable Integer id) {
-        List<TaskDTO> tasks = new ArrayList<>();
-        try {
-            tasks = taskService.getAllUserTasksByUserId(id);
-        } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+
+        List<TaskDTO>  tasks = taskService.getAllUserTasksByUserId(id);
+
         return tasks != null && !tasks.isEmpty()
                 ? new ResponseEntity<>(tasks, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -80,11 +69,11 @@ public class UserController extends BaseController {
     */
     @PostMapping("/users")
     public ResponseEntity<?> create(@RequestBody UserDTO userDTO) {
-        UserDTO createUser = null;
+        UserDTO createUser;
         try {
             createUser = userService.add(userDTO);
         } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(createUser, HttpStatus.CREATED);
     }
@@ -97,12 +86,12 @@ public class UserController extends BaseController {
         try {
             UserDTO verificationUser = userService.getByLogin(user.getLogin());
             if (verificationUser == null || (!verificationUser.getPsw().equals(user.getPsw()))) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("User isn't valid ",HttpStatus.NOT_FOUND);
             }
             model.addAttribute("userActiv", verificationUser);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (CRMProjectServiceException e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity(e.getMessage(),HttpStatus.NOT_FOUND);
         }
     }
 
@@ -113,11 +102,11 @@ public class UserController extends BaseController {
     @PutMapping(value = "/users/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody UserDTO userDTO) {
         userDTO.setId(id);
-        UserDTO updated = null;
+        UserDTO updated;
         try {
             updated = userService.update(userDTO);
         } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
+           return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
         return updated != null
                 ? new ResponseEntity<>(HttpStatus.OK)
@@ -134,7 +123,7 @@ public class UserController extends BaseController {
         try {
             updated = userService.updateUserPassword(psw, id);
         } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
         return updated != null
                 ? new ResponseEntity<>(HttpStatus.OK)
@@ -150,7 +139,7 @@ public class UserController extends BaseController {
         try {
             userService.assignTaskToUser(taskId, userId);
         } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_MODIFIED);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -164,7 +153,7 @@ public class UserController extends BaseController {
         try {
             userService.remove(id);
         } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -178,7 +167,7 @@ public class UserController extends BaseController {
         try {
             userService.revokeTaskFromUser(taskId, userId);
         } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_MODIFIED);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -192,7 +181,7 @@ public class UserController extends BaseController {
         try {
             userService.revokeAllUserTasksByUserId(userId);
         } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+           return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_MODIFIED);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

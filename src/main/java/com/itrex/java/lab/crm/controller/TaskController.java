@@ -11,11 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class TaskController extends BaseController{
+public class TaskController extends BaseController {
 
     @Autowired
     private TaskService taskService;
@@ -28,12 +27,9 @@ public class TaskController extends BaseController{
      */
     @GetMapping("/tasks")
     public ResponseEntity<List<TaskDTO>> read() {
-        List<TaskDTO> tasks = new ArrayList<>();
-        try {
-            tasks = taskService.getAll();
-        } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+
+        List<TaskDTO> tasks = taskService.getAll();
+
         return tasks != null && !tasks.isEmpty()
                 ? new ResponseEntity<>(tasks, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -44,15 +40,12 @@ public class TaskController extends BaseController{
      */
     @GetMapping("/tasks/{id}")
     public ResponseEntity<?> readTaskByIdTask(@PathVariable Integer id) {
-        TaskDTO readTask = null;
-        try {
-            readTask = taskService.getById(id);
-        } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+
+        TaskDTO readTask = taskService.getById(id);
+
         return readTask != null
                 ? new ResponseEntity<>(readTask, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                : new ResponseEntity<>("no found DB role by id",HttpStatus.NOT_FOUND);
     }
 
     /*
@@ -61,11 +54,11 @@ public class TaskController extends BaseController{
      */
     @GetMapping("/tasks/{id}/users")
     public ResponseEntity<List<UserDTO>> readAllTaskUsersByTaskId(@PathVariable Integer id) {
-        List<UserDTO> users = new ArrayList<>();
+        List<UserDTO> users;
         try {
             users = userService.getAllTaskUsersByTaskId(id);
         } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return users != null && !users.isEmpty()
                 ? new ResponseEntity<>(users, HttpStatus.OK)
@@ -80,11 +73,11 @@ public class TaskController extends BaseController{
      */
     @PostMapping("/tasks")
     public ResponseEntity<?> create(@RequestBody TaskDTO taskDTO) {
-        TaskDTO createTask = null;
+        TaskDTO createTask;
         try {
             createTask = taskService.add(taskDTO);
         } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
+           return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(createTask, HttpStatus.CREATED);
     }
@@ -100,7 +93,7 @@ public class TaskController extends BaseController{
         try {
             updated = taskService.update(taskDTO);
         } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
         return updated != null
                 ? new ResponseEntity<>(HttpStatus.OK)
@@ -119,7 +112,7 @@ public class TaskController extends BaseController{
         try {
             taskService.finishTaskByTaskId(id);
         } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -134,7 +127,7 @@ public class TaskController extends BaseController{
         try {
             taskService.remove(id);
         } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
+           return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -148,11 +141,11 @@ public class TaskController extends BaseController{
         try {
             taskStatus = taskService.changeStatusDTO(status, id);
         } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
         return taskStatus != null
                 ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);//TODO
+                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
 }

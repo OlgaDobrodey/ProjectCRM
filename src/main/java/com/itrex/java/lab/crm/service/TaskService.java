@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface TaskService {
 
-    List<TaskDTO> getAll() throws CRMProjectServiceException;
+    List<TaskDTO> getAll();
 
-    TaskDTO getById(Integer id) throws CRMProjectServiceException;
+    TaskDTO getById(Integer id);
 
-    List<TaskDTO> getAllUserTasksByUserId(Integer userId) throws CRMProjectServiceException;
+    List<TaskDTO> getAllUserTasksByUserId(Integer userId);
 
     TaskDTO add(TaskDTO task) throws CRMProjectServiceException;
 

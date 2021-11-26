@@ -5,6 +5,7 @@ import com.itrex.java.lab.crm.exceptions.CRMProjectRepositoryException;
 
 import java.util.List;
 
+@Deprecated
 public interface TaskRepository {
 
     List<Task> selectAll() throws CRMProjectRepositoryException;

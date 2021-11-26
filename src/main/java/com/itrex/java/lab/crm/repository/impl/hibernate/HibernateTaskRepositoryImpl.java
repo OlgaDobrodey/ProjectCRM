@@ -4,15 +4,16 @@ import com.itrex.java.lab.crm.entity.Task;
 import com.itrex.java.lab.crm.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.crm.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-@Primary
+@Deprecated
 @Repository
+@Qualifier("HibernateTaskRepository")
 public class HibernateTaskRepositoryImpl implements TaskRepository {
 
     private static final String USER_ID = "userId";

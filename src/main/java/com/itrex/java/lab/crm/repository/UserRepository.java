@@ -5,8 +5,8 @@ import com.itrex.java.lab.crm.exceptions.CRMProjectRepositoryException;
 
 import java.util.List;
 
+@Deprecated
 public interface UserRepository {
-
 
     List<User> selectAll() throws CRMProjectRepositoryException;
 
@@ -14,7 +14,6 @@ public interface UserRepository {
     User selectByLogin(String login) throws CRMProjectRepositoryException;
 
     List<User> selectAllUsersByTaskId(Integer taskId) throws CRMProjectRepositoryException;
-
     List<User> selectAllUsersByRoleId(Integer roleId) throws CRMProjectRepositoryException;
 
     User add(User user) throws CRMProjectRepositoryException;

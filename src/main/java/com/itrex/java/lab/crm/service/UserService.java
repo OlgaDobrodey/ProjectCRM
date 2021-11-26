@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface UserService {
 
-    List<UserDTO> getAll() throws CRMProjectServiceException;
-    UserDTO getById(Integer id) throws CRMProjectServiceException;
+    List<UserDTO> getAll();
+    UserDTO getById(Integer id);
     UserDTO getByLogin(String login) throws CRMProjectServiceException;
     List<UserDTO> getAllTaskUsersByTaskId(Integer taskId) throws CRMProjectServiceException;
     List<UserDTO> getAllRoleUsersByRoleId(Integer roleId) throws CRMProjectServiceException;

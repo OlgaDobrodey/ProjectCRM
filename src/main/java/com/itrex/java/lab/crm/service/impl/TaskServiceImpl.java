@@ -3,9 +3,8 @@ package com.itrex.java.lab.crm.service.impl;
 import com.itrex.java.lab.crm.dto.TaskDTO;
 import com.itrex.java.lab.crm.entity.Status;
 import com.itrex.java.lab.crm.entity.Task;
-import com.itrex.java.lab.crm.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
-import com.itrex.java.lab.crm.repository.TaskRepository;
+import com.itrex.java.lab.crm.repository.impl.data.TaskRepository;
 import com.itrex.java.lab.crm.service.TaskService;
 import com.itrex.java.lab.crm.utils.ConverterUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,120 +29,108 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<TaskDTO> getAll() throws CRMProjectServiceException {
-        try {
-            return taskRepository.selectAll().stream()
-                    .map(ConverterUtils::convertTaskToDto)
-                    .collect(Collectors.toList());
-        } catch (CRMProjectRepositoryException ex) {
-            throw new CRMProjectServiceException("ERROR SERVICE: GET ALL TASK:", ex);
-        }
+    public List<TaskDTO> getAll() {
+
+        return taskRepository.findAll().stream()
+                .map(ConverterUtils::convertTaskToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public TaskDTO getById(Integer id) throws CRMProjectServiceException {
-        try {
-            Task task = taskRepository.selectById(id);
-            return task != null ? convertTaskToDto(task) : null;
-        } catch (CRMProjectRepositoryException ex) {
-            throw new CRMProjectServiceException("ERROR SERVICE: GET BY ID TASK:", ex);
-        }
+    public TaskDTO getById(Integer id) {
+
+        return taskRepository.findById(id)
+                .map(ConverterUtils::convertTaskToDto)
+                .orElse(null);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<TaskDTO> getAllUserTasksByUserId(Integer userId) throws CRMProjectServiceException {
-        try {
-            return taskRepository.selectAllTasksByUserId(userId).stream()
-                    .map(ConverterUtils::convertTaskToDto)
-                    .collect(Collectors.toList());
-        } catch (CRMProjectRepositoryException ex) {
-            throw new CRMProjectServiceException("ERROR SERVICE: SELECT TASK BY USER: ", ex);
-        }
+    public List<TaskDTO> getAllUserTasksByUserId(Integer userId) {
+
+        return taskRepository.findTasksByUsers_Id(userId).stream()
+                .map(ConverterUtils::convertTaskToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
     public TaskDTO add(TaskDTO task) throws CRMProjectServiceException {
-        try {
-            Task addTask = Task.builder()
-                    .title(task.getTitle())
-                    .status(Status.NEW)
-                    .deadline(task.getDeadline())
-                    .info(task.getInfo())
-                    .build();
-            return convertTaskToDto(taskRepository.add(addTask));
-        } catch (CRMProjectRepositoryException ex) {
-            throw new CRMProjectServiceException("ERROR SERVICE: ADD TASK:", ex);
-        }
+        verification(task);
+
+        Task addTask = Task.builder()
+                .title(task.getTitle())
+                .status(Status.NEW)
+                .deadline(task.getDeadline())
+                .info(task.getInfo())
+                .build();
+        return convertTaskToDto(taskRepository.save(addTask));
     }
 
     @Override
     @Transactional
     public TaskDTO update(TaskDTO task) throws CRMProjectServiceException {
-        try {
-            Task update = taskRepository.selectById(task.getId());
-            if (update == null) {
-                throw new CRMProjectServiceException("TASK NO FOUND DATA BASE");
-            }
-            update.setTitle(task.getTitle());
-            update.setStatus(task.getStatus());
-            update.setDeadline(task.getDeadline());
-            update.setInfo(task.getInfo());
-            return convertTaskToDto(taskRepository.update(update));
-        } catch (CRMProjectRepositoryException ex) {
-            throw new CRMProjectServiceException("ERROR SERVICE: UPDATE TASK:", ex);
-        }
+        verification(task);
+
+        Task update = taskRepository.findById(task.getId()).orElseThrow(() -> new CRMProjectServiceException("TASK NO FOUND DATA BASE"));
+
+        update.setTitle(task.getTitle());
+        update.setStatus(task.getStatus());
+        update.setDeadline(task.getDeadline());
+        update.setInfo(task.getInfo());
+        return convertTaskToDto(taskRepository.save(update));
     }
 
     @Override
     @Transactional
     public void finishTaskByTaskId(Integer taskId) throws CRMProjectServiceException {
-        try {
-            Task task = taskRepository.selectById(taskId);
-            task.setStatus(Status.DONE);
 
-            task.getUsers().forEach(user -> user.getTasks().removeIf(t -> t.getId() == taskId));
-            taskRepository.update(task);
-        } catch (CRMProjectRepositoryException ex) {
-            throw new CRMProjectServiceException("ERROR SERVICE: DELETE ALL TASK:", ex);
-        }
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new CRMProjectServiceException("TASK NO FOUND DATA BASE"));
+        task.setStatus(Status.DONE);
+
+        task.getUsers().forEach(user -> user.getTasks().removeIf(t -> t.getId() == taskId));
+        taskRepository.save(task);
     }
 
     @Override
     @Transactional
     public void remove(Integer taskId) throws CRMProjectServiceException {
-        try {
-            Task task = taskRepository.selectById(taskId);
-            task.setStatus(Status.DONE);
 
-            task.getUsers().forEach(user -> user.getTasks().removeIf(t -> t.getId() == taskId));
-            taskRepository.update(task);
-            taskRepository.remove(taskId);
-        } catch (CRMProjectRepositoryException ex) {
-            throw new CRMProjectServiceException("ERROR SERVICE: DELETE TASK:", ex);
-        }
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new CRMProjectServiceException("TASK NO FOUND DATA BASE"));
+        task.setStatus(Status.DONE);
+
+        task.getUsers().forEach(user -> user.getTasks().removeIf(t -> t.getId() == taskId));
+        taskRepository.save(task);
+        taskRepository.delete(task);
     }
 
     @Override
     @Transactional
     public TaskDTO changeStatusDTO(Status status, Integer taskId) throws CRMProjectServiceException {
-        try {
-            Task task = taskRepository.selectById(taskId);
-            if (task == null) {
-                throw new CRMProjectServiceException("TASK SERVICE: changeStatusForTaskId: no found task by Id" + taskId);
-            }
-            if (status == Status.PROGRESS && CollectionUtils.isEmpty(task.getUsers())) {
-                throw new CRMProjectServiceException("Wrong status: " + status);
-            } else if (status != Status.PROGRESS && !CollectionUtils.isEmpty(task.getUsers())) {
-                task.getUsers().forEach(user -> user.getTasks().removeIf(t -> t.getId() == taskId));
-            }
-            task.setStatus(status);
-            return convertTaskToDto(taskRepository.update(task));
-        } catch (
-                CRMProjectRepositoryException e) {
-            throw new CRMProjectServiceException("TASK SERVICE: changeStatusForTaskId:", e);
+
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new CRMProjectServiceException("TASK NO FOUND DATA BASE"));
+
+        if (status == Status.PROGRESS && CollectionUtils.isEmpty(task.getUsers())) {
+            throw new CRMProjectServiceException("Wrong status: " + status);
+        } else if (status != Status.PROGRESS && !CollectionUtils.isEmpty(task.getUsers())) {
+            task.getUsers().forEach(user -> user.getTasks().removeIf(t -> t.getId() == taskId));
+        }
+        task.setStatus(status);
+        return convertTaskToDto(taskRepository.save(task));
+    }
+
+    /*
+   Проверка таски:
+   -title должен быть от 2 до 250 сиволов,
+   -не должен быть isBlank;
+   Статус, дата проверяются JSON parse.
+   дата и инфо могут быть равны = null
+      */
+    private void verification(TaskDTO task) throws CRMProjectServiceException {
+
+        if (task.getTitle().isBlank() || !task.getTitle().matches(".{2,250}$")) {
+            throw new CRMProjectServiceException("No valid task title");
         }
     }
 

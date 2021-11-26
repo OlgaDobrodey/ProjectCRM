@@ -4,6 +4,7 @@ import com.itrex.java.lab.crm.entity.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 
 import java.time.LocalDate;
 
@@ -18,7 +19,9 @@ import java.time.LocalDate;
 public class TaskDTO {
 
     private Integer id;
+    @NonNull
     private String title;
+    @NonNull
     private Status status;
     private LocalDate deadline;
     private String info;
