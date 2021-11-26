@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -45,7 +44,7 @@ public class RoleController extends BaseController {
 
         return readRole != null
                 ? new ResponseEntity<>(readRole, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                : new ResponseEntity<>("no found DB role by id", HttpStatus.NOT_FOUND);
     }
 
     /*
@@ -53,11 +52,11 @@ public class RoleController extends BaseController {
      */
     @GetMapping("/roles/{id}/users")
     public ResponseEntity<?> getAllRoleUsersByRoleId(@PathVariable Integer id) {
-        List<UserDTO> users = new ArrayList<>();
+        List<UserDTO> users;
         try {
             users = userService.getAllRoleUsersByRoleId(id);
         } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
         return users != null && !users.isEmpty()
                 ? new ResponseEntity<>(users, HttpStatus.OK)
@@ -71,8 +70,12 @@ public class RoleController extends BaseController {
     */
     @PostMapping("/roles")
     public ResponseEntity<?> create(@RequestBody RoleDTO roleDTO) {
-
-        RoleDTO created = roleService.addRole(roleDTO);
+        RoleDTO created = null;
+        try {
+            created = roleService.addRole(roleDTO);
+        } catch (CRMProjectServiceException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        }
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
@@ -82,11 +85,11 @@ public class RoleController extends BaseController {
     @PutMapping(value = "/roles/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody RoleDTO roleDTO) {
         roleDTO.setId(id);
-        RoleDTO updated = null;
+        RoleDTO updated;
         try {
             updated = roleService.updateRole(roleDTO);
         } catch (CRMProjectServiceException e) {
-            new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
         return updated != null
                 ? new ResponseEntity<>(HttpStatus.OK)

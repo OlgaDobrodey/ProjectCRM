@@ -83,7 +83,7 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
 
         //then
         assertEquals(5, actual.getId());
-        assertEquals("TEST 0", actual.getRoleName());
+        assertEquals("TESTA", actual.getRoleName());
     }
 
     @Test
@@ -106,7 +106,7 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
 
         //then
         assertEquals(1, actual.getId());
-        assertEquals("TEST 0", actual.getRoleName());
+        assertEquals("TESTA", actual.getRoleName());
     }
 
     @Test

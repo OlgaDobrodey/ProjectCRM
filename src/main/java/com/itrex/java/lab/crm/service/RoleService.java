@@ -11,7 +11,7 @@ public interface RoleService {
 
     RoleDTO getById(Integer id);
 
-    RoleDTO addRole(RoleDTO role);
+    RoleDTO addRole(RoleDTO role) throws CRMProjectServiceException;
 
     RoleDTO updateRole(RoleDTO role) throws CRMProjectServiceException;
 

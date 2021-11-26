@@ -72,13 +72,13 @@ class RoleServiceTest {
     }
 
     @Test
-    void addRole_existRoleDTO_returnRoleDTOTest(){
+    void addRole_existRoleDTO_returnRoleDTOTest() throws CRMProjectServiceException {
         //given && when
         Role testRole = RepositoryTestUtils.createTestRole(1).get(0);
         Mockito.when(roleRepository.save(testRole)).thenReturn(testRole);
 
         //then
-        assertEquals("TEST " + 0, roleService.addRole(convertRoleToDto(testRole)).getRoleName());
+        assertEquals("TESTA", roleService.addRole(convertRoleToDto(testRole)).getRoleName());
         Mockito.verify(roleRepository, Mockito.times(1)).save(any());
     }
 
@@ -98,7 +98,7 @@ class RoleServiceTest {
         Mockito.verify(roleRepository, Mockito.times(1)).save(any());
         Mockito.verify(roleRepository).findById(any());
         assertEquals(1, actual.getId());
-        assertEquals("TEST 0", actual.getRoleName());
+        assertEquals("TESTA", actual.getRoleName());
     }
 
     @Test

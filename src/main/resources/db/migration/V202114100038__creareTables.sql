@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS role
 (
     id        INT         NOT NULL AUTO_INCREMENT,
-    role_name VARCHAR(50) NOT NULL,
+    role_name VARCHAR(10) NOT NULL,
     CONSTRAINT role_pkey PRIMARY KEY (id),
     CONSTRAINT role_unique UNIQUE (role_name)
 );

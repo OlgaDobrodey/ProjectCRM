@@ -3,6 +3,7 @@ package com.itrex.java.lab.crm.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 
 /**
  * The role class is responsible for the user's role.
@@ -17,6 +18,7 @@ import lombok.Data;
 public class RoleDTO {
 
     private Integer id;
+    @NonNull
     private String roleName;
 
     @Override

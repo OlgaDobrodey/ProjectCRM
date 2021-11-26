@@ -18,7 +18,7 @@ public class RepositoryTestUtils {
 
         for (int i = 0; i < count; i++) {
             roles.add(Role.builder()
-                    .roleName("TEST " + i)
+                    .roleName("TEST" + (char)('@' + (i+1)))
                     .build());
         }
         return roles;
