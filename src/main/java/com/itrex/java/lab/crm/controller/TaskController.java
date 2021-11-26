@@ -45,7 +45,7 @@ public class TaskController extends BaseController {
 
         return readTask != null
                 ? new ResponseEntity<>(readTask, HttpStatus.OK)
-                : new ResponseEntity<>("no found DB role by id",HttpStatus.NOT_FOUND);
+                : new ResponseEntity<>("no found DB role by id", HttpStatus.NOT_FOUND);
     }
 
     /*
@@ -77,7 +77,7 @@ public class TaskController extends BaseController {
         try {
             createTask = taskService.add(taskDTO);
         } catch (CRMProjectServiceException e) {
-           return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(createTask, HttpStatus.CREATED);
     }
@@ -89,15 +89,14 @@ public class TaskController extends BaseController {
     @PutMapping(value = "/tasks/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody TaskDTO taskDTO) {
         taskDTO.setId(id);
-        TaskDTO updated = null;
         try {
-            updated = taskService.update(taskDTO);
+            TaskDTO updated = taskService.update(taskDTO);
+            return updated != null
+                    ? new ResponseEntity<>(HttpStatus.OK)
+                    : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
         } catch (CRMProjectServiceException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-        return updated != null
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
     /*
@@ -112,7 +111,7 @@ public class TaskController extends BaseController {
         try {
             taskService.finishTaskByTaskId(id);
         } catch (CRMProjectServiceException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -127,7 +126,7 @@ public class TaskController extends BaseController {
         try {
             taskService.remove(id);
         } catch (CRMProjectServiceException e) {
-           return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -137,11 +136,11 @@ public class TaskController extends BaseController {
      */
     @PutMapping("/tasks/{id}/{status}")
     public ResponseEntity<?> update(@PathVariable Integer id, @PathVariable(name = "status") Status status) {
-        TaskDTO taskStatus = null;
+        TaskDTO taskStatus;
         try {
             taskStatus = taskService.changeStatusDTO(status, id);
         } catch (CRMProjectServiceException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
         return taskStatus != null
                 ? new ResponseEntity<>(HttpStatus.OK)

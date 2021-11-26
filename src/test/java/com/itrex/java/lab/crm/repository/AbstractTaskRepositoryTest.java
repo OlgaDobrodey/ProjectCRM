@@ -166,7 +166,7 @@ public abstract class AbstractTaskRepositoryTest extends BaseRepositoryTest {
     }
 
     @Test
-    void remove_validData_existTask_returnFalseTest() throws CRMProjectRepositoryException {
+    void remove_validData_existTask_returnFalseTest(){
         //given && when && then
         assertThrows(CRMProjectRepositoryException.class, () -> repository.remove(25));
     }

@@ -70,7 +70,7 @@ public class RoleController extends BaseController {
     */
     @PostMapping("/roles")
     public ResponseEntity<?> create(@RequestBody RoleDTO roleDTO) {
-        RoleDTO created = null;
+        RoleDTO created;
         try {
             created = roleService.addRole(roleDTO);
         } catch (CRMProjectServiceException e) {

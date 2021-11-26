@@ -1,6 +1,9 @@
 package com.itrex.java.lab.crm.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,32 +18,21 @@ import java.util.List;
 
 @Entity
 @Table(name = "role", schema = "public")
-@EqualsAndHashCode
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Role implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter
     private Integer id;
 
     @Column(name = "role_name")
     private String roleName;
 
-    @Setter
     @OneToMany(mappedBy = "role")
     private List<User> users;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName.toUpperCase();
-    }
 
     @Override
     public String toString() {

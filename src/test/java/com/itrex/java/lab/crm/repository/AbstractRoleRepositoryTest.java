@@ -67,7 +67,6 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
     void selectById_existRoleId_shouldThrowRepositoryExceptionTest() {
         //given && when
         cleanDB();    //clean Data Base
-        Integer idRole = 2;
 
         //then
         assertThrows(CRMProjectRepositoryException.class, () -> repository.selectById(2));
@@ -110,7 +109,7 @@ public abstract class AbstractRoleRepositoryTest extends BaseRepositoryTest {
     }
 
     @Test
-    void update_validData_existRoleAndIdRoleNonDB_shouldCRMProjectRepositoryExceptionTest() throws CRMProjectRepositoryException {
+    void update_validData_existRoleAndIdRoleNonDB_shouldCRMProjectRepositoryExceptionTest() {
         //given && when
         Role expected = RepositoryTestUtils.createTestRole(1).get(0);
         expected.setId(99);

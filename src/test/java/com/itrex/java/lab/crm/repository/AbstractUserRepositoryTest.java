@@ -188,7 +188,6 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
         //given && when
         cleanDB();    //clean Data Base
         User expected = RepositoryTestUtils.createTestUsers(1).get(0);
-        Integer id = 1;
 
         //then
         assertThrows(CRMProjectRepositoryException.class, () -> repository.update(expected));
@@ -197,10 +196,10 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
     @Test
     void remove_validData_existUser_Test() throws CRMProjectRepositoryException {
         //given
-        User user = repository.selectById(1);
+        Integer userId = 1;
 
         //when
-        repository.remove(1);
+        repository.remove(userId);
 
         //then
         assertEquals(9, repository.selectAll().size());

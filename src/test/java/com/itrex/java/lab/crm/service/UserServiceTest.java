@@ -89,7 +89,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void getByLogin_existUserDTOLogin_returnUserDTOTest() throws CRMProjectServiceException {
+    void getByLogin_existUserDTOLogin_returnUserDTOTest(){
         //given
         User user = createTestUsersWithId(1, 1).get(0);
         when(userRepository.findUserByLogin(user.getLogin())).thenReturn(Optional.of(user));

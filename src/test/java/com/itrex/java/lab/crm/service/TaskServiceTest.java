@@ -4,7 +4,6 @@ import com.itrex.java.lab.crm.dto.TaskDTO;
 import com.itrex.java.lab.crm.entity.Status;
 import com.itrex.java.lab.crm.entity.Task;
 import com.itrex.java.lab.crm.entity.User;
-import com.itrex.java.lab.crm.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
 import com.itrex.java.lab.crm.repository.RepositoryTestUtils;
 import com.itrex.java.lab.crm.repository.impl.data.TaskRepository;
@@ -36,7 +35,7 @@ public class TaskServiceTest {
     private TaskRepository taskRepository;
 
     @Test
-    public void getAll_returnTaskDTOTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    public void getAll_returnTaskDTOTest() {
         //given && when
         final List<Task> result = RepositoryTestUtils.createTestTasks(2);
         result.get(0).setId(1);
@@ -49,7 +48,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    void getById_existTaskDTOID_returnTaskDTOTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void getById_existTaskDTOID_returnTaskDTOTest() {
         //given
         Integer roleId = 2;
         Task task = RepositoryTestUtils.createTestTasks(1).get(0);
@@ -69,7 +68,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    void getById__existIDTaskDTONonDataBase_returnNULLTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void getById__existIDTaskDTONonDataBase_returnNULLTest() {
         //given
         Integer roleId = 28;
         when(taskRepository.findById(roleId)).thenReturn(Optional.ofNullable(null));
@@ -82,8 +81,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    void getAllTaskDTOByUserDTO_existUserDTO_returnListOfTaskDTOTest()
-            throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void getAllTaskDTOByUserDTO_existUserDTO_returnListOfTaskDTOTest() {
         //given
         List<Task> tasks = createTestTasksWithId(0, 2);
         Integer id = 2;
@@ -107,7 +105,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    void add_existTaskDTO_returnExistTaskDTOTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void add_existTaskDTO_returnExistTaskDTOTest() throws CRMProjectServiceException {
         //given
         Task returnTask = createTestTasksWithId(0, 1).get(0);
         Task task = RepositoryTestUtils.createTestTasks(1).get(0);
@@ -126,7 +124,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    void update_existTaskDTO_returnTaskDTOTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void update_existTaskDTO_returnTaskDTOTest() throws CRMProjectServiceException {
         //given
         Task expected = createTestTasksWithId(0, 1).get(0);
         when(taskRepository.findById(expected.getId())).thenReturn(Optional.of(expected));
@@ -146,7 +144,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    void update_existTaskDTONotDB_returnThrowServiceExceptionTestTest() throws CRMProjectRepositoryException {
+    void update_existTaskDTONotDB_returnThrowServiceExceptionTestTest() {
         //given && when
         Task expected = createTestTasksWithId(98, 1).get(0);
         when(taskRepository.findById(expected.getId())).thenReturn(Optional.ofNullable(null));
@@ -157,7 +155,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    void finishTaskByTaskId_existIdTaskTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void finishTaskByTaskId_existIdTaskTest() throws CRMProjectServiceException {
         //given
         User user = createTestUsersWithId(1, 1).get(0);
         Task task = createTestTasksWithId(1, 1).get(0);
@@ -174,7 +172,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    void remove_existTaskDTO_Test() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void remove_existTaskDTO_Test() throws CRMProjectServiceException {
         //given
         User user = createTestUsersWithId(1, 1).get(0);
         Task task = createTestTasksWithId(1, 1).get(0);
@@ -192,7 +190,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    void remove_existTaskDTO_shouldReturnThrowServiceExceptionTest() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void remove_existTaskDTO_shouldReturnThrowServiceExceptionTest() {
         //given && when
         User user = createTestUsersWithId(1, 1).get(0);
         Task task = createTestTasksWithId(1, 1).get(0);
@@ -206,7 +204,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    void changePasswordDTO_existStatusAndTaskIdWithoutUsers_returnTaskDTO() throws CRMProjectRepositoryException, CRMProjectServiceException {
+    void changePasswordDTO_existStatusAndTaskIdWithoutUsers_returnTaskDTO() throws CRMProjectServiceException {
         //given
         Task task = createTestTasksWithId(0, 1).get(0);
         when(taskRepository.findById(task.getId())).thenReturn(Optional.of(task));

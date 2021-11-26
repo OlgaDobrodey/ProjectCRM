@@ -54,7 +54,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     @Override
     @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public User selectByLogin(String login) throws CRMProjectRepositoryException {
-        User user = null;
+        User user;
         try {
             user = entityManager.createQuery(SELECT_USER_LOGIN, User.class)
                     .setParameter(LOGIN, login).getSingleResult();

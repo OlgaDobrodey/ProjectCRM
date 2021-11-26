@@ -1,6 +1,9 @@
 package com.itrex.java.lab.crm.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,12 +16,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "user", schema = "public")
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode
 public class User implements Serializable {
 
     @Id

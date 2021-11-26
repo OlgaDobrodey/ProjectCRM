@@ -89,7 +89,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new CRMProjectServiceException("TASK NO FOUND DATA BASE"));
         task.setStatus(Status.DONE);
 
-        task.getUsers().forEach(user -> user.getTasks().removeIf(t -> t.getId() == taskId));
+        task.getUsers().forEach(user -> user.getTasks().removeIf(t -> t.getId().equals(taskId)));
         taskRepository.save(task);
     }
 
@@ -100,7 +100,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new CRMProjectServiceException("TASK NO FOUND DATA BASE"));
         task.setStatus(Status.DONE);
 
-        task.getUsers().forEach(user -> user.getTasks().removeIf(t -> t.getId() == taskId));
+        task.getUsers().forEach(user -> user.getTasks().removeIf(t -> t.getId().equals(taskId)));
         taskRepository.save(task);
         taskRepository.delete(task);
     }
@@ -114,7 +114,7 @@ public class TaskServiceImpl implements TaskService {
         if (status == Status.PROGRESS && CollectionUtils.isEmpty(task.getUsers())) {
             throw new CRMProjectServiceException("Wrong status: " + status);
         } else if (status != Status.PROGRESS && !CollectionUtils.isEmpty(task.getUsers())) {
-            task.getUsers().forEach(user -> user.getTasks().removeIf(t -> t.getId() == taskId));
+            task.getUsers().forEach(user -> user.getTasks().removeIf(t -> t.getId().equals(taskId)));
         }
         task.setStatus(status);
         return convertTaskToDto(taskRepository.save(task));
