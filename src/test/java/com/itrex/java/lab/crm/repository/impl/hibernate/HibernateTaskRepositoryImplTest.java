@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 class HibernateTaskRepositoryImplTest extends AbstractTaskRepositoryTest {
 
     @Autowired
-    public HibernateTaskRepositoryImplTest(@Qualifier("HibernateTaskRepository")TaskRepository taskRepository) {
+    public HibernateTaskRepositoryImplTest(@Qualifier(value = "HibernateTaskRepository") TaskRepository taskRepository) {
         super();
         postConstruct(taskRepository);
     }

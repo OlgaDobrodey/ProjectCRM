@@ -5,7 +5,6 @@ import com.itrex.java.lab.crm.exceptions.CRMProjectRepositoryException;
 
 import java.util.List;
 
-@Deprecated
 public interface RoleRepository {
 
     List<Role> selectAll() throws CRMProjectRepositoryException;

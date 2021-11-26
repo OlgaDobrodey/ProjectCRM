@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 class HibernateUserRepositoryImplTest extends AbstractUserRepositoryTest {
 
     @Autowired
-    public HibernateUserRepositoryImplTest(@Qualifier("HibernateUserRepository")UserRepository userRepository) {
+    public HibernateUserRepositoryImplTest(@Qualifier(value = "HibernateUserRepository") UserRepository userRepository) {
         super();
         postConstruct(userRepository);
     }

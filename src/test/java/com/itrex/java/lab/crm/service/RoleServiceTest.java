@@ -102,7 +102,7 @@ class RoleServiceTest {
     }
 
     @Test
-    void updateRole_existRoleDTONonDB_returnCRMProjectServiceExceptionTest(){
+    void updateRole_existRoleDTONonDB_returnCRMProjectServiceExceptionTest() {
         //given && when
         Role expected = RepositoryTestUtils.createTestRole(1).get(0);
         expected.setId(99);
