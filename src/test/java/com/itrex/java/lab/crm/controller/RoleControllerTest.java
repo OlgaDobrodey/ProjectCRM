@@ -3,12 +3,8 @@ package com.itrex.java.lab.crm.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itrex.java.lab.crm.dto.RoleDTO;
 import com.itrex.java.lab.crm.dto.UserDTO;
-import com.itrex.java.lab.crm.service.RoleService;
-import com.itrex.java.lab.crm.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -21,17 +17,12 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = RoleController.class)
-class RoleControllerTest {
+class RoleControllerTest extends BaseControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-    @MockBean
-    private RoleService roleService;
-    @MockBean
-    private UserService userService;
 
     @Test
     void read_whenValidInput_thenReturns200Test() throws Exception {

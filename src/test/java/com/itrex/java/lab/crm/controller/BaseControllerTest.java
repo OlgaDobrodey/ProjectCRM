@@ -1,0 +1,19 @@
+package com.itrex.java.lab.crm.controller;
+
+import com.itrex.java.lab.crm.service.RoleService;
+import com.itrex.java.lab.crm.service.TaskService;
+import com.itrex.java.lab.crm.service.UserService;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+@WebMvcTest
+public abstract class BaseControllerTest {
+
+    @MockBean
+    protected RoleService roleService;
+    @MockBean
+    protected UserService userService;
+    @MockBean
+    protected TaskService taskService;
+
+}

@@ -3,10 +3,10 @@ package com.itrex.java.lab.crm.repository.impl.hibernate;
 import com.itrex.java.lab.crm.entity.Role;
 import com.itrex.java.lab.crm.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.crm.repository.RoleRepository;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -23,38 +23,24 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
     private EntityManager entityManager;
 
     @Override
-    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
-    public List<Role> selectAll() throws CRMProjectRepositoryException {
-        try {
-            return entityManager.createQuery(SELECT_ALL, Role.class).getResultList();
-        } catch (Exception e) {
-            throw new CRMProjectRepositoryException("ERROR: SELECT ALL ROLES: ", e);
-        }
+    public List<Role> selectAll() {
+        return entityManager.createQuery(SELECT_ALL, Role.class).getResultList();
     }
 
     @Override
-    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
-    public Role selectById(Integer id) throws CRMProjectRepositoryException {
-        try {
-            return entityManager.find(Role.class, id);
-        } catch (Exception e) {
-            throw new CRMProjectRepositoryException("ERROR: SELECT ROLE BY ID: ", e);
-        }
+    public Role selectById(Integer id) {
+        return entityManager.find(Role.class, id);
     }
 
     @Override
-    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
-    public Role add(Role role) throws CRMProjectRepositoryException {
-        try {
-            entityManager.persist(role);
-            return role;
-        } catch (Exception ex) {
-            throw new CRMProjectRepositoryException("ERROR: INSERT INTO ROLE - " + role.getRoleName() + ": ", ex);
-        }
+    public Role add(Role role) {
+        Session session = entityManager.unwrap(Session.class);
+        Integer roleId = (Integer) session.save(role);
+
+        return session.get(Role.class, roleId);
     }
 
     @Override
-    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public Role update(Role role) throws CRMProjectRepositoryException {
         try {
             entityManager.merge(role);

@@ -7,17 +7,9 @@ import com.itrex.java.lab.crm.entity.Status;
 import com.itrex.java.lab.crm.entity.Task;
 import com.itrex.java.lab.crm.entity.User;
 import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
-import com.itrex.java.lab.crm.repository.impl.data.RoleRepository;
-import com.itrex.java.lab.crm.repository.impl.data.TaskRepository;
-import com.itrex.java.lab.crm.repository.impl.data.UserRepository;
-import com.itrex.java.lab.crm.service.impl.UserServiceImpl;
 import com.itrex.java.lab.crm.utils.ConverterUtils;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,17 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
-
-    @InjectMocks
-    private UserServiceImpl userService;
-    @Mock
-    private UserRepository userRepository;
-    @Mock
-    private TaskRepository taskRepository;
-    @Mock
-    private RoleRepository roleRepository;
+public class UserServiceTest extends BaseServiceTest {
 
     @Test
     public void getAll_returnUserDTOTest() {
@@ -89,7 +71,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void getByLogin_existUserDTOLogin_returnUserDTOTest(){
+    void getByLogin_existUserDTOLogin_returnUserDTOTest() {
         //given
         User user = createTestUsersWithId(1, 1).get(0);
         when(userRepository.findUserByLogin(user.getLogin())).thenReturn(Optional.of(user));
@@ -108,7 +90,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void getByLogin_existLoginUsereDTONotDataBase_returnNULLTest(){
+    void getByLogin_existLoginUsereDTONotDataBase_returnNULLTest() {
         //given
         when(userRepository.findUserByLogin(any())).thenReturn(Optional.ofNullable(null));
 
@@ -240,7 +222,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void update_validData_existUserNotDB_returnNullTest(){
+    void update_validData_existUserNotDB_returnNullTest() {
         //given && when
         User expected = createTestUsersWithId(0, 1).get(0);
         when(userRepository.findById(1)).thenReturn(Optional.ofNullable(null));
@@ -251,7 +233,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void update_existUser_shouldThrowServiceExceptionTest(){
+    void update_existUser_shouldThrowServiceExceptionTest() {
         //given && when
         User user = createTestUsersWithId(0, 1).get(0);
         when(roleRepository.findById(1)).thenReturn(Optional.ofNullable(null));
@@ -264,7 +246,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void remove_existUserDTO_shouldReturnExistTrueTest() throws  CRMProjectServiceException {
+    void remove_existUserDTO_shouldReturnExistTrueTest() throws CRMProjectServiceException {
         //given
         User user = createTestUsersWithId(1, 2).get(0);
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
@@ -330,7 +312,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void revokeAllUserTasksByUserId_existIdUserTest()throws CRMProjectServiceException {
+    void revokeAllUserTasksByUserId_existIdUserTest() throws CRMProjectServiceException {
         //given
         User user = createTestUsersWithId(1, 2).get(0);
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
@@ -369,7 +351,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void updateUserPassword_exitPasswordDTOEqualsNullAndUserIdEqualsNull_shouldThrowServiceExceptionTest(){
+    void updateUserPassword_exitPasswordDTOEqualsNullAndUserIdEqualsNull_shouldThrowServiceExceptionTest() {
         //given && when
         User user = createTestUsersWithId(0, 1).get(0);
         Integer userIdNoDB = 5;

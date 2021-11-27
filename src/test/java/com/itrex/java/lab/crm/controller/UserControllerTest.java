@@ -6,12 +6,8 @@ import com.itrex.java.lab.crm.dto.TaskDTO;
 import com.itrex.java.lab.crm.dto.UserDTO;
 import com.itrex.java.lab.crm.dto.UserDTOLogin;
 import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
-import com.itrex.java.lab.crm.service.TaskService;
-import com.itrex.java.lab.crm.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -23,18 +19,12 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = UserController.class)
-class UserControllerTest {
+class UserControllerTest extends BaseControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-
-    @MockBean
-    private TaskService taskService;
-    @MockBean
-    private UserService userService;
 
     @Test
     void read_whenValidInput_thenReturns200Test() throws Exception {

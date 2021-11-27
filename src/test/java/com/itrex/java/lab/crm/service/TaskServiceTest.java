@@ -6,14 +6,8 @@ import com.itrex.java.lab.crm.entity.Task;
 import com.itrex.java.lab.crm.entity.User;
 import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
 import com.itrex.java.lab.crm.repository.RepositoryTestUtils;
-import com.itrex.java.lab.crm.repository.impl.data.TaskRepository;
-import com.itrex.java.lab.crm.service.impl.TaskServiceImpl;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,13 +20,7 @@ import static com.itrex.java.lab.crm.utils.ConverterUtils.convertTaskToDto;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class TaskServiceTest {
-
-    @InjectMocks
-    private TaskServiceImpl taskService;
-    @Mock
-    private TaskRepository taskRepository;
+public class TaskServiceTest extends BaseServiceTest {
 
     @Test
     public void getAll_returnTaskDTOTest() {

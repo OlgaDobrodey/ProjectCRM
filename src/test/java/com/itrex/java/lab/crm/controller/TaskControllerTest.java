@@ -4,12 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itrex.java.lab.crm.dto.TaskDTO;
 import com.itrex.java.lab.crm.dto.UserDTO;
 import com.itrex.java.lab.crm.entity.Status;
-import com.itrex.java.lab.crm.service.TaskService;
-import com.itrex.java.lab.crm.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -21,17 +17,12 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = TaskController.class)
-class TaskControllerTest {
+class TaskControllerTest extends BaseControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-    @MockBean
-    private TaskService taskService;
-    @MockBean
-    private UserService userService;
 
     @Test
     void read_whenValidInput_thenReturns200Test() throws Exception {
@@ -173,7 +164,7 @@ class TaskControllerTest {
         doNothing().when(taskService).finishTaskByTaskId(taskId);
 
         //then
-        mockMvc.perform(delete("/crm/tasks/{id}/users",taskId)
+        mockMvc.perform(delete("/crm/tasks/{id}/users", taskId)
                         .contentType("application/json"))
                 .andExpect(status().isOk());
 
@@ -187,7 +178,7 @@ class TaskControllerTest {
         doNothing().when(taskService).remove(taskId);
 
         //then
-        mockMvc.perform(delete("/crm/tasks/{id}",taskId)
+        mockMvc.perform(delete("/crm/tasks/{id}", taskId)
                         .contentType("application/json"))
                 .andExpect(status().isOk());
 
@@ -199,15 +190,15 @@ class TaskControllerTest {
         //given && when
         Status status = Status.NEW;
         TaskDTO task = createTaskDto(1);
-        when(taskService.changeStatusDTO(status,task.getId())).thenReturn(task);
+        when(taskService.changeStatusDTO(status, task.getId())).thenReturn(task);
 
         //then
-        mockMvc.perform(put("/crm/tasks/{id}/{status}",task.getId(),status)
+        mockMvc.perform(put("/crm/tasks/{id}/{status}", task.getId(), status)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(status)))
                 .andExpect(status().isOk());
 
-        verify(taskService).changeStatusDTO(status,task.getId());
+        verify(taskService).changeStatusDTO(status, task.getId());
     }
 
     @Test
@@ -215,15 +206,15 @@ class TaskControllerTest {
         //given && when
         Status status = Status.NEW;
         TaskDTO task = createTaskDto(1);
-        when(taskService.changeStatusDTO(status,task.getId())).thenReturn(task);
+        when(taskService.changeStatusDTO(status, task.getId())).thenReturn(task);
 
         //then
-        mockMvc.perform(put("/crm/tasks/{id}/{status}",task.getId(),status)
+        mockMvc.perform(put("/crm/tasks/{id}/{status}", task.getId(), status)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(status)))
                 .andExpect(status().isOk());
 
-        verify(taskService).changeStatusDTO(status,task.getId());
+        verify(taskService).changeStatusDTO(status, task.getId());
     }
 
 }

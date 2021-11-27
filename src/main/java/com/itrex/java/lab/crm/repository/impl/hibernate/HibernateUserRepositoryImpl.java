@@ -3,10 +3,10 @@ package com.itrex.java.lab.crm.repository.impl.hibernate;
 import com.itrex.java.lab.crm.entity.User;
 import com.itrex.java.lab.crm.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.crm.repository.UserRepository;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -30,92 +30,63 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     private EntityManager entityManager;
 
     @Override
-    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public List<User> selectAll() throws CRMProjectRepositoryException {
 
-        try {
-            return entityManager.createQuery(SELECT_ALL, User.class).getResultList();
-        } catch (Exception ex) {
-            throw new CRMProjectRepositoryException("ERROR: SELECT ALL USERS: ", ex);
-        }
+        return entityManager.createQuery(SELECT_ALL, User.class).getResultList();
     }
 
     @Override
-    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public User selectById(Integer id) throws CRMProjectRepositoryException {
 
-        try {
-            return entityManager.find(User.class, id);
-        } catch (Exception ex) {
-            throw new CRMProjectRepositoryException("ERROR: SELECT User BY ID: " + ex);
-        }
+        return entityManager.find(User.class, id);
     }
 
     @Override
-    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
-    public User selectByLogin(String login) throws CRMProjectRepositoryException {
+
+    public User selectByLogin(String login) {
         User user;
         try {
             user = entityManager.createQuery(SELECT_USER_LOGIN, User.class)
                     .setParameter(LOGIN, login).getSingleResult();
         } catch (NoResultException e) {
             return null;
-        } catch (Exception ex) {
-            throw new CRMProjectRepositoryException("ERROR: SELECT User BY Login: " + ex);
         }
         return user;
     }
 
     @Override
-    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
-    public List<User> selectAllUsersByTaskId(Integer taskId) throws CRMProjectRepositoryException {
-        try {
-            return entityManager.createQuery(SELECT_ALL_USERS_BY_TASK, User.class)
-                    .setParameter(TASK_ID, taskId)
-                    .getResultList();
-        } catch (Exception e) {
-            throw new CRMProjectRepositoryException("ERROR: SELECT ALL USERS FOR TASK BY ID" + taskId + ": ", e);
-        }
+    public List<User> selectAllUsersByTaskId(Integer taskId) {
+
+        return entityManager.createQuery(SELECT_ALL_USERS_BY_TASK, User.class)
+                .setParameter(TASK_ID, taskId)
+                .getResultList();
     }
 
     @Override
-    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public List<User> selectAllUsersByRoleId(Integer roleId) throws CRMProjectRepositoryException {
-        try {
-            return entityManager.createQuery(SELECT_ALL_USERS_BY_ROLE, User.class)
-                    .setParameter(ROLE_ID, roleId)
-                    .getResultList();
-        } catch (Exception e) {
-            throw new CRMProjectRepositoryException("ERROR: SELECT ALL USERS FOR ROLE BY ID" + roleId + ": ", e);
-        }
+
+        return entityManager.createQuery(SELECT_ALL_USERS_BY_ROLE, User.class)
+                .setParameter(ROLE_ID, roleId)
+                .getResultList();
     }
 
     @Override
-    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public User add(User user) throws CRMProjectRepositoryException {
 
-        try {
-            entityManager.persist(user);
-            return user;
-        } catch (Exception ex) {
-            throw new CRMProjectRepositoryException("ERROR: INSERT INTO USER - " + user + ": ", ex);
-        }
+        Session session = entityManager.unwrap(Session.class);
+        Integer userId = (Integer) session.save(user);
+
+        return session.get(User.class, userId);
     }
 
     @Override
-    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public User update(User user) throws CRMProjectRepositoryException {
 
-        try {
-            entityManager.merge(user);
-            return entityManager.find(User.class, user.getId());
-        } catch (Exception e) {
-            throw new CRMProjectRepositoryException("ERROR: UPDATE TASK " + user, e);
-        }
+        entityManager.merge(user);
+        return entityManager.find(User.class, user.getId());
     }
 
     @Override
-    @Transactional(rollbackFor = {CRMProjectRepositoryException.class})
     public void remove(Integer userId) throws CRMProjectRepositoryException {
         try {
             entityManager.remove(entityManager.find(User.class, userId));

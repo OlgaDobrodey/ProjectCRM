@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ControllerAdvice {
 
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handle(Exception e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.EXPECTATION_FAILED);
     }
 
 }

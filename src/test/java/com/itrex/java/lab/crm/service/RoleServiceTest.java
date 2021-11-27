@@ -4,14 +4,8 @@ import com.itrex.java.lab.crm.dto.RoleDTO;
 import com.itrex.java.lab.crm.entity.Role;
 import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
 import com.itrex.java.lab.crm.repository.RepositoryTestUtils;
-import com.itrex.java.lab.crm.repository.impl.data.RoleRepository;
-import com.itrex.java.lab.crm.service.impl.RoleServiceImpl;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -20,14 +14,7 @@ import static com.itrex.java.lab.crm.utils.ConverterUtils.convertRoleToDto;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
-
-@ExtendWith(MockitoExtension.class)
-class RoleServiceTest {
-
-    @InjectMocks
-    private RoleServiceImpl roleService;
-    @Mock
-    private RoleRepository roleRepository;
+class RoleServiceTest extends BaseServiceTest {
 
     @Test
     void getAllRole_returnRoleDTOTest() {
