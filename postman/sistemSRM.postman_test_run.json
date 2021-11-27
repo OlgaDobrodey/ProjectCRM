@@ -760,7 +760,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/users/3/updatePassword",
+			"name": "http://localhost:8080/crm/users/3/password",
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -775,7 +775,7 @@
 					"raw": "    {\r\n        \"oldPassword\": \"123\",\r\n        \"newPassword\": \"1234\",\r\n        \"repeatNewPassword\": \"1234\"\r\n    }"
 				},
 				"url": {
-					"raw": "http://localhost:8080/crm/users/3/updatePassword",
+					"raw": "http://localhost:8080/crm/users/3/password",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -785,7 +785,7 @@
 						"crm",
 						"users",
 						"3",
-						"updatePassword"
+						"password"
 					]
 				}
 			},

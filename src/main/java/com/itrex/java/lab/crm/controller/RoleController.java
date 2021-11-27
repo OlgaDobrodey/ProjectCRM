@@ -38,7 +38,7 @@ public class RoleController extends BaseController {
     Просмотреть данную роль под id
     */
     @GetMapping("/roles/{id}")
-    public ResponseEntity<?> readTaskByIdTask(@PathVariable Integer id) {
+    public ResponseEntity<?> readRoleByROleId(@PathVariable Integer id) {
 
         RoleDTO readRole = roleService.getById(id);
 

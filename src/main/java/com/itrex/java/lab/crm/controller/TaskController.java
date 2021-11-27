@@ -39,7 +39,7 @@ public class TaskController extends BaseController {
     Посмотреть задачу, необходимо для ознакомления содержимым задачи/task
      */
     @GetMapping("/tasks/{id}")
-    public ResponseEntity<?> readTaskByIdTask(@PathVariable Integer id) {
+    public ResponseEntity<?> readTaskByTaskId(@PathVariable Integer id) {
 
         TaskDTO readTask = taskService.getById(id);
 
@@ -135,16 +135,15 @@ public class TaskController extends BaseController {
     Изменение значения статуса. Перевод его в одно из состояний: NEW, DONE и PROGRESS
      */
     @PutMapping("/tasks/{id}/{status}")
-    public ResponseEntity<?> update(@PathVariable Integer id, @PathVariable(name = "status") Status status) {
-        TaskDTO taskStatus;
+    public ResponseEntity<?> updateStatus(@PathVariable Integer id, @PathVariable(name = "status") Status status) {
+
         try {
-            taskStatus = taskService.changeStatusDTO(status, id);
+            taskService.changeStatusDTO(status, id);
+            return new ResponseEntity<>(HttpStatus.OK);
+
         } catch (CRMProjectServiceException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-        return taskStatus != null
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
 }

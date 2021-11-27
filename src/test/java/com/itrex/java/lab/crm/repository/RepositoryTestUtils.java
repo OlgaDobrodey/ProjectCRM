@@ -18,7 +18,18 @@ public class RepositoryTestUtils {
 
         for (int i = 0; i < count; i++) {
             roles.add(Role.builder()
-                    .roleName("TEST" + (char)('@' + (i+1)))
+                    .roleName("TEST" + (char) ('@' + (i + 1)))
+                    .build());
+        }
+        return roles;
+    }
+
+    public static List<Role> createTestRoleWithId(int start, int count) {
+        List<Role> roles = new ArrayList<>();
+        for (int i = start; i < start + count; i++) {
+            roles.add(Role.builder()
+                    .id(i + 1)
+                    .roleName("TEST" + (char) ('@' + (i + 1)))
                     .build());
         }
         return roles;
@@ -28,8 +39,8 @@ public class RepositoryTestUtils {
         List<User> users = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             users.add(User.builder()
-                    .lastName("Ivanov" + (char)('@' + (i+1)))
-                    .firstName("Ivan" + (char)('@' + (i+1)))
+                    .lastName("Ivanov" + (char) ('@' + (i + 1)))
+                    .firstName("Ivan" + (char) ('@' + (i + 1)))
                     .login("Test" + i)
                     .psw("123" + i)
                     .role(role)
@@ -43,8 +54,8 @@ public class RepositoryTestUtils {
         for (int i = start; i < start + count; i++) {
             users.add(User.builder()
                     .id(i + 1)
-                    .lastName("Ivanov" + (char)('@' + (i+1)))
-                    .firstName("Ivan" + (char)('@' + (i+1)))
+                    .lastName("Ivanov" + (char) ('@' + (i + 1)))
+                    .firstName("Ivan" + (char) ('@' + (i + 1)))
                     .login("Test" + i)
                     .psw("123" + i)
                     .role(role)

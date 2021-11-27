@@ -8,7 +8,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 @Builder
-public class LoginUserDTO {
+public class UserDTOLogin {
 
     @NotNull
     private String login;

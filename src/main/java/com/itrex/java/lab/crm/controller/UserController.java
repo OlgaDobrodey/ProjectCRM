@@ -1,9 +1,9 @@
 package com.itrex.java.lab.crm.controller;
 
-import com.itrex.java.lab.crm.dto.LoginUserDTO;
 import com.itrex.java.lab.crm.dto.PasswordDTOForChanges;
 import com.itrex.java.lab.crm.dto.TaskDTO;
 import com.itrex.java.lab.crm.dto.UserDTO;
+import com.itrex.java.lab.crm.dto.UserDTOLogin;
 import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
 import com.itrex.java.lab.crm.service.TaskService;
 import com.itrex.java.lab.crm.service.UserService;
@@ -42,7 +42,7 @@ public class UserController extends BaseController {
    По запросу "/{id}/tasks" -можно посмотреть задачи в его выполнении
     */
     @GetMapping("/users/{id}")
-    public ResponseEntity<?> readTaskByIdTask(@PathVariable Integer id) {
+    public ResponseEntity<?> readUserByUserId(@PathVariable Integer id) {
         UserDTO readed = userService.getById(id);
 
         return readed != null
@@ -82,7 +82,7 @@ public class UserController extends BaseController {
     Вход в систему с помощью пароля и логина
      */
     @PostMapping("/profile")
-    public ResponseEntity<?> signIn(Model model, @RequestBody LoginUserDTO user) {
+    public ResponseEntity<?> signIn(Model model, @RequestBody UserDTOLogin user) {
         try {
             UserDTO verificationUser = userService.getByLogin(user.getLogin());
             if (verificationUser == null || (!verificationUser.getPsw().equals(user.getPsw()))) {
@@ -116,19 +116,16 @@ public class UserController extends BaseController {
     /*
     Обновление пароля пользователя с данным id, проверека старого
      */
-    @PutMapping("/users/{id}/updatePassword")
+    @PutMapping("/users/{id}/password")
     public ResponseEntity<?> updateUserPassword(
             @PathVariable(name = "id") int id, @RequestBody PasswordDTOForChanges psw) {
         try {
-
-            return userService.updateUserPassword(psw, id) != null
-                    ? new ResponseEntity<>(HttpStatus.OK)
-                    : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+            UserDTO userDTO = userService.updateUserPassword(psw, id);
+            return new ResponseEntity<>(userDTO,HttpStatus.OK);
 
         } catch (CRMProjectServiceException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-
     }
 
     /*
@@ -140,7 +137,7 @@ public class UserController extends BaseController {
         try {
             userService.assignTaskToUser(taskId, userId);
         } catch (CRMProjectServiceException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_MODIFIED);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -163,8 +160,8 @@ public class UserController extends BaseController {
     Открепление задачи от пользователя (задача выполнена или переопределиться на другого пользователя)
   */
     @DeleteMapping(value = "/users/{userId}/tasks/{taskId}")
-    public ResponseEntity<?> revoke(@PathVariable(name = "userId") int userId,
-                                    @PathVariable(name = "taskId") int taskId) {
+    public ResponseEntity<?> revoke(@PathVariable(name = "userId") Integer userId,
+                                    @PathVariable(name = "taskId") Integer taskId) {
         try {
             userService.revokeTaskFromUser(taskId, userId);
         } catch (CRMProjectServiceException e) {
