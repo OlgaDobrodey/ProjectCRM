@@ -6,13 +6,19 @@ import com.itrex.java.lab.crm.entity.Task;
 import com.itrex.java.lab.crm.entity.User;
 import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
 import com.itrex.java.lab.crm.repository.RepositoryTestUtils;
+import com.itrex.java.lab.crm.utils.ConverterUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.itrex.java.lab.crm.repository.RepositoryTestUtils.createTestTasksWithId;
 import static com.itrex.java.lab.crm.repository.RepositoryTestUtils.createTestUsersWithId;
@@ -23,7 +29,7 @@ import static org.mockito.Mockito.*;
 public class TaskServiceTest extends BaseServiceTest {
 
     @Test
-    public void getAll_returnTaskDTOTest() {
+    void getAll_returnTaskDTOTest() {
         //given && when
         final List<Task> result = RepositoryTestUtils.createTestTasks(2);
         result.get(0).setId(1);
@@ -33,6 +39,27 @@ public class TaskServiceTest extends BaseServiceTest {
         //then
         assertFalse(taskService.getAll().isEmpty());
         verify(taskRepository).findAll();
+    }
+
+    @Test
+    void getAll_existPageable_returnPageofTaskDTOTest() {
+        //given
+        Pageable pageable = PageRequest.of(0, 4);
+        List<Task> testUsersWithId = createTestTasksWithId(1, 4);
+        List<TaskDTO> taskDTOList = testUsersWithId.stream().map(ConverterUtils::convertTaskToDto).collect(Collectors.toList());
+        Page<Task> tasks = new PageImpl<>(testUsersWithId);
+
+        when(taskRepository.findAll(pageable)).thenReturn(tasks);
+
+        //when
+        Page<TaskDTO> taskDTOPage = taskService.getAll(pageable);
+
+        //then
+        assertEquals(taskDTOPage.getSize(), 4);
+        assertEquals(taskDTOPage.getTotalPages(), 1);
+        assertEquals(taskDTOPage.get().collect(Collectors.toList()),taskDTOList);
+
+        verify(taskRepository).findAll(pageable);
     }
 
     @Test

@@ -885,6 +885,148 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "http://localhost:8080/crm/tasks/page defaultParam",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/crm/tasks/page",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"crm",
+						"tasks",
+						"page"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "3",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "id,asc",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "status,desc",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/crm/tasks/page diferentParam",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/crm/tasks/page?page=0&size=3&sort=title,asc&sort=status,desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"crm",
+						"tasks",
+						"page"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "3"
+						},
+						{
+							"key": "sort",
+							"value": "title,asc"
+						},
+						{
+							"key": "sort",
+							"value": "status,desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/crm/profile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "  {\r\n    \r\n        \"login\": \"Petrov\",\r\n        \"psw\": \"123\"\r\n    \r\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8080/crm/profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"crm",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/crm/profile user isnot valid",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "  {\r\n    \r\n        \"login\": \"Petrov\",\r\n        \"psw\": \"1234\"\r\n    \r\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8080/crm/profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"crm",
+						"profile"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

@@ -6,6 +6,7 @@ import com.itrex.java.lab.crm.dto.UserDTO;
 import com.itrex.java.lab.crm.entity.Status;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -50,6 +51,65 @@ class TaskControllerTest extends BaseControllerTest {
                 .andExpect(status().isNotFound());
 
         verify(taskService).getAll();
+    }
+
+    @Test
+    void readPageableSort_whenInputValidPageable_thenReturn404Test() throws Exception {
+        //given && when
+        Sort sort = Sort.by(Sort.Direction.ASC, "id")
+                .and(Sort.by(Sort.Direction.DESC, "status"));
+        Pageable pageable = PageRequest.of(0, 3, sort);
+        when(taskService.getAll(pageable)).thenReturn(Page.empty());
+
+        //then
+        mockMvc.perform(get("/crm/tasks/page")
+                        .param("page", "0")
+                        .param("size", "3")
+                        .param("sort", "id,asc")
+                        .param("sort", "status,desc"))
+                .andExpect(status().isNotFound());
+
+        verify(taskService).getAll(pageable);
+    }
+
+    @Test
+    void readPageableSort_whenInputValidPageable_thenReturn200Test() throws Exception {
+        //given && when
+        Sort sort = Sort.by(Sort.Direction.ASC, "id")
+                .and(Sort.by(Sort.Direction.DESC, "status"));
+        Pageable pageable = PageRequest.of(0, 3, sort);
+        Page<TaskDTO> tasks = new PageImpl<>(List.of(createTaskDto(1)));
+
+        when(taskService.getAll(pageable)).thenReturn(tasks);
+
+        //then
+        mockMvc.perform(get("/crm/tasks/page")
+                        .param("page", "0")
+                        .param("size", "3")
+                        .param("sort", "id,asc")
+                        .param("sort", "status,desc"))
+                .andExpect(status().isOk());
+
+        verify(taskService).getAll(pageable);
+    }
+
+    @Test
+    void readPageableSort_whenInputValidPageableDefaultParam_thenReturn200Test() throws Exception {
+        //given && when
+        Pageable pageable = PageRequest.of(0, 4);
+        Page<TaskDTO> tasks = new PageImpl<>(List.of(createTaskDto(1)));
+
+        when(taskService.getAll(pageable)).thenReturn(tasks);
+
+        //then
+        mockMvc.perform(get("/crm/tasks/page")
+                        .param("page", "")
+                        .param("size", "")
+                        .param("sort", "")
+                        .param("sort", ""))
+                .andExpect(status().isOk());
+
+        verify(taskService).getAll(pageable);
     }
 
     @Test

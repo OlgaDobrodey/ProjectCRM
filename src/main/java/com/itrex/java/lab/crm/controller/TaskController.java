@@ -7,6 +7,11 @@ import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
 import com.itrex.java.lab.crm.service.TaskService;
 import com.itrex.java.lab.crm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +28,32 @@ public class TaskController extends BaseController {
 
     /*
      Посмотреть все существующие задачи/таски.
-     Необходимо для Admin и Controlera(для анализа, общего состояния бизнес-процессов)
+     Для анализа, общего состояния бизнес-процессов)
      */
     @GetMapping("/tasks")
     public ResponseEntity<List<TaskDTO>> read() {
 
         List<TaskDTO> tasks = taskService.getAll();
+
+        return tasks != null && !tasks.isEmpty()
+                ? new ResponseEntity<>(tasks, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    /*
+     Посмотреть все существующие задачи/таски с
+     пагинацией(дефолтное значение: page = 0, size = 4)
+     сортировкой(дефолтная сортировка по полю "title"-ASC, "status"-DESC)
+     */
+    @GetMapping("/tasks/page")
+    public ResponseEntity<Page<TaskDTO>> readPageableSort(
+            @PageableDefault(page = 0, size = 4)
+            @SortDefault.SortDefaults({
+                    @SortDefault(sort = "id", direction = Sort.Direction.ASC),
+                    @SortDefault(sort = "status", direction = Sort.Direction.DESC)
+            }) Pageable pageable) {
+
+        Page<TaskDTO> tasks = taskService.getAll(pageable);
 
         return tasks != null && !tasks.isEmpty()
                 ? new ResponseEntity<>(tasks, HttpStatus.OK)
@@ -140,7 +165,6 @@ public class TaskController extends BaseController {
         try {
             taskService.changeStatusDTO(status, id);
             return new ResponseEntity<>(HttpStatus.OK);
-
         } catch (CRMProjectServiceException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

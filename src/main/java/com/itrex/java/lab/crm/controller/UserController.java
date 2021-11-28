@@ -89,7 +89,7 @@ public class UserController extends BaseController {
                 return new ResponseEntity<>("User isn't valid ", HttpStatus.NOT_FOUND);
             }
             model.addAttribute("userActiv", verificationUser);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("welcome to profile",HttpStatus.OK);
         } catch (CRMProjectServiceException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

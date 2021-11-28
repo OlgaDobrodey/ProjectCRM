@@ -8,6 +8,8 @@ import com.itrex.java.lab.crm.repository.impl.data.TaskRepository;
 import com.itrex.java.lab.crm.service.TaskService;
 import com.itrex.java.lab.crm.utils.ConverterUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -34,6 +36,13 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.findAll().stream()
                 .map(ConverterUtils::convertTaskToDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<TaskDTO> getAll(Pageable pageable) {
+        return taskRepository
+                .findAll(pageable)
+                .map(task -> convertTaskToDto(task));
     }
 
     @Override
