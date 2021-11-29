@@ -2,9 +2,9 @@ package com.itrex.java.lab.crm.repository.impl.data;
 
 import com.itrex.java.lab.crm.entity.Status;
 import com.itrex.java.lab.crm.entity.Task;
+import com.itrex.java.lab.crm.repository.BaseRepositoryTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,8 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DataJpaTest
-class DataTaskRepositoryTest {
+class DataTaskRepositoryTest extends BaseRepositoryTest {
 
     @Autowired
     private TaskRepository taskRepository;

@@ -1,17 +1,16 @@
 package com.itrex.java.lab.crm.repository.impl.data;
 
 import com.itrex.java.lab.crm.entity.User;
+import com.itrex.java.lab.crm.repository.BaseRepositoryTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
-class DataUserRepositoryTest {
+class DataUserRepositoryTest extends BaseRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
