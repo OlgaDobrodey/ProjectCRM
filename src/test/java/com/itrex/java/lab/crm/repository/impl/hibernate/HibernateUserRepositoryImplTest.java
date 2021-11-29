@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -117,7 +118,6 @@ class HibernateUserRepositoryImplTest extends BaseHibernateRepositoryTest {
         User actual = repository.add(user);
 
         //then
-        assertEquals(11, actual.getId());
         assertEquals("Test0", actual.getLogin());
         assertEquals("1230", actual.getPsw());
         assertEquals("ADMIN", actual.getRole().getRoleName());
@@ -129,7 +129,7 @@ class HibernateUserRepositoryImplTest extends BaseHibernateRepositoryTest {
     void add_existCopyUSERId2_returnThrowRepositoryExceptionTest() throws CRMProjectRepositoryException {
         //given && when
         User user = repository.selectById(2);
-        User ex = RepositoryTestUtils.createTestUsersWithId(1,1).get(0);
+        User ex = RepositoryTestUtils.createTestUsersWithId(1, 1).get(0);
 
         //then
         assertFalse(user.equals(ex));
@@ -154,7 +154,7 @@ class HibernateUserRepositoryImplTest extends BaseHibernateRepositoryTest {
     }
 
     @Test
-    void remove_validData_existUser_Test() throws CRMProjectRepositoryException {
+    void remove_validData_existUser_Test() throws CRMProjectRepositoryException, SQLException {
         //given
         Integer userId = 1;
 
@@ -183,10 +183,10 @@ class HibernateUserRepositoryImplTest extends BaseHibernateRepositoryTest {
         List<User> users = repository.selectAllUsersByRoleId(roleId);
 
         //then
-        assertEquals(3,users.size());
-        assertEquals(1,users.get(0).getId());
-        assertEquals(2,users.get(1).getId());
-        assertEquals(3,users.get(2).getId());
+        assertEquals(3, users.size());
+        assertEquals(1, users.get(0).getId());
+        assertEquals(2, users.get(1).getId());
+        assertEquals(3, users.get(2).getId());
     }
 
     @Test
@@ -198,7 +198,7 @@ class HibernateUserRepositoryImplTest extends BaseHibernateRepositoryTest {
         List<User> users = repository.selectAllUsersByRoleId(roleId);
 
         //then
-        assertEquals(0,users.size());
+        assertEquals(0, users.size());
     }
 
 }

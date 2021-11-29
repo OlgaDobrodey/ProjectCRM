@@ -5,6 +5,7 @@ import com.itrex.java.lab.crm.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.crm.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -34,9 +35,10 @@ public class JDBCRoleRepositoryImpl implements RoleRepository {
     @Override
     public List<Role> selectAll() throws CRMProjectRepositoryException {
         List<Role> roles = new ArrayList<>();
-        try (Connection conn = dataSource.getConnection();
-             Statement stm = conn.createStatement();
-             ResultSet resultSet = stm.executeQuery(SELECT_ALL_QUERY)) {
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet resultSet = stm.executeQuery(SELECT_ALL_QUERY);
             while (resultSet.next()) {
                 Role role = getRole(resultSet);
                 roles.add(role);
@@ -50,9 +52,11 @@ public class JDBCRoleRepositoryImpl implements RoleRepository {
     @Override
     public Role selectById(Integer id) throws CRMProjectRepositoryException {
         Role role = null;
-        try (Connection conn = dataSource.getConnection();
-             Statement stm = conn.createStatement();
-             ResultSet resultSet = stm.executeQuery(SELECT_ROLE_BY_ID_QUERY + id)) {
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet resultSet = stm.executeQuery(SELECT_ROLE_BY_ID_QUERY + id);
+
             if (resultSet.next()) {
                 role = getRole(resultSet);
                 if (resultSet.next()) {
@@ -68,9 +72,9 @@ public class JDBCRoleRepositoryImpl implements RoleRepository {
     @Override
     public Role add(Role role) throws CRMProjectRepositoryException {
         List<Role> roles = new ArrayList<>();
-        try (Connection con = dataSource.getConnection();
-             PreparedStatement preparedStatement = con.prepareStatement(INSERT_ROLE_QUERY, Statement.RETURN_GENERATED_KEYS)) {
-
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_ROLE_QUERY, Statement.RETURN_GENERATED_KEYS);
             roles.add(role);
             insert(roles, preparedStatement);
         } catch (SQLException ex) {
@@ -81,8 +85,9 @@ public class JDBCRoleRepositoryImpl implements RoleRepository {
 
     @Override
     public Role update(Role role) throws CRMProjectRepositoryException {
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_ROLE_QUERY)) {
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_ROLE_QUERY);
 
             preparedStatement.setString(1, role.getRoleName());
             preparedStatement.setInt(2, role.getId());

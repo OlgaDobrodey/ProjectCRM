@@ -3,6 +3,7 @@ package com.itrex.java.lab.crm.repository;
 import com.itrex.java.lab.crm.entity.User;
 import com.itrex.java.lab.crm.exceptions.CRMProjectRepositoryException;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface UserRepository {
@@ -19,7 +20,7 @@ public interface UserRepository {
 
     User update(User user) throws CRMProjectRepositoryException;  //update user by id
 
-    void remove(Integer userId) throws CRMProjectRepositoryException;
+    void remove(Integer userId) throws CRMProjectRepositoryException, SQLException;
 
 }
 

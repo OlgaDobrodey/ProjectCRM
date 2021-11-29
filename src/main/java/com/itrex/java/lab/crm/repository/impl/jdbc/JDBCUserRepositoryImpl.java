@@ -6,6 +6,7 @@ import com.itrex.java.lab.crm.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.crm.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -49,9 +50,10 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     @Override
     public List<User> selectAll() throws CRMProjectRepositoryException {
         List<User> users = new ArrayList<>();
-        try (Connection conn = dataSource.getConnection();
-             Statement stm = conn.createStatement();
-             ResultSet resultSet = stm.executeQuery(SELECT_ALL_QUERY)) {
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet resultSet = stm.executeQuery(SELECT_ALL_QUERY);
 
             while (resultSet.next()) {
                 User user = getUser(resultSet);
@@ -66,9 +68,10 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     @Override
     public User selectById(Integer id) throws CRMProjectRepositoryException {
         User user = null;
-        try (Connection conn = dataSource.getConnection();
-             Statement stm = conn.createStatement();
-             ResultSet resultSet = stm.executeQuery(SELECT_USER_BY_ID_QUERY + id)) {
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet resultSet = stm.executeQuery(SELECT_USER_BY_ID_QUERY + id);
             if (resultSet.next()) {
                 user = getUser(resultSet);
                 if (resultSet.next()) {
@@ -84,9 +87,10 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     @Override
     public User selectByLogin(String login) throws CRMProjectRepositoryException {
         User user = null;
-        try (Connection conn = dataSource.getConnection();
-             Statement stm = conn.createStatement();
-             ResultSet resultSet = stm.executeQuery(SELECT_USER_BY_LOGIN + "'" + login + "'")) {
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet resultSet = stm.executeQuery(SELECT_USER_BY_LOGIN + "'" + login + "'");
             if (resultSet.next()) {
                 user = getUser(resultSet);
                 if (resultSet.next()) {
@@ -102,15 +106,15 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     @Override
     public List<User> selectAllUsersByTaskId(Integer taskId) throws CRMProjectRepositoryException {
         List<User> users = new ArrayList<>();
-        try (Connection conn = dataSource.getConnection();
-
-             Statement stm = conn.createStatement();
-             ResultSet resultSet = stm.executeQuery(SELECT_ALL_USERS_FOR_TASK + taskId)) {
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet resultSet = stm.executeQuery(SELECT_ALL_USERS_FOR_TASK + taskId);
             while (resultSet.next()) {
                 User user = selectById(resultSet.getInt(CROSS_TABLE_ID_USER));
                 users.add(user);
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: SELECT ALL USERS FOR TASK: ", ex);
         }
         return users;
@@ -119,9 +123,10 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     @Override
     public List<User> selectAllUsersByRoleId(Integer roleId) throws CRMProjectRepositoryException {
         List<User> users = new ArrayList<>();
-        try (Connection conn = dataSource.getConnection();
-             Statement stm = conn.createStatement();
-             ResultSet resultSet = stm.executeQuery(SELECT_ALL_USERS_BY_ROLE + roleId)) {
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet resultSet = stm.executeQuery(SELECT_ALL_USERS_BY_ROLE + roleId);
             while (resultSet.next()) {
                 User user = getUser(resultSet);
                 users.add(user);
@@ -135,8 +140,9 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     @Override
     public User add(User user) throws CRMProjectRepositoryException {
         List<User> users = new ArrayList<>();
-        try (Connection con = dataSource.getConnection();
-             PreparedStatement preparedStatement = con.prepareStatement(INSERT_USER_QUERY, Statement.RETURN_GENERATED_KEYS)) {
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_USER_QUERY, Statement.RETURN_GENERATED_KEYS);
             users.add(user);
             insert(users, preparedStatement);
         } catch (SQLException ex) {
@@ -147,8 +153,9 @@ public class JDBCUserRepositoryImpl implements UserRepository {
 
     @Override
     public User update(User user) throws CRMProjectRepositoryException {
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_USER_QUERY)) {
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_USER_QUERY);
             extracted(0, user, preparedStatement);
 
             preparedStatement.setInt(6, user.getId());
@@ -164,31 +171,24 @@ public class JDBCUserRepositoryImpl implements UserRepository {
 
     @Override
     public void remove(Integer userId) throws CRMProjectRepositoryException {
-        try (Connection conn = dataSource.getConnection()) {
-            conn.setAutoCommit(false);
-            try {
-                removeAllTasksByUser(userId);
-                try (PreparedStatement preparedStatement = conn.prepareStatement(DELETE_USER_QUERY)) {
-                    preparedStatement.setInt(1, userId);
-                    if (preparedStatement.executeUpdate() != 1) {
-                        throw new CRMProjectRepositoryException("ERROR: REMOVE_USER_BY_ID_ - " + userId + ": ");
-                    }
-                }
-                conn.commit();
-            } catch (SQLException ex) {
-                conn.rollback();
-                throw new SQLException("TRANSACTION ROLLBACK: " + ex);
-            } finally {
-                conn.setAutoCommit(true);
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        removeAllTasksByUser(userId);
+
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(DELETE_USER_QUERY);
+            preparedStatement.setInt(1, userId);
+            if (preparedStatement.executeUpdate() != 1) {
+                throw new CRMProjectRepositoryException("ERROR: REMOVE_USER_BY_ID_ - " + userId + ": ");
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             throw new CRMProjectRepositoryException("ERROR: REMOVE_USER - " + userId + ": ", ex);
         }
     }
 
     private void removeAllTasksByUser(Integer userId) throws CRMProjectRepositoryException {
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement preparedStatement = conn.prepareStatement(DELETE_USER_ALL_TASKS_QUERY)) {
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(DELETE_USER_ALL_TASKS_QUERY);
             preparedStatement.setInt(1, userId);
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {

@@ -6,6 +6,7 @@ import com.itrex.java.lab.crm.exceptions.CRMProjectRepositoryException;
 import com.itrex.java.lab.crm.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -38,9 +39,10 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
     @Override
     public List<Task> selectAll() throws CRMProjectRepositoryException {
         List<Task> tasks = new ArrayList<>();
-        try (Connection conn = dataSource.getConnection();
-             Statement stm = conn.createStatement();
-             ResultSet resultSet = stm.executeQuery(SELECT_ALL_QUERY)) {
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet resultSet = stm.executeQuery(SELECT_ALL_QUERY);
 
             while (resultSet.next()) {
                 Task task = getTask(resultSet);
@@ -55,9 +57,10 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
     @Override
     public Task selectById(Integer id) throws CRMProjectRepositoryException {
         Task task = null;
-        try (Connection conn = dataSource.getConnection();
-             Statement stm = conn.createStatement();
-             ResultSet resultSet = stm.executeQuery(SELECT_TASK_BY_ID_QUERY + id)) {
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet resultSet = stm.executeQuery(SELECT_TASK_BY_ID_QUERY + id);
             if (resultSet.next()) {
                 task = getTask(resultSet);
                 if (resultSet.next()) {
@@ -73,9 +76,10 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
     @Override
     public List<Task> selectAllTasksByUserId(Integer id) throws CRMProjectRepositoryException {
         List<Task> tasks = new ArrayList<>();
-        try (Connection conn = dataSource.getConnection();
-             Statement stm = conn.createStatement();
-             ResultSet resultSet = stm.executeQuery(SELECT_ALL_TASKS_FOR_USER + id)) {
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            Statement stm = conn.createStatement();
+            ResultSet resultSet = stm.executeQuery(SELECT_ALL_TASKS_FOR_USER + id);
             while (resultSet.next()) {
                 Task task = selectById(resultSet.getInt(CROSS_TABLE_ID_TASK));
                 tasks.add(task);
@@ -89,8 +93,9 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
     @Override
     public Task add(Task task) throws CRMProjectRepositoryException {
         List<Task> tasks = new ArrayList<>();
-        try (Connection con = dataSource.getConnection();
-             PreparedStatement preparedStatement = con.prepareStatement(INSERT_TASK_QUERY, Statement.RETURN_GENERATED_KEYS)) {
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_TASK_QUERY, Statement.RETURN_GENERATED_KEYS);
             tasks.add(task);
             insert(tasks, preparedStatement);
         } catch (SQLException ex) {
@@ -101,8 +106,9 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
 
     @Override
     public Task update(Task task) throws CRMProjectRepositoryException {
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_TASK_QUERY)) {
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_TASK_QUERY);
             extracted(0, task, preparedStatement);
 
             preparedStatement.setInt(5, task.getId());
@@ -117,24 +123,15 @@ public class JDBCTaskRepositoryImpl implements TaskRepository {
 
     @Override
     public void remove(Integer taskId) throws CRMProjectRepositoryException {
-        try (Connection conn = dataSource.getConnection()) {
-            conn.setAutoCommit(false);
-            try {
-                try (PreparedStatement preparedStatement = conn.prepareStatement(DELETE_TASK_QUERTY)) {
-                    preparedStatement.setInt(1, taskId);
-                    if (preparedStatement.executeUpdate() != 1) {
-                        throw new CRMProjectRepositoryException("ERROR: REMOVE_TASK - " + taskId);
-                    }
-                }
-                conn.commit();
-            } catch (SQLException ex) {
-                conn.rollback();
-                throw new SQLException("TRANSACTION ROLLBACK: ", ex);
-            } finally {
-                conn.setAutoCommit(true);
+        Connection conn = DataSourceUtils.getConnection(dataSource);
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement(DELETE_TASK_QUERTY);
+            preparedStatement.setInt(1, taskId);
+            if (preparedStatement.executeUpdate() != 1) {
+                throw new CRMProjectRepositoryException("ERROR: REMOVE_TASK - " + taskId);
             }
-        } catch (SQLException ex) {
-            throw new CRMProjectRepositoryException("ERROR: REMOVE_TASK - " + taskId + ": ", ex);
+        } catch (Exception ex) {
+            throw new CRMProjectRepositoryException("ERROR: REMOVE_TASK - " + taskId);
         }
     }
 
