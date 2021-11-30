@@ -3,25 +3,22 @@ package com.itrex.java.lab.crm.controller;
 import com.itrex.java.lab.crm.dto.PasswordDTOForChanges;
 import com.itrex.java.lab.crm.dto.TaskDTO;
 import com.itrex.java.lab.crm.dto.UserDTO;
-import com.itrex.java.lab.crm.dto.UserDTOLogin;
 import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
 import com.itrex.java.lab.crm.service.TaskService;
 import com.itrex.java.lab.crm.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class UserController extends BaseController {
 
-    @Autowired
-    private TaskService taskService;
-    @Autowired
-    private UserService userService;
+    private final TaskService taskService;
+    private final UserService userService;
 
     /*
     Посмотреть всех пользователей.
@@ -76,23 +73,6 @@ public class UserController extends BaseController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(createUser, HttpStatus.CREATED);
-    }
-
-    /*
-    Вход в систему с помощью пароля и логина
-     */
-    @PostMapping("/profile")
-    public ResponseEntity<?> signIn(Model model, @RequestBody UserDTOLogin user) {
-        try {
-            UserDTO verificationUser = userService.getByLogin(user.getLogin());
-            if (verificationUser == null || (!verificationUser.getPsw().equals(user.getPsw()))) {
-                return new ResponseEntity<>("User isn't valid ", HttpStatus.NOT_FOUND);
-            }
-            model.addAttribute("userActiv", verificationUser);
-            return new ResponseEntity<>("welcome to profile",HttpStatus.OK);
-        } catch (CRMProjectServiceException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
     }
 
     /*

@@ -6,7 +6,7 @@ import com.itrex.java.lab.crm.entity.Status;
 import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
 import com.itrex.java.lab.crm.service.TaskService;
 import com.itrex.java.lab.crm.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -14,17 +14,17 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class TaskController extends BaseController {
 
-    @Autowired
-    private TaskService taskService;
-    @Autowired
-    private UserService userService;
+    private final TaskService taskService;
+    private final UserService userService;
 
     /*
      Посмотреть все существующие задачи/таски.
@@ -97,6 +97,7 @@ public class TaskController extends BaseController {
     taskId - формируется автоматически
      */
     @PostMapping("/tasks")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<?> create(@RequestBody TaskDTO taskDTO) {
         TaskDTO createTask;
         try {
@@ -112,6 +113,7 @@ public class TaskController extends BaseController {
     возможное смещение сроков
      */
     @PutMapping(value = "/tasks/{id}")
+    @Secured({"ROLE_ADMIN", "ROLE_CONTROLLER"})
     public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody TaskDTO taskDTO) {
         taskDTO.setId(id);
         try {
@@ -132,6 +134,7 @@ public class TaskController extends BaseController {
     Но не удаление таски
      */
     @DeleteMapping("/tasks/{id}/users")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<?> finishTaskByTaskId(@PathVariable(name = "id") int id) {
         try {
             taskService.finishTaskByTaskId(id);

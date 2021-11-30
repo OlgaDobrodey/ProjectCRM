@@ -6,16 +6,16 @@ VALUES (1, 'ADMIN'),
 
 
 INSERT INTO user(id, login, psw, role_id, last_name, first_name)
-VALUES (1, 'Petrov', '123', 1, 'Petrov', 'Petr'),
-       (2, 'Ivanov', '123', 1, 'Ivanov', 'Ivan'),
-       (3, 'Sidorov', '123', 1, 'Sidorov', 'Sidr'),
-       (4, 'Frolov', '123', 3, 'Frolov', 'Vova'),
-       (5, 'Kozlov', '123', 2, 'Kozlov', 'Igor'),
-       (6, 'Kolpokova', '123', 2, 'Kolpokova', 'Sveta'),
-       (7, 'Kulak', '123', 3, 'Kulak', 'Tanyay'),
-       (8, 'Dropalo', '123', 2, 'Dropalo', 'Andrey'),
-       (9, 'Kurgan', '123', 3, 'Kurgan', 'Misha'),
-       (10, 'Leurdo', '123', 2, 'Leurdo', 'Elena');
+VALUES (1, 'Petrov', '$2a$10$RIlu14GNv2Ahm6Ayj0cJOOPKI9liARHYFKk6ctESUEGdpmbJUz0iS', 1, 'Petrov', 'Petr'),
+       (2, 'Ivanov','$2a$10$RIlu14GNv2Ahm6Ayj0cJOOPKI9liARHYFKk6ctESUEGdpmbJUz0iS', 1, 'Ivanov', 'Ivan'),
+       (3, 'Sidorov','$2a$10$RIlu14GNv2Ahm6Ayj0cJOOPKI9liARHYFKk6ctESUEGdpmbJUz0iS', 1, 'Sidorov', 'Sidr'),
+       (4, 'Frolov','$2a$10$RIlu14GNv2Ahm6Ayj0cJOOPKI9liARHYFKk6ctESUEGdpmbJUz0iS', 3, 'Frolov', 'Vova'),
+       (5, 'Kozlov', '$2a$10$RIlu14GNv2Ahm6Ayj0cJOOPKI9liARHYFKk6ctESUEGdpmbJUz0iS', 2, 'Kozlov', 'Igor'),
+       (6, 'Kolpokova', '$2a$10$RIlu14GNv2Ahm6Ayj0cJOOPKI9liARHYFKk6ctESUEGdpmbJUz0iS', 2, 'Kolpokova', 'Sveta'),
+       (7, 'Kulak', '$2a$10$RIlu14GNv2Ahm6Ayj0cJOOPKI9liARHYFKk6ctESUEGdpmbJUz0iS', 3, 'Kulak', 'Tanyay'),
+       (8, 'Dropalo', '$2a$10$RIlu14GNv2Ahm6Ayj0cJOOPKI9liARHYFKk6ctESUEGdpmbJUz0iS', 2, 'Dropalo', 'Andrey'),
+       (9, 'Kurgan', '$2a$10$RIlu14GNv2Ahm6Ayj0cJOOPKI9liARHYFKk6ctESUEGdpmbJUz0iS', 3, 'Kurgan', 'Misha'),
+       (10, 'Leurdo', '$2a$10$RIlu14GNv2Ahm6Ayj0cJOOPKI9liARHYFKk6ctESUEGdpmbJUz0iS', 2, 'Leurdo', 'Elena');
 
 INSERT INTO task(id, title, status, deadline, info)
 VALUES (1, 'task_title 1', 'NEW', '2022-10-23', 'task info 1'),

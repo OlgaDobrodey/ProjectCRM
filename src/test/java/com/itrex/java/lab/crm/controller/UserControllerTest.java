@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itrex.java.lab.crm.dto.PasswordDTOForChanges;
 import com.itrex.java.lab.crm.dto.TaskDTO;
 import com.itrex.java.lab.crm.dto.UserDTO;
-import com.itrex.java.lab.crm.dto.UserDTOLogin;
 import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,66 +123,6 @@ class UserControllerTest extends BaseControllerTest {
                 .andExpect(status().isCreated());
 
         verify(userService).add(user);
-    }
-
-    @Test
-    void signIn_whereInputValidUserDTOLogin_thenReturns200Test() throws Exception {
-        //given && when
-        UserDTO userDTO = createUserDto(1);
-        UserDTOLogin userDTOLogin = UserDTOLogin.builder()
-                .login(userDTO.getLogin())
-                .psw(userDTO.getPsw())
-                .build();
-
-        when(userService.getByLogin(userDTOLogin.getLogin())).thenReturn(userDTO);
-
-        //then
-        mockMvc.perform(post("/crm/profile")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(userDTOLogin)))
-                .andExpect(status().isOk());
-
-        verify(userService).getByLogin(userDTOLogin.getLogin());
-    }
-
-    @Test
-    void signIn_whereInputValidUserDTOLogin_thenReturns404Test() throws Exception {
-        //given && when
-        UserDTO userDTO = createUserDto(1);
-        UserDTOLogin userDTOLogin = UserDTOLogin.builder()
-                .login(userDTO.getLogin())
-                .psw(userDTO.getPsw())
-                .build();
-
-        when(userService.getByLogin(userDTOLogin.getLogin())).thenReturn(null);
-
-        //then
-        mockMvc.perform(post("/crm/profile")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(userDTOLogin)))
-                .andExpect(status().isNotFound());
-
-        verify(userService).getByLogin(userDTOLogin.getLogin());
-    }
-
-    @Test
-    void signIn_whereInputValidUserDTOLoginCreateExceprion_thenReturns404Test() throws Exception {
-        //given && when
-        UserDTO userDTO = createUserDto(1);
-        UserDTOLogin userDTOLogin = UserDTOLogin.builder()
-                .login(userDTO.getLogin())
-                .psw(userDTO.getPsw())
-                .build();
-
-        when(userService.getByLogin(userDTOLogin.getLogin())).thenThrow(CRMProjectServiceException.class);
-
-        //then
-        mockMvc.perform(post("/crm/profile")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(userDTOLogin)))
-                .andExpect(status().isNotFound());
-
-        verify(userService).getByLogin(userDTOLogin.getLogin());
     }
 
     @Test

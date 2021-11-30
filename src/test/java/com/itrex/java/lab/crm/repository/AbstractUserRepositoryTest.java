@@ -41,7 +41,7 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
         //then
         assertEquals(2, actual.getId());
         assertEquals("Ivanov", actual.getLogin());
-        assertEquals("123", actual.getPsw());
+        assertEquals("$2a$10$RIlu14GNv2Ahm6Ayj0cJOOPKI9liARHYFKk6ctESUEGdpmbJUz0iS", actual.getPsw());
         assertEquals("ADMIN", actual.getRole().getRoleName());
         assertEquals("Ivanov", actual.getLastName());
         assertEquals("Ivan", actual.getFirstName());
@@ -70,7 +70,7 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
         //then
         assertEquals(2, actual.getId());
         assertEquals("Ivanov", actual.getLogin());
-        assertEquals("123", actual.getPsw());
+        assertEquals("$2a$10$RIlu14GNv2Ahm6Ayj0cJOOPKI9liARHYFKk6ctESUEGdpmbJUz0iS", actual.getPsw());
         assertEquals("ADMIN", actual.getRole().getRoleName());
         assertEquals("Ivanov", actual.getLastName());
         assertEquals("Ivan", actual.getFirstName());
@@ -99,13 +99,13 @@ public abstract class AbstractUserRepositoryTest extends BaseRepositoryTest {
         //then
         assertEquals(1, actual.get(0).getId());
         assertEquals("Petrov", actual.get(0).getLogin());
-        assertEquals("123", actual.get(0).getPsw());
+        assertEquals("$2a$10$RIlu14GNv2Ahm6Ayj0cJOOPKI9liARHYFKk6ctESUEGdpmbJUz0iS", actual.get(0).getPsw());
         assertEquals("ADMIN", actual.get(0).getRole().getRoleName());
         assertEquals("Petrov", actual.get(0).getLastName());
         assertEquals("Petr", actual.get(0).getFirstName());
         assertEquals(8, actual.get(1).getId());
         assertEquals("Dropalo", actual.get(1).getLogin());
-        assertEquals("123", actual.get(1).getPsw());
+        assertEquals("$2a$10$RIlu14GNv2Ahm6Ayj0cJOOPKI9liARHYFKk6ctESUEGdpmbJUz0iS", actual.get(1).getPsw());
         assertEquals("USER", actual.get(1).getRole().getRoleName());
         assertEquals("Dropalo", actual.get(1).getLastName());
         assertEquals("Andrey", actual.get(1).getFirstName());

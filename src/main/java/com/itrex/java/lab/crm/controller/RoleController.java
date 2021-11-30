@@ -5,26 +5,27 @@ import com.itrex.java.lab.crm.dto.UserDTO;
 import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
 import com.itrex.java.lab.crm.service.RoleService;
 import com.itrex.java.lab.crm.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class RoleController extends BaseController {
 
-    @Autowired
-    private RoleService roleService;
-    @Autowired
-    private UserService userService;
+    private final RoleService roleService;
+    private final UserService userService;
 
     /*
     Посмотреть все существующие роли.
     Могут посмотреть все пользователи
     */
     @GetMapping("/roles")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<List<RoleDTO>> read() {
 
         List<RoleDTO> tasks = roleService.getAllRoles();
