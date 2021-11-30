@@ -2,6 +2,7 @@ package com.itrex.java.lab.crm.service;
 
 import com.itrex.java.lab.crm.dto.PasswordDTOForChanges;
 import com.itrex.java.lab.crm.dto.UserDTO;
+import com.itrex.java.lab.crm.dto.UserDtoLoginRoleName;
 import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public interface UserService {
 
     List<UserDTO> getAll();
     UserDTO getById(Integer id);
-    UserDTO getByLogin(String login) throws CRMProjectServiceException;
+    UserDtoLoginRoleName getByLogin(String login) throws CRMProjectServiceException;
     List<UserDTO> getAllTaskUsersByTaskId(Integer taskId) throws CRMProjectServiceException;
     List<UserDTO> getAllRoleUsersByRoleId(Integer roleId) throws CRMProjectServiceException;
 

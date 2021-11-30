@@ -9,6 +9,7 @@ import com.itrex.java.lab.crm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,6 +66,7 @@ public class UserController extends BaseController {
     Создание нового пользователя
     */
     @PostMapping("/users")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<?> create(@RequestBody UserDTO userDTO) {
         UserDTO createUser;
         try {
@@ -76,10 +78,10 @@ public class UserController extends BaseController {
     }
 
     /*
-   Корректировка задачи, Изменение статуса, внесение пояснений в инфо, корректировка названия
-   возможное смещение сроков
+   Корректировка пользователя, изменение роли
     */
     @PutMapping(value = "/users/{id}")
+    @Secured({"ROLE_ADMIN", "ROLE_CONTROLLER"})
     public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody UserDTO userDTO) {
         userDTO.setId(id);
         UserDTO updated;
@@ -97,6 +99,7 @@ public class UserController extends BaseController {
     Обновление пароля пользователя с данным id, проверека старого
      */
     @PutMapping("/users/{id}/password")
+    @Secured({"ROLE_ADMIN", "ROLE_CONTROLLER"})
     public ResponseEntity<?> updateUserPassword(
             @PathVariable(name = "id") int id, @RequestBody PasswordDTOForChanges psw) {
         try {
@@ -112,6 +115,7 @@ public class UserController extends BaseController {
     Добавление задачи для пользователя
     */
     @PutMapping(value = "/users/{userId}/tasks/{taskId}")
+    @Secured({"ROLE_ADMIN", "ROLE_CONTROLLER"})
     public ResponseEntity<?> assignTaskToUser(@PathVariable(name = "userId") int userId,
                                               @PathVariable(name = "taskId") int taskId) {
         try {
@@ -127,6 +131,7 @@ public class UserController extends BaseController {
     При удалении пользователь удаляется со всех заданий, которые выполнял.
  */
     @DeleteMapping("/users/{id}")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
         try {
             userService.remove(id);
@@ -140,6 +145,7 @@ public class UserController extends BaseController {
     Открепление задачи от пользователя (задача выполнена или переопределиться на другого пользователя)
   */
     @DeleteMapping(value = "/users/{userId}/tasks/{taskId}")
+    @Secured({"ROLE_ADMIN", "ROLE_CONTROLLER"})
     public ResponseEntity<?> revoke(@PathVariable(name = "userId") Integer userId,
                                     @PathVariable(name = "taskId") Integer taskId) {
         try {
@@ -155,6 +161,7 @@ public class UserController extends BaseController {
     Ухода пользователя в длительный отпуск
      */
     @DeleteMapping("/users/{userId}/tasks")
+    @Secured({"ROLE_ADMIN", "ROLE_CONTROLLER"})
     public ResponseEntity<?> revokeAllUserTasksByUserId(@PathVariable(name = "userId") int userId) {
         try {
             userService.revokeAllUserTasksByUserId(userId);

@@ -2,6 +2,7 @@ package com.itrex.java.lab.crm.service.impl;
 
 import com.itrex.java.lab.crm.dto.PasswordDTOForChanges;
 import com.itrex.java.lab.crm.dto.UserDTO;
+import com.itrex.java.lab.crm.dto.UserDtoLoginRoleName;
 import com.itrex.java.lab.crm.entity.Role;
 import com.itrex.java.lab.crm.entity.Status;
 import com.itrex.java.lab.crm.entity.Task;
@@ -54,10 +55,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO getByLogin(String login) {
+    public UserDtoLoginRoleName getByLogin(String login) {
 
         return userRepository.findUserByLogin(login)
-                .map(ConverterUtils::convertUserToDto)
+                .map(ConverterUtils::convertUserToDtoLoginRoleName)
                 .orElse(null);
     }
 

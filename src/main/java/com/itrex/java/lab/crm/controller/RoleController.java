@@ -25,7 +25,6 @@ public class RoleController extends BaseController {
     Могут посмотреть все пользователи
     */
     @GetMapping("/roles")
-    @Secured("ROLE_ADMIN")
     public ResponseEntity<List<RoleDTO>> read() {
 
         List<RoleDTO> tasks = roleService.getAllRoles();
@@ -52,6 +51,7 @@ public class RoleController extends BaseController {
     Посмотреть конкретную роль и всех пользователей данной роли.
      */
     @GetMapping("/roles/{id}/users")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<?> getAllRoleUsersByRoleId(@PathVariable Integer id) {
         List<UserDTO> users;
         try {
@@ -70,6 +70,7 @@ public class RoleController extends BaseController {
    пример может быть в будущем добавлен клиент(как наблюдатель выполнения задачи)
     */
     @PostMapping("/roles")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<?> create(@RequestBody RoleDTO roleDTO) {
         RoleDTO created;
         try {
@@ -84,6 +85,7 @@ public class RoleController extends BaseController {
      Корректировка роли, в связи изменившимися бизнес-процессами. Изменения названия
      */
     @PutMapping(value = "/roles/{id}")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<?> update(@PathVariable(name = "id") int id, @RequestBody RoleDTO roleDTO) {
         roleDTO.setId(id);
         RoleDTO updated;

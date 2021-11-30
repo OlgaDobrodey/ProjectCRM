@@ -2,6 +2,7 @@ package com.itrex.java.lab.crm.service;
 
 import com.itrex.java.lab.crm.dto.PasswordDTOForChanges;
 import com.itrex.java.lab.crm.dto.UserDTO;
+import com.itrex.java.lab.crm.dto.UserDtoLoginRoleName;
 import com.itrex.java.lab.crm.entity.Role;
 import com.itrex.java.lab.crm.entity.Status;
 import com.itrex.java.lab.crm.entity.Task;
@@ -71,21 +72,19 @@ public class UserServiceTest extends BaseServiceTest {
     }
 
     @Test
-    void getByLogin_existUserDTOLogin_returnUserDTOTest() {
+    void getByLogin_existUserDTOLogin_returnUserDTOLoginRoleNameTest() {
         //given
         User user = createTestUsersWithId(1, 1).get(0);
         when(userRepository.findUserByLogin(user.getLogin())).thenReturn(Optional.of(user));
 
         //when
-        UserDTO actual = userService.getByLogin(user.getLogin());
+        UserDtoLoginRoleName actual = userService.getByLogin(user.getLogin());
 
         //then
         assertEquals(2, actual.getId());
         assertEquals("Test1", actual.getLogin());
         assertEquals("1231", actual.getPsw());
-        assertEquals(1, actual.getRoleId());
-        assertEquals("IvanovB", actual.getLastName());
-        assertEquals("IvanB", actual.getFirstName());
+        assertEquals("ADMIN", actual.getRoleName());
         verify(userRepository).findUserByLogin(user.getLogin());
     }
 
@@ -95,7 +94,7 @@ public class UserServiceTest extends BaseServiceTest {
         when(userRepository.findUserByLogin(any())).thenReturn(Optional.ofNullable(null));
 
         //when
-        UserDTO actual = userService.getByLogin(any());
+        UserDtoLoginRoleName actual = userService.getByLogin(any());
 
         //then
         assertNull(actual);

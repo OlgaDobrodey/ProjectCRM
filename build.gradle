@@ -22,9 +22,8 @@ repositories {
 dependencies {
     implementation 'com.h2database:h2'
     implementation 'org.flywaydb:flyway-core'
-    implementation ('org.springframework.boot:spring-boot-starter-thymeleaf') {
-        exclude module: 'spring-boot-starter-logging'
-    }
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
     implementation('org.springframework.boot:spring-boot-starter-data-jpa') {
         exclude module: 'spring-boot-starter-logging'
     }
@@ -40,6 +39,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude module: 'spring-boot-starter-logging'
+    }
+    testImplementation ('org.springframework.security:spring-security-test'){
         exclude module: 'spring-boot-starter-logging'
     }
 

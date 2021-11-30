@@ -150,6 +150,7 @@ public class TaskController extends BaseController {
      Статус переводится в STATUS.DONE также открепляются все пользователи.
      */
     @DeleteMapping("/tasks/{id}")
+    @Secured({"ROLE_ADMIN", "ROLE_CONTROLLER"})
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
         try {
             taskService.remove(id);

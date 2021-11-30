@@ -3,6 +3,7 @@ package com.itrex.java.lab.crm.utils;
 import com.itrex.java.lab.crm.dto.RoleDTO;
 import com.itrex.java.lab.crm.dto.TaskDTO;
 import com.itrex.java.lab.crm.dto.UserDTO;
+import com.itrex.java.lab.crm.dto.UserDtoLoginRoleName;
 import com.itrex.java.lab.crm.entity.Role;
 import com.itrex.java.lab.crm.entity.Task;
 import com.itrex.java.lab.crm.entity.User;
@@ -24,6 +25,15 @@ public class ConverterUtils {
                 .roleId(user.getRole().getId())
                 .lastName(user.getLastName())
                 .firstName(user.getFirstName())
+                .build();
+    }
+
+    public static UserDtoLoginRoleName convertUserToDtoLoginRoleName(User user) {
+        return UserDtoLoginRoleName.builder()
+                .id(user.getId())
+                .login(user.getLogin())
+                .psw(user.getPsw())
+                .roleName(user.getRole().getRoleName())
                 .build();
     }
 
