@@ -1,12 +1,15 @@
 package com.itrex.java.lab.crm.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itrex.java.lab.crm.config.JwtConfigurer;
 import com.itrex.java.lab.crm.dto.PasswordDTOForChanges;
 import com.itrex.java.lab.crm.dto.TaskDTO;
 import com.itrex.java.lab.crm.dto.UserDTO;
 import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -24,8 +27,11 @@ class UserControllerTest extends BaseControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @MockBean
+    protected JwtConfigurer jwtConfigurer;
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "USER")
     void read_whenValidInput_thenReturns200Test() throws Exception {
         //given && when
         List<UserDTO> users = List.of(createUserDto(1));
@@ -41,6 +47,7 @@ class UserControllerTest extends BaseControllerTest {
 
     /* List of Users not found in Data Base */
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "USER")
     void read_whenValidInput_thenReturns404Test() throws Exception {
         //given && when
         when(userService.getAll()).thenReturn(new ArrayList<>());
@@ -54,6 +61,7 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "USER")
     void readUserByUserId_whenInputValId_thenReturns200Test() throws Exception {
         //given && when
         UserDTO user = createUserDto(1);
@@ -68,6 +76,7 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "USER")
     void readUserByUserId_whenInputValIdNoBD_thenReturns404Test() throws Exception {
         //given && when
         Integer userId = 1;
@@ -82,6 +91,7 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "USER")
     void readAllUserTasksByUserId_whenInputValidPathVariableUserId_thenReturns200Test() throws Exception {
         //given && when
         List<TaskDTO> tasks = List.of(createTaskDto(1));
@@ -97,6 +107,7 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "USER")
     void readAllUserTasksByUserId_whenInputValidPathVariableUserId_thenReturns404Test() throws Exception {
         //given && when
         Integer userId = 1;
@@ -111,6 +122,7 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void create_whereInputValidUser_thenReturns201Test() throws Exception {
         //given && when
         UserDTO user = createUserDto(1);
@@ -126,6 +138,7 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "CONTROLLER")
     void update_whereInputValidUserAndUserId_thenReturns200Test() throws Exception {
         //given && when
         UserDTO user = createUserDto(1);
@@ -141,6 +154,7 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void update_whereInputValidUserAndUserId_thenReturns404Test() throws Exception {
         //given && when
         UserDTO user = createUserDto(1);
@@ -156,6 +170,7 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "CONTROLLER")
     void updateUserPassword_whenValidInputPathVarUserIdReqBodyPasswordDTOForChanges_thenReturns200Test() throws Exception {
         //given && when
         PasswordDTOForChanges pdtofc = PasswordDTOForChanges
@@ -178,6 +193,7 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void updateUserPassword_whenValidInputPathVarUserIdReqBodyPasswordDTOForChanges_thenReturns404Test() throws Exception {
         //given && when
         PasswordDTOForChanges pdtofc = PasswordDTOForChanges
@@ -199,6 +215,7 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void assignTaskToUser_whenValidInputPathUserIdAndTaskId_return200Test() throws Exception {
         //given && when
         Integer userId = 1;
@@ -214,6 +231,7 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void assignTaskToUser_whenValidInputPathUserIdAndTaskId_return404Test() throws Exception {
         //given && when
         Integer userId = 1;
@@ -229,6 +247,7 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void delete_whenInputValidPathVariableUsersId_thenReturns200Test() throws Exception {
         //given && when
         Integer userId = 2;
@@ -243,6 +262,7 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void delete_whenInputValidPathVariableUsersId_thenReturns404Test() throws Exception {
         //given && when
         Integer userId = 2;
@@ -257,6 +277,7 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void revoke_whenInputValidPathVariableUsersId_thenReturns200Test() throws Exception {
         //given && when
         Integer userId = 2;
@@ -272,6 +293,7 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void revoke_whenInputValidPathVariableUsersId_thenReturns304Test() throws Exception {
         //given && when
         Integer userId = 2;
@@ -287,6 +309,7 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void revokeAllUserTasksByUserId_whenInputValidPathVariableUsersId_thenReturns200Test() throws Exception {
         //given && when
         Integer userId = 2;
@@ -301,6 +324,7 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void revokeAllUserTasksByUserId_whenInputValidPathVariableUsersId_thenReturns304Test() throws Exception {
         //given && when
         Integer userId = 2;

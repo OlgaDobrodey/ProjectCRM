@@ -1,10 +1,12 @@
 package com.itrex.java.lab.crm.controller;
 
+import com.itrex.java.lab.crm.security.JwtTokenProvider;
 import com.itrex.java.lab.crm.service.RoleService;
 import com.itrex.java.lab.crm.service.TaskService;
 import com.itrex.java.lab.crm.service.UserService;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authentication.AuthenticationManager;
 
 @WebMvcTest
 public abstract class BaseControllerTest {
@@ -15,5 +17,9 @@ public abstract class BaseControllerTest {
     protected UserService userService;
     @MockBean
     protected TaskService taskService;
+    @MockBean
+    protected JwtTokenProvider jwtTokenProvider;
+    @MockBean
+    protected AuthenticationManager authenticationManager;
 
 }

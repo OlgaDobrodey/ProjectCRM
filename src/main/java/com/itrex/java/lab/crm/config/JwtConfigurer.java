@@ -1,6 +1,7 @@
 package com.itrex.java.lab.crm.config;
 
 import com.itrex.java.lab.crm.filter.JwtTokenFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;
@@ -9,8 +10,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
+
     private final JwtTokenFilter jwtTokenFilter;
 
+    @Autowired
     public JwtConfigurer(JwtTokenFilter jwtTokenFilter) {
         this.jwtTokenFilter = jwtTokenFilter;
     }

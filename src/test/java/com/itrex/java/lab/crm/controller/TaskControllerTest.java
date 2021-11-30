@@ -1,12 +1,15 @@
 package com.itrex.java.lab.crm.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itrex.java.lab.crm.config.JwtConfigurer;
 import com.itrex.java.lab.crm.dto.TaskDTO;
 import com.itrex.java.lab.crm.dto.UserDTO;
 import com.itrex.java.lab.crm.entity.Status;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.*;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -24,8 +27,11 @@ class TaskControllerTest extends BaseControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @MockBean
+    protected JwtConfigurer jwtConfigurer;
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void read_whenValidInput_thenReturns200Test() throws Exception {
         //given && when
         List<TaskDTO> tasks = List.of(createTaskDto(1));
@@ -40,6 +46,7 @@ class TaskControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void read_whenValidInputDBNotResault_thenReturns404Test() throws Exception {
         //given && when
         List<TaskDTO> tasks = new ArrayList<>();
@@ -54,6 +61,7 @@ class TaskControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void readPageableSort_whenInputValidPageable_thenReturn404Test() throws Exception {
         //given && when
         Sort sort = Sort.by(Sort.Direction.ASC, "id")
@@ -73,6 +81,7 @@ class TaskControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void readPageableSort_whenInputValidPageable_thenReturn200Test() throws Exception {
         //given && when
         Sort sort = Sort.by(Sort.Direction.ASC, "id")
@@ -94,6 +103,7 @@ class TaskControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void readPageableSort_whenInputValidPageableDefaultParam_thenReturn200Test() throws Exception {
         //given && when
         Pageable pageable = PageRequest.of(0, 4);
@@ -113,6 +123,7 @@ class TaskControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void readTaskByIdTask_whenInputValid_thenReturns200Test() throws Exception {
         //given && when
         TaskDTO taskDTO = createTaskDto(1);
@@ -127,6 +138,7 @@ class TaskControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void readTaskByIdTask_whenInputValidNotBD_thenReturns404Test() throws Exception {
         //given && when
         Integer taskId = 2;
@@ -142,6 +154,7 @@ class TaskControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void readAllTaskUsersByTaskId_whenInputValidPathVariableTaskId_thenReturns200Test() throws Exception {
         //given && when
         List<UserDTO> users = List.of(createUserDto(1));
@@ -157,6 +170,7 @@ class TaskControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void readAllTaskUsersByTaskId_whenInputValidPathVariableTaskId_thenReturns404Test() throws Exception {
         //given && when
         List<UserDTO> users = new ArrayList<>();
@@ -172,6 +186,7 @@ class TaskControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void create_whereInputValidTask_thenReturns201Test() throws Exception {
         //given && when
         TaskDTO task = createTaskDto(1);
@@ -188,6 +203,7 @@ class TaskControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void update_whereInputValidTaskAndTaskId_thenReturns200Test() throws Exception {
         //given && when
         TaskDTO task = createTaskDto(1);
@@ -203,6 +219,7 @@ class TaskControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void update_whereInputValidTaskAndTaskId_thenReturns304Test() throws Exception {
         //given && when
         TaskDTO task = createTaskDto(1);
@@ -218,6 +235,7 @@ class TaskControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void finishTaskByTaskId_whenInputValidPathVariableTaskId_thenReturns200Test() throws Exception {
         //given && when
         Integer taskId = 2;
@@ -232,6 +250,7 @@ class TaskControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void delete_whenInputValidPathVariableTaskId_thenReturns200Test() throws Exception {
         //given && when
         Integer taskId = 2;
@@ -246,6 +265,7 @@ class TaskControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void updateStatus_whenInputValidPathVariableTaskIdAndStatus_thenReturns200Test() throws Exception {
         //given && when
         Status status = Status.NEW;
@@ -262,6 +282,7 @@ class TaskControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void updateStatus_whenInputNoValidPathVariableTaskIdAndStatus_thenReturns200Test() throws Exception {
         //given && when
         Status status = Status.NEW;

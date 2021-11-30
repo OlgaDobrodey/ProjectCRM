@@ -23,9 +23,9 @@ public class ControllerUtilsTest {
     public static TaskDTO createTaskDto(Integer taskId) {
         return TaskDTO.builder()
                 .id(taskId)
-                .title("Task test " + (char)('@' + (taskId+ 1)))
+                .title("Task test " + (char) ('@' + (taskId + 1)))
                 .status(Status.NEW)
-                .info("Task test info " + (char)('@' + (taskId+ 1)))
+                .info("Task test info " + (char) ('@' + (taskId + 1)))
                 .deadline(LocalDate.of(2001, 1, 1))
                 .build();
     }

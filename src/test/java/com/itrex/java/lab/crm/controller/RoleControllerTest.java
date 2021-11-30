@@ -1,10 +1,13 @@
 package com.itrex.java.lab.crm.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itrex.java.lab.crm.config.JwtConfigurer;
 import com.itrex.java.lab.crm.dto.RoleDTO;
 import com.itrex.java.lab.crm.dto.UserDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -23,8 +26,11 @@ class RoleControllerTest extends BaseControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @MockBean
+    private JwtConfigurer jwtConfigurer;
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "USER")
     void read_whenValidInput_thenReturns200Test() throws Exception {
         //given && when
         List<RoleDTO> roles = List.of(createRoleDto(1));
@@ -40,6 +46,7 @@ class RoleControllerTest extends BaseControllerTest {
 
     /* List of Roles not found in Data Base */
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void read_whenValidInput_thenReturns404Test() throws Exception {
         //given && when
         when(roleService.getAllRoles()).thenReturn(new ArrayList<>());
@@ -53,6 +60,7 @@ class RoleControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "USER")
     void readRoleByRoleId_whenInputValid_thenReturns200Test() throws Exception {
         //given && when
         RoleDTO role = createRoleDto(1);
@@ -67,6 +75,7 @@ class RoleControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "USER")
     void readRoleByRoleId_whenInputValidRoleIdNoDataBase_thenReturns404Test() throws Exception {
         //given && when
         Integer roleId = 1;
@@ -81,6 +90,7 @@ class RoleControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void getAllRoleUsersByRoleId_inputValidPathVariableRoleId_thenReturns200Test() throws Exception {
         //given && when
         Integer roleId = 2;
@@ -97,6 +107,7 @@ class RoleControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void getAllRoleUsersByRoleId_inputValidPathVariableRoleIdNoDataBase_thenReturns404Test() throws Exception {
         //given && when
         Integer roleId = 2;
@@ -113,6 +124,7 @@ class RoleControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void create_whereInputValidRole_thenReturns201Test() throws Exception {
         //given && when
         RoleDTO roleDTO = createRoleDto(1);
@@ -128,6 +140,7 @@ class RoleControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void update_whereInputValidRoleAndRoleId_thenReturns200Test() throws Exception {
         //given && when
         RoleDTO roleDTO = createRoleDto(1);
@@ -143,6 +156,7 @@ class RoleControllerTest extends BaseControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void update_whereInputValidRoleAndRoleId_thenReturns304Test() throws Exception {
         //given && when
         RoleDTO roleDTO = createRoleDto(1);
