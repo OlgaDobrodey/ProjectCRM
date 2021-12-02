@@ -6,1267 +6,1287 @@
 	},
 	"item": [
 		{
-			"name": "Read all tasts (ADMIN)/crm/tasks",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/tasks",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"tasks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Read task2 (ADMIN)/crm/tasks/2",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/tasks/2",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"tasks",
-						"2"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Read all task's 2 users (ADMIN)/crm/tasks/2/users",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/tasks/2/users",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"tasks",
-						"2",
-						"users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update task 2 (ADMIN)/crm/tasks/2",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": " {\r\n        \r\n        \"title\": \"task title 148\",\r\n        \"status\": \"PROGRESS\",\r\n        \"deadline\": \"2021-12-23\",\r\n        \"info\": \"task info 3\"\r\n    }"
-				},
-				"url": {
-					"raw": "http://localhost:8080/crm/tasks/2",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"tasks",
-						"2"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete task 5 /crm/tasks/5",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/tasks/5",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"tasks",
-						"5"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "revoke all task's 6 users(ADMIN)/crm/tasks/6/users",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/tasks/6/users",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"tasks",
-						"6",
-						"users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update task 7 to status New (ADMIN)/crm/tasks/7/NEW",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/tasks/7/NEW",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"tasks",
-						"7",
-						"NEW"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Read All roles/crm/roles",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/roles",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"roles"
-					],
-					"query": [
-						{
-							"key": "oldPasswors",
-							"value": null,
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Read role2(Admin )/roles/2",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/roles/2",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"roles",
-						"2"
-					],
-					"query": [
-						{
-							"key": "oldPasswors",
-							"value": null,
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Read role8 (ADMIN)/crm/roles/8 (no found DB)",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/roles/8",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"roles",
-						"8"
-					],
-					"query": [
-						{
-							"key": "oldPasswors",
-							"value": null,
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Read All role 2 users(ADMIN)/crm/roles",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/roles/2/users",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"roles",
-						"2",
-						"users"
-					],
-					"query": [
-						{
-							"key": "oldPasswors",
-							"value": null,
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Creat role (ADMIN)/crm/roles(non valid role)",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n       \r\n        \"roleName\": \"aaaaaaaaaas\"\r\n    }"
-				},
-				"url": {
-					"raw": "http://localhost:8080/crm/roles",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"roles"
-					],
-					"query": [
-						{
-							"key": "oldPasswors",
-							"value": null,
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Creat role(ADMIN)/crm/roles",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n       \r\n        \"roleName\": \"CLIENT\"\r\n    }"
-				},
-				"url": {
-					"raw": "http://localhost:8080/crm/roles",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"roles"
-					],
-					"query": [
-						{
-							"key": "oldPasswors",
-							"value": null,
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update role 4 (ADMIN)/crm/roles/4",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n      \r\n        \"roleName\": \"TESTROLE\"\r\n    }"
-				},
-				"url": {
-					"raw": "http://localhost:8080/crm/roles/4",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"roles",
-						"4"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update role (ADMIN )crm/roles/4(non valid role)",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n      \r\n        \"roleName\": \"TESTROLE1\"\r\n    }"
-				},
-				"url": {
-					"raw": "http://localhost:8080/crm/roles/4",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"roles",
-						"4"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create task(ADMIN)/crm/tasks",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": " {\r\n        \r\n        \"title\": \"task title 137\",\r\n        \"status\": \"PROGRESS\",\r\n        \"deadline\": \"2021-12-23\",\r\n        \"info\": \"task info 3\"\r\n    }"
-				},
-				"url": {
-					"raw": "http://localhost:8080/crm/tasks",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"tasks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create task (ADMIN )crm/tasks (not valid title)",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": " {\r\n        \r\n        \"title\": \"t\",\r\n        \"status\": \"PROGRESS\",\r\n        \"deadline\": \"2021-12-23\",\r\n        \"info\": \"task info 3\"\r\n    }"
-				},
-				"url": {
-					"raw": "http://localhost:8080/crm/tasks",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"tasks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create task (ADMIN)crm/tasks(not valid Localdata)",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": " {\r\n        \r\n        \"title\": \"task title 137\",\r\n        \"status\": \"PROGRESS\",\r\n        \"deadline\": \"2021-12-233\",\r\n        \"info\": \"task info 3\"\r\n    }"
-				},
-				"url": {
-					"raw": "http://localhost:8080/crm/tasks",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"tasks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Read users (ADMIN)/crm/users",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": " {\r\n        \r\n        \"title\": \"task title 137\",\r\n        \"status\": \"PROGRESS\",\r\n        \"deadline\": \"2021-12-23\",\r\n        \"info\": \"task info 3\"\r\n    }"
-				},
-				"url": {
-					"raw": "http://localhost:8080/crm/users",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Read user6(ADMIN)/crm/users/6",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/users/6",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"users",
-						"6"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create user(ADMIN) /crm/users",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n     \"login\": \"LEURDON\",\r\n    \"psw\": \"123\",\r\n    \"firstName\": \"Sveta\",\r\n    \"lastName\": \"Kolpokova\",\r\n    \"roleId\": 2\r\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8080/crm/users",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create user(ADMIN)/crm/users (no valid login)",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n     \"login\": \"LEURDON/\",\r\n    \"psw\": \"123\",\r\n    \"firstName\": \"Sveta\",\r\n    \"lastName\": \"Kolpokova\",\r\n    \"roleId\": 2\r\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8080/crm/users",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create user (ADMIN)crm/users (no valid login)(No valid First Name)",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n     \"login\": \"LEURDON\",\r\n    \"psw\": \"123\",\r\n    \"firstName\": \"Sveta1\",\r\n    \"lastName\": \"Kolpokova\",\r\n    \"roleId\": 2\r\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8080/crm/users",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create user (ADMIN) /crm/users (no valid login)(no valid pasword)",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n     \"login\": \"LEURDON\",\r\n    \"psw\": \"123/\",\r\n    \"firstName\": \"Sveta1\",\r\n    \"lastName\": \"Kolpokova\",\r\n    \"roleId\": 2\r\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8080/crm/users",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Read all user's tasks(ADMIN)/crm/users/6/tasks",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/users/6/tasks",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"users",
-						"6",
-						"tasks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update user3(ADMIN)/crm/users/3",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "    {\r\n        \"login\": \"Sidorov\",\r\n        \"psw\": \"123\",\r\n        \"firstName\": \"SidrTest\",\r\n        \"lastName\": \"Sidorov\",\r\n        \"roleId\": 1\r\n    }"
-				},
-				"url": {
-					"raw": "http://localhost:8080/crm/users/3",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"users",
-						"3"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update user's 3 password (ADMIN )/crm/users/3/password",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "    {\r\n        \"oldPassword\": \"123\",\r\n        \"newPassword\": \"1234\",\r\n        \"repeatNewPassword\": \"1234\"\r\n    }"
-				},
-				"url": {
-					"raw": "http://localhost:8080/crm/users/3/password",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"users",
-						"3",
-						"password"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Assing task 10 for user 2 (ADMIN )/crm/users/2/tasks/10",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/users/2/tasks/10",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"users",
-						"2",
-						"tasks",
-						"10"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Revoke task4 for user 2 (ADMIN)/crm/users/2/tasks/4",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/users/2/tasks/4",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"users",
-						"2",
-						"tasks",
-						"4"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Revoke all  user's tasks(ADMIN )/crm/users/3/tasks",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/users/3/tasks",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"users",
-						"3",
-						"tasks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete user4 (ADMIN)/crm/users/4",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/users/4",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"users",
-						"4"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Read all tasks with pagane and sort default(ADMIN) /crm/tasks/page defaultParam",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/tasks/page",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"tasks",
-						"page"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "0",
-							"disabled": true
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login /crm/login (Login with not in db)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\r\n    \r\n        \"login\": \"Petrov\",\r\n        \"psw\": \"1234\"\r\n    \r\n    }"
 						},
-						{
-							"key": "size",
-							"value": "3",
-							"disabled": true
-						},
-						{
-							"key": "sort",
-							"value": "id,asc",
-							"disabled": true
-						},
-						{
-							"key": "sort",
-							"value": "status,desc",
-							"disabled": true
+						"url": {
+							"raw": "http://localhost:8080/crm/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"login"
+							]
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "read tasks with pagane and sort param(ADMIN)/crm/tasks/page diferentParam",
-			"request": {
-				"auth": {
-					"type": "noauth"
+					},
+					"response": []
 				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/crm/tasks/page?page=0&size=3&sort=title,asc&sort=status,desc",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"tasks",
-						"page"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "0"
+				{
+					"name": "Login(ROLE_ADMIN) /crm/login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\r\n    \r\n        \"login\": \"Petrov\",\r\n        \"password\": \"123\"\r\n    \r\n    }"
 						},
-						{
-							"key": "size",
-							"value": "3"
-						},
-						{
-							"key": "sort",
-							"value": "title,asc"
-						},
-						{
-							"key": "sort",
-							"value": "status,desc"
+						"url": {
+							"raw": "http://localhost:8080/crm/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"login"
+							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "Login(ROLE_USER) /crm/login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \r\n        \"login\": \"Kozlov\",\r\n        \"password\": \"123\"\r\n    \r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/crm/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login(ROLE_CONTROLLER) /crm/login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \r\n        \"login\": \"Frolov\",\r\n        \"password\": \"123\"\r\n    \r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/crm/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"login"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Login /crm/login (Login with not in db)",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "  {\r\n    \r\n        \"login\": \"Petrov\",\r\n        \"psw\": \"1234\"\r\n    \r\n    }"
+			"name": "Users",
+			"item": [
+				{
+					"name": "Read users (ADMIN)/crm/users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n        \r\n        \"title\": \"task title 137\",\r\n        \"status\": \"PROGRESS\",\r\n        \"deadline\": \"2021-12-23\",\r\n        \"info\": \"task info 3\"\r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/crm/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"users"
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/crm/login",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"login"
-					]
+				{
+					"name": "Read user6(ADMIN)/crm/users/6",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/users/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"users",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user(ADMIN) /crm/users",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"login\": \"LEURDON\",\r\n    \"psw\": \"123\",\r\n    \"firstName\": \"Sveta\",\r\n    \"lastName\": \"Kolpokova\",\r\n    \"roleId\": 2\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/crm/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user(ADMIN)/crm/users (no valid login)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"login\": \"LEURDON/\",\r\n    \"psw\": \"123\",\r\n    \"firstName\": \"Sveta\",\r\n    \"lastName\": \"Kolpokova\",\r\n    \"roleId\": 2\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/crm/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user (ADMIN)crm/users (no valid login)(No valid First Name)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"login\": \"LEURDON\",\r\n    \"psw\": \"123\",\r\n    \"firstName\": \"Sveta1\",\r\n    \"lastName\": \"Kolpokova\",\r\n    \"roleId\": 2\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/crm/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user (ADMIN) /crm/users (no valid login)(no valid pasword)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"login\": \"LEURDON\",\r\n    \"psw\": \"123/\",\r\n    \"firstName\": \"Sveta1\",\r\n    \"lastName\": \"Kolpokova\",\r\n    \"roleId\": 2\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/crm/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read all user's tasks(ADMIN)/crm/users/6/tasks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/users/6/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"users",
+								"6",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user3(ADMIN)/crm/users/3",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"login\": \"Sidorov\",\r\n        \"psw\": \"123\",\r\n        \"firstName\": \"SidrTest\",\r\n        \"lastName\": \"Sidorov\",\r\n        \"roleId\": 1\r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/crm/users/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"users",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user's 3 password (ADMIN )/crm/users/3/password",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"oldPassword\": \"123\",\r\n        \"newPassword\": \"1234\",\r\n        \"repeatNewPassword\": \"1234\"\r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/crm/users/3/password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"users",
+								"3",
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Revoke all  user's tasks(ADMIN )/crm/users/3/tasks",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/users/3/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"users",
+								"3",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user4 (ADMIN)/crm/users/4",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/users/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"users",
+								"4"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Login(ROLE_ADMIN) /crm/login",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "  {\r\n    \r\n        \"login\": \"Petrov\",\r\n        \"password\": \"123\"\r\n    \r\n    }"
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Read all tasts (ADMIN)/crm/tasks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"tasks"
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/crm/login",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"login"
-					]
+				{
+					"name": "Read task2 (ADMIN)/crm/tasks/2",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/tasks/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"tasks",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read all task's 2 users (ADMIN)/crm/tasks/2/users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/tasks/2/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"tasks",
+								"2",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update task 2 (ADMIN)/crm/tasks/2",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n        \r\n        \"title\": \"task title 148\",\r\n        \"status\": \"PROGRESS\",\r\n        \"deadline\": \"2021-12-23\",\r\n        \"info\": \"task info 3\"\r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/crm/tasks/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"tasks",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete task 5 /crm/tasks/5",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/tasks/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"tasks",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "revoke all task's 6 users(ADMIN)/crm/tasks/6/users",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/tasks/6/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"tasks",
+								"6",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update task 7 to status New (ADMIN)/crm/tasks/7/NEW",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/tasks/7/NEW",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"tasks",
+								"7",
+								"NEW"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create task(ADMIN)/crm/tasks",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n        \r\n        \"title\": \"task title 137\",\r\n        \"status\": \"PROGRESS\",\r\n        \"deadline\": \"2021-12-23\",\r\n        \"info\": \"task info 3\"\r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/crm/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create task (ADMIN )crm/tasks (not valid title)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n        \r\n        \"title\": \"t\",\r\n        \"status\": \"PROGRESS\",\r\n        \"deadline\": \"2021-12-23\",\r\n        \"info\": \"task info 3\"\r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/crm/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create task (ADMIN)crm/tasks(not valid Localdata)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n        \r\n        \"title\": \"task title 137\",\r\n        \"status\": \"PROGRESS\",\r\n        \"deadline\": \"2021-12-233\",\r\n        \"info\": \"task info 3\"\r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/crm/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assing task 10 for user 2 (ADMIN )/crm/users/2/tasks/10",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/users/2/tasks/10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"users",
+								"2",
+								"tasks",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Revoke task4 for user 2 (ADMIN)/crm/users/2/tasks/4",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/users/2/tasks/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"users",
+								"2",
+								"tasks",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read all tasks with pagane and sort default(ADMIN) /crm/tasks/page defaultParam",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/tasks/page",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"tasks",
+								"page"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "id,asc",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "status,desc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "read tasks with pagane and sort param(ADMIN)/crm/tasks/page diferentParam",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/tasks/page?page=0&size=3&sort=title,asc&sort=status,desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"tasks",
+								"page"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "3"
+								},
+								{
+									"key": "sort",
+									"value": "title,asc"
+								},
+								{
+									"key": "sort",
+									"value": "status,desc"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Login(ROLE_USER) /crm/login",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": " {\r\n    \r\n        \"login\": \"Kozlov\",\r\n        \"password\": \"123\"\r\n    \r\n    }"
+			"name": "Roles",
+			"item": [
+				{
+					"name": "Read All roles/crm/roles",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/roles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"roles"
+							],
+							"query": [
+								{
+									"key": "oldPasswors",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/crm/login",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Login(ROLE_CONTROLLER) /crm/login",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": " {\r\n    \r\n        \"login\": \"Frolov\",\r\n        \"password\": \"123\"\r\n    \r\n    }"
+				{
+					"name": "Read role2(Admin )/roles/2",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/roles/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"roles",
+								"2"
+							],
+							"query": [
+								{
+									"key": "oldPasswors",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/crm/login",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"login"
-					]
+				{
+					"name": "Read role8 (ADMIN)/crm/roles/8 (no found DB)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/roles/8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"roles",
+								"8"
+							],
+							"query": [
+								{
+									"key": "oldPasswors",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read All role 2 users(ADMIN)/crm/roles",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/crm/roles/2/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"roles",
+								"2",
+								"users"
+							],
+							"query": [
+								{
+									"key": "oldPasswors",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creat role (ADMIN)/crm/roles(non valid role)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n       \r\n        \"roleName\": \"aaaaaaaaaas\"\r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/crm/roles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"roles"
+							],
+							"query": [
+								{
+									"key": "oldPasswors",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creat role(ADMIN)/crm/roles",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n       \r\n        \"roleName\": \"CLIENT\"\r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/crm/roles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"roles"
+							],
+							"query": [
+								{
+									"key": "oldPasswors",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update role 4 (ADMIN)/crm/roles/4",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n      \r\n        \"roleName\": \"TESTROLE\"\r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/crm/roles/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"roles",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update role (ADMIN )crm/roles/4(non valid role)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n      \r\n        \"roleName\": \"TESTROLE1\"\r\n    }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/crm/roles/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"crm",
+								"roles",
+								"4"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }
