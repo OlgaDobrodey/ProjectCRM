@@ -6,13 +6,18 @@
 	},
 	"item": [
 		{
-			"name": "http://localhost:8080/crm/tasks",
+			"name": "Read all tasts (ADMIN)/crm/tasks",
 			"request": {
 				"method": "GET",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -32,13 +37,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/tasks/2",
+			"name": "Read task2 (ADMIN)/crm/tasks/2",
 			"request": {
 				"method": "GET",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -59,13 +69,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/tasks/2/users",
+			"name": "Read all task's 2 users (ADMIN)/crm/tasks/2/users",
 			"request": {
 				"method": "GET",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -87,13 +102,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/tasks/2",
+			"name": "Update task 2 (ADMIN)/crm/tasks/2",
 			"request": {
 				"method": "PUT",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -118,10 +138,16 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/tasks/5",
+			"name": "Delete task 5 /crm/tasks/5",
 			"request": {
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:8080/crm/tasks/5",
 					"protocol": "http",
@@ -139,10 +165,16 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/tasks/6/users",
+			"name": "revoke all task's 6 users(ADMIN)/crm/tasks/6/users",
 			"request": {
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:8080/crm/tasks/6/users",
 					"protocol": "http",
@@ -161,13 +193,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/tasks/7/NEW",
+			"name": "Update task 7 to status New (ADMIN)/crm/tasks/7/NEW",
 			"request": {
 				"method": "PUT",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -189,10 +226,16 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/roles",
+			"name": "Read All roles/crm/roles",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:8080/crm/roles",
 					"protocol": "http",
@@ -216,10 +259,16 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/roles/2",
+			"name": "Read role2(Admin )/roles/2",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:8080/crm/roles/2",
 					"protocol": "http",
@@ -244,10 +293,16 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/roles/8 (no found DB)",
+			"name": "Read role8 (ADMIN)/crm/roles/8 (no found DB)",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:8080/crm/roles/8",
 					"protocol": "http",
@@ -272,10 +327,16 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/roles",
+			"name": "Read All role 2 users(ADMIN)/crm/roles",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:8080/crm/roles/2/users",
 					"protocol": "http",
@@ -301,13 +362,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/roles(non valid role)",
+			"name": "Creat role (ADMIN)/crm/roles(non valid role)",
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -338,13 +404,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/roles",
+			"name": "Creat role(ADMIN)/crm/roles",
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -375,13 +446,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/roles/4",
+			"name": "Update role 4 (ADMIN)/crm/roles/4",
 			"request": {
 				"method": "PUT",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -406,13 +482,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/roles/4(non valid role)",
+			"name": "Update role (ADMIN )crm/roles/4(non valid role)",
 			"request": {
 				"method": "PUT",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -437,13 +518,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/tasks",
+			"name": "Create task(ADMIN)/crm/tasks",
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -467,13 +553,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/tasks (not valid title)",
+			"name": "Create task (ADMIN )crm/tasks (not valid title)",
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -497,13 +588,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/tasks(not valid Localdata)",
+			"name": "Create task (ADMIN)crm/tasks(not valid Localdata)",
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -527,7 +623,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/users",
+			"name": "Read users (ADMIN)/crm/users",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -537,6 +633,11 @@
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -560,13 +661,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/users/6",
+			"name": "Read user6(ADMIN)/crm/users/6",
 			"request": {
 				"method": "GET",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -587,13 +693,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/users",
+			"name": "Create user(ADMIN) /crm/users",
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -617,13 +728,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/users (no valid login)",
+			"name": "Create user(ADMIN)/crm/users (no valid login)",
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -647,13 +763,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/users (no valid login)(No valid First Name)",
+			"name": "Create user (ADMIN)crm/users (no valid login)(No valid First Name)",
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -677,13 +798,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/users (no valid login)(no valid pasword)",
+			"name": "Create user (ADMIN) /crm/users (no valid login)(no valid pasword)",
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -707,10 +833,16 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/users/6/tasks",
+			"name": "Read all user's tasks(ADMIN)/crm/users/6/tasks",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:8080/crm/users/6/tasks",
 					"protocol": "http",
@@ -729,13 +861,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/users/3",
+			"name": "Update user3(ADMIN)/crm/users/3",
 			"request": {
 				"method": "PUT",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -760,13 +897,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/users/3/password",
+			"name": "Update user's 3 password (ADMIN )/crm/users/3/password",
 			"request": {
 				"method": "PUT",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -792,13 +934,18 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/users/2/tasks/10",
+			"name": "Assing task 10 for user 2 (ADMIN )/crm/users/2/tasks/10",
 			"request": {
 				"method": "PUT",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
 						"type": "text"
 					}
 				],
@@ -821,10 +968,16 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/users/2/tasks/4",
+			"name": "Revoke task4 for user 2 (ADMIN)/crm/users/2/tasks/4",
 			"request": {
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:8080/crm/users/2/tasks/4",
 					"protocol": "http",
@@ -844,10 +997,16 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/users/3/tasks",
+			"name": "Revoke all  user's tasks(ADMIN )/crm/users/3/tasks",
 			"request": {
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:8080/crm/users/3/tasks",
 					"protocol": "http",
@@ -866,10 +1025,16 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/users/4",
+			"name": "Delete user4 (ADMIN)/crm/users/4",
 			"request": {
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:8080/crm/users/4",
 					"protocol": "http",
@@ -887,10 +1052,16 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/tasks/page defaultParam",
+			"name": "Read all tasks with pagane and sort default(ADMIN) /crm/tasks/page defaultParam",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:8080/crm/tasks/page",
 					"protocol": "http",
@@ -930,10 +1101,19 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/tasks/page diferentParam",
+			"name": "read tasks with pagane and sort param(ADMIN)/crm/tasks/page diferentParam",
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "http://localhost:8080/crm/tasks/page?page=0&size=3&sort=title,asc&sort=status,desc",
 					"protocol": "http",
@@ -969,37 +1149,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/crm/profile",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "  {\r\n    \r\n        \"login\": \"Petrov\",\r\n        \"psw\": \"123\"\r\n    \r\n    }"
-				},
-				"url": {
-					"raw": "http://localhost:8080/crm/profile",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"crm",
-						"profile"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "http://localhost:8080/crm/profile user isnot valid",
+			"name": "Login /crm/login (Login with not in db)",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -1014,7 +1164,7 @@
 					"raw": "  {\r\n    \r\n        \"login\": \"Petrov\",\r\n        \"psw\": \"1234\"\r\n    \r\n    }"
 				},
 				"url": {
-					"raw": "http://localhost:8080/crm/profile",
+					"raw": "http://localhost:8080/crm/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1022,7 +1172,97 @@
 					"port": "8080",
 					"path": [
 						"crm",
-						"profile"
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login(ROLE_ADMIN) /crm/login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "  {\r\n    \r\n        \"login\": \"Petrov\",\r\n        \"password\": \"123\"\r\n    \r\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8080/crm/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"crm",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login(ROLE_USER) /crm/login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n    \r\n        \"login\": \"Kozlov\",\r\n        \"password\": \"123\"\r\n    \r\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8080/crm/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"crm",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login(ROLE_CONTROLLER) /crm/login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n    \r\n        \"login\": \"Frolov\",\r\n        \"password\": \"123\"\r\n    \r\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:8080/crm/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"crm",
+						"login"
 					]
 				}
 			},
