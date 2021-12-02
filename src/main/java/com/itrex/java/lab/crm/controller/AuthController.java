@@ -28,6 +28,7 @@ public class AuthController extends BaseController {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final SecurityContextLogoutHandler securityContextLogoutHandler;
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody UserAuthenticationDTO request) {
@@ -49,7 +50,6 @@ public class AuthController extends BaseController {
 
     @PostMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
-        SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.logout(request, response, null);
     }
 

@@ -7,6 +7,7 @@ import com.itrex.java.lab.crm.service.UserService;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 @WebMvcTest
 public abstract class BaseControllerTest {
@@ -21,5 +22,7 @@ public abstract class BaseControllerTest {
     protected JwtTokenProvider jwtTokenProvider;
     @MockBean
     protected AuthenticationManager authenticationManager;
+    @MockBean
+    private SecurityContextLogoutHandler securityContextLogoutHandler;
 
 }
