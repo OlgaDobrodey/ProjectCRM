@@ -7,14 +7,18 @@ import com.itrex.java.lab.crm.dto.UserDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.itrex.java.lab.crm.controller.ControllerUtilsTest.createRoleDto;
 import static com.itrex.java.lab.crm.controller.ControllerUtilsTest.createUserDto;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -29,6 +33,9 @@ class RoleControllerTest extends BaseControllerTest {
     @MockBean
     private JwtConfigurer jwtConfigurer;
 
+    private String EXPECTED_USERS_DTO = "[" + createUserDto(1).toString().replaceFirst("\\n", "").replaceAll("\\'", "") + "]";
+    private String EXPECTED_ROlES_DTO = "[" + createRoleDto(1).toString().replaceFirst("\\n", "").replaceAll("\\'", "") + "]";
+
     @Test
     @WithMockUser(username = "Petrov", password = "123", roles = "USER")
     void read_whenValidInput_thenReturns200Test() throws Exception {
@@ -37,9 +44,14 @@ class RoleControllerTest extends BaseControllerTest {
         when(roleService.getAllRoles()).thenReturn(roles);
 
         //then
-        mockMvc.perform(get("/crm/roles")
+        MvcResult mvcResult = mockMvc.perform(get("/crm/roles")
                         .contentType("application/json"))
-                .andExpect(status().isOk());
+                .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+        List<RoleDTO> roleDTOSs = objectMapper.readValue(response.getContentAsString(), ArrayList.class);
+        assertEquals(EXPECTED_ROlES_DTO, roleDTOSs.toString());
 
         verify(roleService).getAllRoles();
     }
@@ -62,14 +74,20 @@ class RoleControllerTest extends BaseControllerTest {
     @Test
     @WithMockUser(username = "Petrov", password = "123", roles = "USER")
     void readRoleByRoleId_whenInputValid_thenReturns200Test() throws Exception {
-        //given && when
+        //given
         RoleDTO role = createRoleDto(1);
         when(roleService.getById(role.getId())).thenReturn(role);
 
-        //then
-        mockMvc.perform(get("/crm/roles/{id}", role.getId())
+        // when
+        MvcResult mvcResult = mockMvc.perform(get("/crm/roles/{id}", role.getId())
                         .contentType("application/json"))
-                .andExpect(status().isOk());
+                .andReturn();
+
+        //then
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+        RoleDTO roleDTOSs = objectMapper.readValue(response.getContentAsString(), RoleDTO.class);
+        assertEquals("TestRoleB", roleDTOSs.getRoleName());
 
         verify(roleService).getById(role.getId());
     }
@@ -92,16 +110,22 @@ class RoleControllerTest extends BaseControllerTest {
     @Test
     @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void getAllRoleUsersByRoleId_inputValidPathVariableRoleId_thenReturns200Test() throws Exception {
-        //given && when
+        //given
         Integer roleId = 2;
-        List<UserDTO> users = List.of(createUserDto(1), createUserDto(2));
+        List<UserDTO> users = List.of(createUserDto(1));
 
         when(userService.getAllRoleUsersByRoleId(roleId)).thenReturn(users);
 
-        //then
-        mockMvc.perform(get("/crm/roles/{id}/users", roleId)
+        //when
+        MvcResult mvcResult = mockMvc.perform(get("/crm/roles/{id}/users", roleId)
                         .contentType("application/json"))
-                .andExpect(status().isOk());
+                .andReturn();
+
+        //then
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+        List<UserDTO> result = objectMapper.readValue(response.getContentAsString(), ArrayList.class);
+        assertEquals(EXPECTED_USERS_DTO, result.toString());
 
         verify(userService).getAllRoleUsersByRoleId(roleId);
     }
@@ -126,15 +150,21 @@ class RoleControllerTest extends BaseControllerTest {
     @Test
     @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void create_whereInputValidRole_thenReturns201Test() throws Exception {
-        //given && when
+        //given
         RoleDTO roleDTO = createRoleDto(1);
         when(roleService.addRole(roleDTO)).thenReturn(roleDTO);
 
-        //then
-        mockMvc.perform(post("/crm/roles")
+        //when
+        MvcResult mvcResult = mockMvc.perform(post("/crm/roles")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(roleDTO)))
-                .andExpect(status().isCreated());
+                .andReturn();
+
+        //then
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpServletResponse.SC_CREATED, response.getStatus());
+        RoleDTO roleDTOSs = objectMapper.readValue(response.getContentAsString(), RoleDTO.class);
+        assertEquals("TestRoleB", roleDTOSs.getRoleName());
 
         verify(roleService).addRole(roleDTO);
     }

@@ -9,14 +9,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.*;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.itrex.java.lab.crm.controller.ControllerUtilsTest.createTaskDto;
 import static com.itrex.java.lab.crm.controller.ControllerUtilsTest.createUserDto;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,17 +34,26 @@ class TaskControllerTest extends BaseControllerTest {
     @MockBean
     protected JwtConfigurer jwtConfigurer;
 
+    private String EXPECTED_USERS_DTO = "[" + createUserDto(1).toString().replaceFirst("\\n", "").replaceAll("\\'", "") + "]";
+    private String EXPECTED_TASKS_DTO = "[" + createTaskDto(1).toString().replaceFirst("\\n", "").replaceAll("\\'", "") + "]";
+
     @Test
     @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void read_whenValidInput_thenReturns200Test() throws Exception {
-        //given && when
+        //given
         List<TaskDTO> tasks = List.of(createTaskDto(1));
         when(taskService.getAll()).thenReturn(tasks);
 
-        //then
-        mockMvc.perform(get("/crm/tasks")
+        //when
+        MvcResult mvcResult = mockMvc.perform(get("/crm/tasks")
                         .contentType("application/json"))
-                .andExpect(status().isOk());
+                .andReturn();
+
+        //then
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+        List<TaskDTO> result = objectMapper.readValue(response.getContentAsString(), ArrayList.class);
+        assertEquals(EXPECTED_TASKS_DTO, result.toString());
 
         verify(taskService).getAll();
     }
@@ -125,14 +138,22 @@ class TaskControllerTest extends BaseControllerTest {
     @Test
     @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void readTaskByIdTask_whenInputValid_thenReturns200Test() throws Exception {
-        //given && when
+        //given
         TaskDTO taskDTO = createTaskDto(1);
         when(taskService.getById(taskDTO.getId())).thenReturn(taskDTO);
 
-        //then
-        mockMvc.perform(get("/crm/tasks/{id}", taskDTO.getId())
+        //when
+        MvcResult mvcResult = mockMvc.perform(get("/crm/tasks/{id}", taskDTO.getId())
                         .contentType("application/json"))
-                .andExpect(status().isOk());
+                .andReturn();
+
+        //then
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+        TaskDTO result = objectMapper.readValue(response.getContentAsString(), TaskDTO.class);
+        assertEquals("Task test B", result.getTitle());
+        assertEquals(Status.NEW, result.getStatus());
+        assertEquals("Task test info B", result.getInfo());
 
         verify(taskService).getById(taskDTO.getId());
     }
@@ -156,15 +177,21 @@ class TaskControllerTest extends BaseControllerTest {
     @Test
     @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void readAllTaskUsersByTaskId_whenInputValidPathVariableTaskId_thenReturns200Test() throws Exception {
-        //given && when
+        //given
         List<UserDTO> users = List.of(createUserDto(1));
         Integer taskId = 1;
         when(userService.getAllTaskUsersByTaskId(taskId)).thenReturn(users);
 
-        //then
-        mockMvc.perform(get("/crm/tasks/{id}/users", taskId)
+        //when
+        MvcResult mvcResult = mockMvc.perform(get("/crm/tasks/{id}/users", taskId)
                         .contentType("application/json"))
-                .andExpect(status().isOk());
+                .andReturn();
+
+        //then
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+        List<UserDTO> result = objectMapper.readValue(response.getContentAsString(), ArrayList.class);
+        assertEquals(EXPECTED_USERS_DTO, result.toString());
 
         verify(userService).getAllTaskUsersByTaskId(taskId);
     }
@@ -188,16 +215,24 @@ class TaskControllerTest extends BaseControllerTest {
     @Test
     @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void create_whereInputValidTask_thenReturns201Test() throws Exception {
-        //given && when
+        //given
         TaskDTO task = createTaskDto(1);
         task.setId(null);
         when(taskService.add(task)).thenReturn(task);
 
-        //then
-        mockMvc.perform(post("/crm/tasks")
+        //when
+        MvcResult mvcResult = mockMvc.perform(post("/crm/tasks")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(task)))
-                .andExpect(status().isCreated());
+                .andReturn();
+
+        //then
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpServletResponse.SC_CREATED, response.getStatus());
+        TaskDTO result = objectMapper.readValue(response.getContentAsString(), TaskDTO.class);
+        assertEquals("Task test B", result.getTitle());
+        assertEquals(Status.NEW, result.getStatus());
+        assertEquals("Task test info B", result.getInfo());
 
         verify(taskService).add(task);
     }

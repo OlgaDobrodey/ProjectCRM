@@ -31,13 +31,13 @@ public class UserDTO {
 
     @Override
     public String toString() {
-        return "\nUserDTO{" +
+        return "\n{" +
                 "id=" + id +
                 ", login='" + login + '\'' +
                 ", psw='" + psw + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", role=" + roleId +
+                ", roleId=" + roleId +
                 '}';
     }
 

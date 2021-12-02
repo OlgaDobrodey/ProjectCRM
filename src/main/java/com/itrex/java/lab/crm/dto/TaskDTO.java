@@ -28,7 +28,7 @@ public class TaskDTO {
 
     @Override
     public String toString() {
-        return "\nTaskDTO{" +
+        return "\n{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", status=" + status +

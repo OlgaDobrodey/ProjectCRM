@@ -41,7 +41,7 @@ public class AuthController extends BaseController {
             Map<Object, Object> response = new HashMap<>();
             response.put("login", request.getLogin());
             response.put("token", token);
-            return ResponseEntity.ok(response);
+            return new ResponseEntity<>(response,HttpStatus.OK);
         } catch (AuthenticationException | CRMProjectServiceException e) {
             return new ResponseEntity<>("Invalid email/password combination", HttpStatus.FORBIDDEN);
         }

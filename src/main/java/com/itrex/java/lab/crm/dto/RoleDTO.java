@@ -23,7 +23,7 @@ public class RoleDTO {
 
     @Override
     public String toString() {
-        return "\nRoleDTO{" +
+        return "\n{" +
                 "id=" + id +
                 ", roleName='" + roleName + '\'' +
                 '}';

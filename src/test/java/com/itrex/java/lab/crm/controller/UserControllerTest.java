@@ -9,14 +9,18 @@ import com.itrex.java.lab.crm.exceptions.CRMProjectServiceException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.itrex.java.lab.crm.controller.ControllerUtilsTest.createTaskDto;
 import static com.itrex.java.lab.crm.controller.ControllerUtilsTest.createUserDto;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,17 +34,28 @@ class UserControllerTest extends BaseControllerTest {
     @MockBean
     protected JwtConfigurer jwtConfigurer;
 
+    private String EXPECTED_USER_DTO = createUserDto(1).toString();
+    private String EXPECTED_USERS_DTO ="["+ createUserDto(1).toString().replaceFirst("\\n", "").replaceAll("\\'", "")+"]";
+    private String EXPECTED_TASKS_DTO ="["+ createTaskDto(1).toString().replaceFirst("\\n", "").replaceAll("\\'", "")+"]";
+
     @Test
     @WithMockUser(username = "Petrov", password = "123", roles = "USER")
     void read_whenValidInput_thenReturns200Test() throws Exception {
-        //given && when
+        //given
         List<UserDTO> users = List.of(createUserDto(1));
         when(userService.getAll()).thenReturn(users);
 
-        //then
-        mockMvc.perform(get("/crm/users")
+        //when
+        MvcResult mvcResult = mockMvc.perform(get("/crm/users")
                         .contentType("application/json"))
-                .andExpect(status().isOk());
+                .andReturn();
+
+        //then
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+        List<UserDTO> usersDTO = objectMapper.readValue(response.getContentAsString(), ArrayList.class);
+        assertEquals(EXPECTED_USERS_DTO, usersDTO.toString());
+        assertEquals(1, usersDTO.size());
 
         verify(userService).getAll();
     }
@@ -63,14 +78,21 @@ class UserControllerTest extends BaseControllerTest {
     @Test
     @WithMockUser(username = "Petrov", password = "123", roles = "USER")
     void readUserByUserId_whenInputValId_thenReturns200Test() throws Exception {
-        //given && when
+        //given
         UserDTO user = createUserDto(1);
         when(userService.getById(user.getId())).thenReturn(user);
 
-        //then
-        mockMvc.perform(get("/crm/users/{id}", user.getId())
+        // when
+        MvcResult mvcResult= mockMvc.perform(get("/crm/users/{id}", user.getId())
                         .contentType("application/json"))
-                .andExpect(status().isOk());
+                .andReturn();
+
+        //then
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+        UserDTO userDTO = objectMapper.readValue(response.getContentAsString(), UserDTO.class);
+        assertEquals(EXPECTED_USER_DTO, userDTO.toString());
+        assertEquals("TestLoginB", userDTO.getLogin());
 
         verify(userService).getById(user.getId());
     }
@@ -93,15 +115,22 @@ class UserControllerTest extends BaseControllerTest {
     @Test
     @WithMockUser(username = "Petrov", password = "123", roles = "USER")
     void readAllUserTasksByUserId_whenInputValidPathVariableUserId_thenReturns200Test() throws Exception {
-        //given && when
+        //given
         List<TaskDTO> tasks = List.of(createTaskDto(1));
         Integer userId = 1;
         when(taskService.getAllUserTasksByUserId(userId)).thenReturn(tasks);
 
-        //then
-        mockMvc.perform(get("/crm/users/{id}/tasks", userId)
+       //when
+        MvcResult mvcResult = mockMvc.perform(get("/crm/users/{id}/tasks", userId)
                         .contentType("application/json"))
-                .andExpect(status().isOk());
+                .andReturn();
+
+        //then
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+        List<TaskDTO> taskDTOS = objectMapper.readValue(response.getContentAsString(), ArrayList.class);
+        assertEquals(EXPECTED_TASKS_DTO, taskDTOS.toString());
+        assertEquals(1, taskDTOS.size());
 
         verify(taskService).getAllUserTasksByUserId(userId);
     }
@@ -124,15 +153,21 @@ class UserControllerTest extends BaseControllerTest {
     @Test
     @WithMockUser(username = "Petrov", password = "123", roles = "ADMIN")
     void create_whereInputValidUser_thenReturns201Test() throws Exception {
-        //given && when
+        //given
         UserDTO user = createUserDto(1);
         when(userService.add(user)).thenReturn(user);
 
-        //then
-        mockMvc.perform(post("/crm/users")
+        //when
+        MvcResult mvcResult = mockMvc.perform(post("/crm/users")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(user)))
-                .andExpect(status().isCreated());
+                .andReturn();
+
+        //then
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpServletResponse.SC_CREATED, response.getStatus());
+        UserDTO userDTO = objectMapper.readValue(response.getContentAsString(), UserDTO.class);
+        assertEquals(EXPECTED_USER_DTO, userDTO .toString());
 
         verify(userService).add(user);
     }
@@ -172,7 +207,7 @@ class UserControllerTest extends BaseControllerTest {
     @Test
     @WithMockUser(username = "Petrov", password = "123", roles = "CONTROLLER")
     void updateUserPassword_whenValidInputPathVarUserIdReqBodyPasswordDTOForChanges_thenReturns200Test() throws Exception {
-        //given && when
+        //given
         PasswordDTOForChanges pdtofc = PasswordDTOForChanges
                 .builder()
                 .oldPassword("123")
@@ -183,11 +218,17 @@ class UserControllerTest extends BaseControllerTest {
         user.setPsw(pdtofc.getNewPassword());
         when(userService.updateUserPassword(pdtofc, user.getId())).thenReturn(user);
 
-        //then
-        mockMvc.perform(put("/crm/users/{id}/password", user.getId())
+        //when
+        MvcResult mvcResult = mockMvc.perform(put("/crm/users/{id}/password", user.getId())
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(pdtofc)))
-                .andExpect(status().isOk());
+                .andReturn();
+
+        //then
+        MockHttpServletResponse response = mvcResult.getResponse();
+        assertEquals(HttpServletResponse.SC_OK,response.getStatus());
+        UserDTO result = objectMapper.readValue(response.getContentAsString(), UserDTO.class);
+        assertEquals("TestLoginB", result.getLogin());
 
         verify(userService).updateUserPassword(pdtofc, user.getId());
     }

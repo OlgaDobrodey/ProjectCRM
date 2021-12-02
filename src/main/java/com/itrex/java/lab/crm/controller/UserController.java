@@ -104,8 +104,7 @@ public class UserController extends BaseController {
             @PathVariable(name = "id") int id, @RequestBody PasswordDTOForChanges psw) {
         try {
             UserDTO userDTO = userService.updateUserPassword(psw, id);
-            return new ResponseEntity<>(userDTO,HttpStatus.OK);
-
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
         } catch (CRMProjectServiceException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
