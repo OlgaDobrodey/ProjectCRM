@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -27,6 +28,8 @@ class AuthControllerTest extends BaseControllerTest {
     private ObjectMapper objectMapper;
     @MockBean
     private JwtConfigurer jwtConfigurer;
+    @MockBean
+    protected SecurityContextLogoutHandler securityContextLogoutHandler;
 
     private String APPLICATION_JSON = "application/json";
 
@@ -88,9 +91,10 @@ class AuthControllerTest extends BaseControllerTest {
     }
 
     @Test
-    void logout() throws Exception {
+    void logout_existHttpServletRequestHttpServletResponse_Test() throws Exception {
+        //given && when && then
 
-        MvcResult mvcResult = mockMvc.perform(post("/crm/logout")
+        mockMvc.perform(post("/crm/logout")
                         .contentType(APPLICATION_JSON))
                 .andReturn();
     }
