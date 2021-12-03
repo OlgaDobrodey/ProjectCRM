@@ -27,10 +27,10 @@ public class RoleController extends BaseController {
     @GetMapping("/roles")
     public ResponseEntity<List<RoleDTO>> read() {
 
-        List<RoleDTO> tasks = roleService.getAllRoles();
+        List<RoleDTO> roles = roleService.getAllRoles();
 
-        return tasks != null && !tasks.isEmpty()
-                ? new ResponseEntity<>(tasks, HttpStatus.OK)
+        return roles != null && !roles.isEmpty()
+                ? new ResponseEntity<>(roles, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
