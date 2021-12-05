@@ -19,43 +19,33 @@ tags:
 paths:
   /roles:
     get:
+      security:
+        - bearerAuth: [ ]
       tags:
         - roles
       summary: Return a list of roles
-      parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
       responses:
         '200':
           description: OK
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: '#/components/schemas/Role'
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleDTO'
         '404':
           description: NOT_FOUND
     post:
+      security:
+        - bearerAuth: [ ]
       tags:
         - roles
       summary: Add a new roles to the CRM
-      parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Role'
+              $ref: '#/components/schemas/RoleDTO'
         required: true
       responses:
         '201':
@@ -63,23 +53,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Role'
+                $ref: '#/components/schemas/RoleDTO'
         '406':
           description: NOT_ACCEPTABLE
   /roles/{id}:
     get:
+      security:
+        - bearerAuth: [ ]
       tags:
         - roles
       summary: Returns a role by ID.
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
-
         - name: id
           in: path
           required: true
@@ -92,22 +76,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Role'
+                $ref: '#/components/schemas/RoleDTO'
         '404':
           description: no found DB role by id.
     put:
+      security:
+        - bearerAuth: [ ]
       tags:
         - roles
       summary: Update an role by id
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
-
         - name: id
           in: path
           required: true
@@ -118,7 +96,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Role'
+              $ref: '#/components/schemas/RoleDTO'
         required: true
       responses:
         '200':
@@ -129,17 +107,12 @@ paths:
           description: NOT_FOUND
   /roles/{id}/users:
     get:
+      security:
+        - bearerAuth: [ ]
       tags:
         - roles
       summary: Returns all role users by role by id.
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-              type: string
-              format: token
-              example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
         - name: id
           in: path
           required: true
@@ -152,22 +125,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserDTO'
         '404':
           description: NOT FOUND.
   /tasks:
     get:
+      security:
+        - bearerAuth: [ ]
       tags:
         - tasks
       summary: Return a list of tasks
-      parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
       responses:
         '200':
           description: OK
@@ -179,6 +146,8 @@ paths:
           description: NOT_FOUND
 
     post:
+      security:
+        - bearerAuth: [ ]
       tags:
         - tasks
       summary: Add a new task to the CRM
@@ -194,7 +163,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Task'
+              $ref: '#/components/schemas/TaskDTO'
         required: true
       responses:
         '201':
@@ -202,42 +171,40 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Task'
+                $ref: '#/components/schemas/TaskDTO'
         '404':
           description: NOT_FOUND
   /tasks/page:
     get:
+      security:
+        - bearerAuth: [ ]
       tags:
         - tasks
       summary: Return a list of tasks
       parameters:
-        - name: Authorization
-          in: header
+        - name: pageable
+          in: query
           required: true
           schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
+            $ref: '#/components/schemas/Pageable'
       responses:
         '200':
           description: OK
-
+          content:
+              '*/*':
+                schema:
+                  $ref: '#/components/schemas/PageTaskDTO'
         '404':
           description: NOT_FOUND
 
   /tasks/{id}:
     get:
+      security:
+        - bearerAuth: [ ]
       tags:
         - tasks
       summary: Task by Id
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
         - name: id
           in: path
           required: true
@@ -250,21 +217,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Task'
+                $ref: '#/components/schemas/TaskDTO'
         '404':
           description: no found DB role by id, NOT_FOUND
     put:
+      security:
+        - bearerAuth: [ ]
       tags:
         - tasks
       summary: Update an task by id
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
+
         - name: id
           in: path
           required: true
@@ -276,7 +239,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Task'
+              $ref: '#/components/schemas/TaskDTO'
       responses:
         '200':
           description: OK
@@ -286,17 +249,13 @@ paths:
           description: NOT_FOUND
 
     delete:
+      security:
+        - bearerAuth: [ ]
       tags:
         - tasks
       summary: Delete an task by id
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
+
         - name: id
           in: path
           required: true
@@ -311,17 +270,13 @@ paths:
 
   /tasks/{id}/users:
     get:
+      security:
+        - bearerAuth: [ ]
       tags:
         - tasks
       summary: Return all users by task with id
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
+
         - name: id
           in: path
           required: true
@@ -334,22 +289,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Task'
+                $ref: '#/components/schemas/TaskDTO'
         '404':
           description: NOT_FOUND
 
     delete:
+      security:
+        - bearerAuth: [ ]
       tags:
         - tasks
       summary: Revoke all users from task by id
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
+
         - name: id
           in: path
           required: true
@@ -364,17 +315,13 @@ paths:
 
   /tasks/{id}/{statis}:
     put:
+      security:
+        - bearerAuth: [ ]
       tags:
         - tasks
       summary: Change status for task by id
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
+
         - name: id
           in: path
           required: true
@@ -397,56 +344,47 @@ paths:
           description: NOT_FOUND
   /users:
     get:
+      security:
+        - bearerAuth: [ ]
       tags:
         - users
       summary: Return a list of users
-      parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserDTO'
         '404':
           description: NOT_FOUND
     post:
+      security:
+        - bearerAuth: [ ]
       tags:
         - users
       summary: Add a new user to the CRM
-      parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
+
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserDTO'
       responses:
         '201':
           description: CREATE
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserDTO'
         '404':
           description: NOT_ACCEPTABLE
 
   /users/{id}:
     get:
+      security:
+        - bearerAuth: [ ]
       tags:
         - users
       summary: Returns a user by ID.
@@ -474,17 +412,13 @@ paths:
         '404':
           description: no found DB role by id.
     put:
+      security:
+        - bearerAuth: [ ]
       tags:
         - users
       summary: Update an user by id
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
+
         - name: id
           in: path
           required: true
@@ -495,7 +429,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserDTO'
         required: true
       responses:
         '200':
@@ -505,17 +439,13 @@ paths:
         '404':
           description: NOT_FOUND
     delete:
+      security:
+        - bearerAuth: [ ]
       tags:
         - users
       summary: delete an user by id
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
+
         - name: id
           in: path
           required: true
@@ -529,17 +459,13 @@ paths:
           description: NOT_FOUND
   /users/{id}/tasks:
     get:
+      security:
+        - bearerAuth: [ ]
       tags:
         - users
       summary: return all tasks by user with id
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
+
         - name: id
           in: path
           required: true
@@ -552,21 +478,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserDTO'
         '404':
           description: NOT_FOUND, no found user in DB
     delete:
+      security:
+        - bearerAuth: [ ]
       tags:
         - users
       summary: revoke all user tasks from user by id
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
+
         - name: id
           in: path
           required: true
@@ -580,17 +502,13 @@ paths:
           description: NOT_MODIFIED
   /users/{id}/password:
     put:
+      security:
+        - bearerAuth: [ ]
       tags:
         - users
       summary: update user's password by id
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
+
         - name: id
           in: path
           required: true
@@ -609,22 +527,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserDTO'
         '404':
           description: NOT_FOUND
   /users/{userId}/tasks/{taskId}:
     put:
+      security:
+        - bearerAuth: [ ]
       tags:
         - users
       summary: assing task to user
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            format: token
-            example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg0MjU0NDQsImV4cCI6MTYzOTAzMDI0NH0.ZUmRQ0eXSAg_TlaD3g9pvrGK0a8E-t6n3YA0_3EZPLg
+
         - name: userId
           in: path
           required: true
@@ -644,6 +558,8 @@ paths:
         '404':
           description: NOT_FOUND
     delete:
+      security:
+        - bearerAuth: [ ]
       tags:
         - users
       summary: revoke task from user
@@ -698,14 +614,55 @@ paths:
                     example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQZXRyb3YiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2Mzg1NTYyMjksImV4cCI6MTYzOTE2MTAyOX0.cJUYsXDim2CvnxEz8o_CerUDptkXAvvLDWuWejkeJ_s
         '406':
           description: FORBIDDEN
+  /logout:
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        -  auth
+      operationId: logout
+      responses:
+        "200":
+          description: OK
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
-    Task:
+    UserDTO:
       type: object
       properties:
         id:
           type: integer
-          format: int64
+          format: int32
+        login:
+          type: string
+        psw:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        roleId:
+          type: integer
+          format: int32
+    PasswordDTOForChanges:
+      type: object
+      properties:
+        oldPassword:
+          type: string
+        newPassword:
+          type: string
+        repeatNewPassword:
+          type: string
+    TaskDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
         title:
           type: string
         status:
@@ -719,47 +676,77 @@ components:
           format: date
         info:
           type: string
-      xml:
-        name: Task
-    User:
+    RoleDTO:
       type: object
       properties:
         id:
           type: integer
-          format: int64
+          format: int32
+        roleName:
+          type: string
+    UserAuthenticationDTO:
+      type: object
+      properties:
         login:
           type: string
-        psw:
+        password:
           type: string
-        role_id:
-          type: integer
-          format: int64
-          minimum: 1
-          maximum: 4
-        first_name:
-          type: string
-        last_name:
-          type: string
-      xml:
-        name: User
-    Role:
+    Pageable:
       type: object
       properties:
-        id:
+        offset:
           type: integer
           format: int64
-        role_name:
-          type: string
-      xml:
-        name: Role
-    PasswordDTOForChanges :
+        sort:
+          $ref: '#/components/schemas/Sort'
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+    Sort:
       type: object
       properties:
-        oldPassword:
-          type: string
-        newPassword:
-          type: string
-        repeatNewPassword:
-          type: string
-      xml:
-        name: PasswordDTOForChanges
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+    PageTaskDTO:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskDTO'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/Sort'
+        first:
+          type: boolean
+        last:
+          type: boolean
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        numberOfElements:
+          type: integer
+          format: int32
+        empty:
+          type: boolean

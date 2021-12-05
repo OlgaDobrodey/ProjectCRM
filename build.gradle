@@ -30,9 +30,13 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web') {
         exclude module: 'spring-boot-starter-logging'
     }
-    implementation('org.springframework.boot:spring-boot-starter-security'){
+    implementation('org.springframework.boot:spring-boot-starter-security') {
         exclude module: 'spring-boot-starter-logging'
     }
+    implementation 'org.springdoc:springdoc-openapi-data-rest:1.5.13'
+    implementation "org.springdoc:springdoc-openapi-ui:1.5.13"
+    implementation "org.springdoc:springdoc-openapi-security:1.5.13"
+
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     compileOnly 'org.projectlombok:lombok'
@@ -41,7 +45,7 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude module: 'spring-boot-starter-logging'
     }
-    testImplementation ('org.springframework.security:spring-security-test'){
+    testImplementation('org.springframework.security:spring-security-test') {
         exclude module: 'spring-boot-starter-logging'
     }
 
